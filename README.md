@@ -7,5 +7,6 @@
 # - React
 
 # Desenv's:
-# Back-end - <a href="github.com/gbzzz">Guilherme Braz</a> & <a href="github.com/gbzzz">Pedro Henrique</a>
-# Front-end - <a href="github.com/gbzzz">Íris Mayara</a> & <a href="github.com/gbzzz">Alandysson</a>
+# Back-end - <a href="https://github.com/Gbzzz">Guilherme Braz</a> & <a href="https://github.com/PHPdro">Pedro Henrique</a>
+# Front-end - <a href="https://github.com/irismayara">Íris Mayara</a> & <a href="https://github.com/alandysson">Alandysson</a>
+# Documentação - <a href="https://github.com/Arthur-4"></a>
