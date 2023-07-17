@@ -2,9 +2,9 @@ Ficker - Finance Tracker
 Sistema de Controle de Finanças - PROINT ( Projeto Integrador )
 
 *Stacks:*
-- PHP 8.1.9 - (*back-end*)
-- Laravel 10 - (*back-end*)
-- React - (*front-end*)
+- PHP 8.1.9 - *back-end*
+- Laravel 10 - *back-end*
+- React - *front-end*
 - MySQL
 - Docker
 <br>
