@@ -1,4 +1,5 @@
-Ficker - Finance Tracker
+*Ficker - Finance Tracker*
+<br>
 Sistema de Controle de Finanças - PROINT ( Projeto Integrador )
 
 *Stacks:*
