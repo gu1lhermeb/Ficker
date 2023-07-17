@@ -8,5 +8,7 @@ Stacks:
 
 Desenv's:
 Back-end - <a href="https://github.com/Gbzzz">Guilherme Braz</a> & <a href="https://github.com/PHPdro">Pedro Henrique</a>
+<br>
 Front-end - <a href="https://github.com/irismayara">Íris Mayara</a> & <a href="https://github.com/alandysson">Alandysson</a>
-Documentação - <a href="https://github.com/Arthur-4"></a>
+<br>
+Documentação - <a href="https://github.com/Arthur-4">Arthur Henrique</a>
