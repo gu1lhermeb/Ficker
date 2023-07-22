@@ -1,12 +1,19 @@
 import React from "react";
-import Home from "../src/components/Login";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import Login from "@/components/Login/Login";
 
-describe("Initial page", () => {
-  it("should have a title", () => {
-    render(<Home />);
-    const title = screen.getByText("Tela inicial");
-    expect(title).toBeInTheDocument();
+describe("Login.tsx", () => {
+  it("should show required message if the field is empty", () => {
+    render(<Login />);
+    const email = screen.getByLabelText("Email");
+    const password = screen.getByLabelText("Senha");
+    const button = screen.getByRole("button");
+
+    fireEvent.click(button);
+    expect(email).toBeRequired();
+    fireEvent.change(email, { target: { value: "teste@gmail.com" } });
+    fireEvent.click(button);
+    expect(password).toBeRequired();
   });
 });
