@@ -1,10 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Login from "@/components/Login/Login";
 
 export default function Home() {
-  return (
-    <div>
-      <h1>Tela inicial</h1>
-    </div>
-  );
+  return <Login />;
 }
