@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
 
         // $request->session()->regenerate();
 
-        return response()->noContent();
+        return response('Login efetuado com sucesso!', 200);
     }
 
     /**
@@ -29,9 +29,9 @@ class AuthenticatedSessionController extends Controller
     {
         Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
+        // $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+        // $request->session()->regenerateToken();
 
         return response()->noContent();
     }
