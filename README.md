@@ -15,4 +15,4 @@ Back-end - <a href="https://github.com/Gbzzz">Guilherme Braz</a> & <a href="http
 <br>
 Front-end - <a href="https://github.com/irismayara">Íris Mayara</a> & <a href="https://github.com/alandysson">Alandysson</a>
 <br>
-Documentação - <a href="https://github.com/Arthur-4">Arthur Henrique</a>
+Documentação - <a href="https://github.com/Arthur-4">Arthur Henrique</a> & <a href="https://github.com/Johnviti">John</a>
