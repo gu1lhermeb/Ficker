@@ -30,6 +30,8 @@
     flex-direction: column;
     margin: 40px auto;
     padding: 20px;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -52,6 +54,7 @@
   @media (max-width: 600px){
     min-width: 120px;
     height: 45px;
+    font-size: 1rem;
   }
 }
 
@@ -75,6 +78,7 @@
   @media (max-width: 600px){
     min-width: 120px;
     height: 45px;
+    font-size: 1rem;
   }
 }
 .imagesContainer {
