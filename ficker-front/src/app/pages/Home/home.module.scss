@@ -23,9 +23,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
   max-width: 990px;
-  margin: 40px auto;
+  min-height: 60vh;
+  margin: 60px auto;
   @media (max-width: 600px){
     flex-direction: column;
     margin: 40px auto;
@@ -76,4 +76,32 @@
     min-width: 120px;
     height: 45px;
   }
+}
+.imagesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  min-height: 60vh;
+    @media (max-width: 600px){
+      padding: 20px;
+    }
+}
+
+.grid {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+  max-width: 990px;
+  margin: 0 auto;
+  @media (max-width: 600px){
+    grid-template-columns: 1fr;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
