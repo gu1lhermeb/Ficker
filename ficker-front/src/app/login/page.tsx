@@ -1,5 +1,6 @@
 import styles from "./login.module.scss";
 import Image from "next/image";
+
 export default function Login() {
   return (
     <div>
@@ -16,7 +17,12 @@ export default function Login() {
           <label htmlFor="password" style={{ marginBottom: 5 }}>
             Senha
           </label>
-          <input type="password" id="password" required className={styles.input} />
+          <input
+            type="password"
+            id="password"
+            required
+            className={styles.input}
+          />
           <div style={{ display: "flex", justifyContent: "center" }}>
             <button type="submit" className={styles.button}>
               Entrar
