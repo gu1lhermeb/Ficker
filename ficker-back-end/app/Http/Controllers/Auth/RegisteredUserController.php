@@ -36,6 +36,16 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response('Usuário Cadastrado!', 201);
+        $token = $user->createToken('create_token')->plainTextToken;
+
+        $response = [
+            "user" => $user,
+            "data" => [
+                "token" => $token,
+                "token_type" => 'Bearer'
+            ]
+        ];
+
+        return response($response, 201);
     }
 }
