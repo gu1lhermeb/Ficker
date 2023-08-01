@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Login from "@/components/Login/Login";
+import Login from "@/app/login/page";
 
 describe("Login.tsx", () => {
   it("should show required message if the field is empty", () => {
