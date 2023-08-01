@@ -1,15 +1,31 @@
+"use client";
 import Image from "next/image";
 import styles from "./createaccount.module.scss";
 import Link from "next/link";
+import { useState } from "react";
 
 const CreateAccountPage = () => {
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const handleSubmit = () => {
+    if (password !== confirmPassword) {
+      alert("As senhas precisam ser iguais!");
+    }
+  };
+
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
         <Image src="/logo.png" alt="Logo" width={130} height={27} />
       </div>
       <div className={styles.container}>
-        <form className={styles.form}>
+        <form
+          className={styles.form}
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleSubmit();
+          }}
+        >
           <h3 style={{ textAlign: "center" }}>Cadastro</h3>
           <label htmlFor="name" style={{ marginBottom: 5 }}>
             Nome
@@ -27,6 +43,7 @@ const CreateAccountPage = () => {
             id="password"
             required
             className={styles.input}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <label htmlFor="password" style={{ marginBottom: 5 }}>
             Confirmar Senha
@@ -36,6 +53,7 @@ const CreateAccountPage = () => {
             id="password"
             required
             className={styles.input}
+            onChange={(event) => setConfirmPassword(event.target.value)}
           />
           <div
             style={{
