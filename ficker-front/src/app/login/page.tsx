@@ -5,7 +5,7 @@ export default function Login() {
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
-        <Image src="/logo.png" alt="Logo" width={130} height={30} />
+        <Image src="/logo.png" alt="Logo" width={130} height={27} />
       </div>
       <div className={styles.container}>
         <form className={styles.form}>
