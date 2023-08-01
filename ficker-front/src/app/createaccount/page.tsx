@@ -3,15 +3,32 @@ import Image from "next/image";
 import styles from "./createaccount.module.scss";
 import Link from "next/link";
 import { useState } from "react";
+import { request } from "@/service/api";
 
 const CreateAccountPage = () => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (password !== confirmPassword) {
-      setError(true);
+      return setError(true);
+    }
+    try {
+      const response = await request({
+        method: "POST",
+        endpoint: "register",
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
+      });
+    } catch (error) {
+      //TODO: create treatment to errors
+      console.log(error);
     }
   };
 
@@ -32,11 +49,25 @@ const CreateAccountPage = () => {
           <label htmlFor="name" style={{ marginBottom: 5 }}>
             Nome
           </label>
-          <input type="text" id="name" required className={styles.input} />
+          <input
+            type="text"
+            id="name"
+            required
+            className={styles.input}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
           <label htmlFor="email" style={{ marginBottom: 5 }}>
             Email
           </label>
-          <input type="text" id="email" required className={styles.input} />
+          <input
+            type="text"
+            id="email"
+            required
+            className={styles.input}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
           <label htmlFor="password" style={{ marginBottom: 5 }}>
             Senha
           </label>
