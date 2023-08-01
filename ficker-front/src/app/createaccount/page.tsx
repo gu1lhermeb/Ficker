@@ -7,9 +7,11 @@ import { useState } from "react";
 const CreateAccountPage = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
+
   const handleSubmit = () => {
     if (password !== confirmPassword) {
-      alert("As senhas precisam ser iguais!");
+      setError(true);
     }
   };
 
@@ -41,20 +43,25 @@ const CreateAccountPage = () => {
           <input
             type="password"
             id="password"
+            value={password}
             required
             className={styles.input}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <label htmlFor="password" style={{ marginBottom: 5 }}>
+          <label htmlFor="confirmPassword" style={{ marginBottom: 5 }}>
             Confirmar Senha
           </label>
           <input
             type="password"
-            id="password"
+            id="confirmPassword"
             required
+            value={confirmPassword}
             className={styles.input}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
+          {error ? (
+            <p style={{ color: "red" }}>*As senhas precisam ser iguais</p>
+          ) : null}
           <div
             style={{
               display: "flex",
