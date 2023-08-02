@@ -16,7 +16,9 @@ const CreateAccountPage = () => {
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
-        <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
+          <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        </Link>
       </div>
       <div className={styles.container}>
         <form
@@ -26,7 +28,7 @@ const CreateAccountPage = () => {
             handleSubmit();
           }}
         >
-          <h3 style={{ textAlign: "center" }}>Cadastro</h3>
+          <h2 style={{ textAlign: "center" }}>Cadastro</h2>
           <label htmlFor="name" style={{ marginBottom: 5 }}>
             Nome
           </label>
@@ -66,8 +68,8 @@ const CreateAccountPage = () => {
             <button type="submit" className={styles.button}>
               Cadastrar
             </button>
-            <Link href={"/login"}>
-              <p style={{ fontSize: 14, marginTop: 20 }}>Já possui cadastro?</p>
+            <Link href={"/login"} style={{ textDecoration: 'none' }}>
+              <p style={{ fontSize: 14, marginTop: 20, color: 'black'}}>Já possui cadastro?</p>
             </Link>
           </div>
         </form>
