@@ -3,6 +3,7 @@ import { useState } from "react";
 import styles from "./login.module.scss";
 import Image from "next/image";
 import { request } from "@/service/api";
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
@@ -63,6 +64,14 @@ export default function Login() {
             <button type="submit" className={styles.button}>
               Entrar
             </button>
+          </div>
+          <div style={{ textAlign: "center", marginTop: 10 }}>
+            <Link href="/recoveryaccount" style={{ textDecoration: "none", fontSize: 14 }}>
+              <p>Esqueceu sua senha?</p>
+            </Link>
+            <Link href="/createaccount" style={{ textDecoration: "none", fontSize: 14 }}>
+              <p>Cadastre-se</p>
+            </Link>
           </div>
         </form>
       </div>
