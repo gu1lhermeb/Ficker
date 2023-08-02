@@ -3,13 +3,32 @@ import Image from "next/image";
 import styles from "./createaccount.module.scss";
 import Link from "next/link";
 import { useState } from "react";
+import { request } from "@/service/api";
 
 const CreateAccountPage = () => {
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const handleSubmit = () => {
+  const [error, setError] = useState<boolean>(false);
+
+  const handleSubmit = async () => {
     if (password !== confirmPassword) {
-      alert("As senhas precisam ser iguais!");
+      return setError(true);
+    }
+    try {
+      const response = await request({
+        method: "POST",
+        endpoint: "register",
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
+      });
+    } catch (error) {
+      //TODO: create treatment to errors
+      console.log(error);
     }
   };
 
@@ -30,31 +49,50 @@ const CreateAccountPage = () => {
           <label htmlFor="name" style={{ marginBottom: 5 }}>
             Nome
           </label>
-          <input type="text" id="name" required className={styles.input} />
+          <input
+            type="text"
+            id="name"
+            required
+            className={styles.input}
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
           <label htmlFor="email" style={{ marginBottom: 5 }}>
             Email
           </label>
-          <input type="text" id="email" required className={styles.input} />
+          <input
+            type="text"
+            id="email"
+            required
+            className={styles.input}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
           <label htmlFor="password" style={{ marginBottom: 5 }}>
             Senha
           </label>
           <input
             type="password"
             id="password"
+            value={password}
             required
             className={styles.input}
             onChange={(event) => setPassword(event.target.value)}
           />
-          <label htmlFor="password" style={{ marginBottom: 5 }}>
+          <label htmlFor="confirmPassword" style={{ marginBottom: 5 }}>
             Confirmar Senha
           </label>
           <input
             type="password"
-            id="password"
+            id="confirmPassword"
             required
+            value={confirmPassword}
             className={styles.input}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
+          {error ? (
+            <p style={{ color: "red" }}>*As senhas precisam ser iguais</p>
+          ) : null}
           <div
             style={{
               display: "flex",

@@ -28,11 +28,9 @@ describe("Create Account page", () => {
     fireEvent.change(password, { target: { value: "1234" } });
     fireEvent.change(confirmPassword, { target: { value: "1235" } });
 
-    //TODO: criar teste para tela de criação de conta
+    fireEvent.click(button);
+    const errorMessage = screen.getByText("*As senhas precisam ser iguais");
 
-    // fireEvent.click(button);
-    // expect(screen.getByRole("alert")).toHaveTextContent(
-    // "As senhas precisam ser iguais"
-    // );
+    expect(errorMessage).toBeInTheDocument();
   });
 });
