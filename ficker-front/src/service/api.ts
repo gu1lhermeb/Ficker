@@ -23,7 +23,7 @@ export const request = async ({
   params,
   loaderStateSetter,
 }: RequestParams) => {
-  const baseUrl = "beta.atlanteti.com/cd-api";
+  const baseUrl = "localhost:3000";
   const config: AxiosRequestConfig = {
     method,
     baseURL: `https://${baseUrl}/${endpoint}`,
