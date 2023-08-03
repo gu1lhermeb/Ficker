@@ -6,7 +6,9 @@ export const HomeScreen = () => {
   return (
     <div className={styles.container}>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
-        <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
+          <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        </Link>
       </div>
       <div className={styles.contentContainer}>
         <Image
@@ -16,7 +18,7 @@ export const HomeScreen = () => {
           height={267}
           className={styles.image}
         />
-        <div>
+        <div className={styles.introContainer}>
           <p>
             Assuma o controle de suas finanças com o Ficker, a solução completa para gerenciar suas despesas.
           </p>
@@ -25,7 +27,7 @@ export const HomeScreen = () => {
               <button className={styles.whiteButton}>Entrar</button>
             </Link>
             <Link href={"/createaccount"}>
-              <button className={styles.purpleButton}>Cadastrar-se</button>
+              <button className={styles.purpleButton}>Cadastrar</button>
             </Link>
           </div>
         </div>

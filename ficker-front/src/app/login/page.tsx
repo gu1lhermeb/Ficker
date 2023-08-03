@@ -27,7 +27,9 @@ export default function Login() {
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
-        <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
+          <Image src="/logo.png" alt="Logo" width={130} height={27} />
+        </Link>
       </div>
       <div className={styles.container}>
         <form
@@ -37,7 +39,7 @@ export default function Login() {
             handleSubmit();
           }}
         >
-          <h3 style={{ textAlign: "center" }}>Entrar</h3>
+          <h2 style={{ textAlign: "center" }}>Entrar</h2>
           <label htmlFor="email" style={{ marginBottom: 5 }}>
             Email
           </label>
@@ -66,11 +68,11 @@ export default function Login() {
             </button>
           </div>
           <div style={{ textAlign: "center", marginTop: 10 }}>
-            <Link href="/recoveryaccount" style={{ textDecoration: "none", fontSize: 14 }}>
-              <p>Esqueceu sua senha?</p>
+            <Link href={"/recoveryaccount"} style={{ textDecoration: 'none' }}>
+              <p style={{ fontSize: 14, marginTop: 20, color: 'black'}}>Esqueceu a senha?</p>
             </Link>
-            <Link href="/createaccount" style={{ textDecoration: "none", fontSize: 14 }}>
-              <p>Cadastre-se</p>
+            <Link href={"/createaccount"} style={{ textDecoration: 'none' }}>
+              <p style={{ fontSize: 14, marginTop: -11, color: 'black'}}>Cadastre-se</p>
             </Link>
           </div>
         </form>
