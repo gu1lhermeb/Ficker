@@ -16,19 +16,31 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): JsonResponse
     {
-        $request->authenticate();
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)){
 
-        $user = $request->user();
-        $token = $user->createToken('login_token')->plainTextToken;
+            $message = 'Login Success';
+            $user = $request->user();
+            $token = $user->createToken('login_token')->plainTextToken;
+            $response = [
+                "message" => $message,
+                "data" => [
+                    "token" => $token,
+                    "token_type" => 'Bearer'
+                ]
+            ];
 
-        $response = [
-            "data" => [
-                "token" => $token,
-                "token_type" => 'Bearer'
-            ]
-        ];
-
-        return response()->json($response, 200);
+            return response()->json($response, 200);
+        } else {
+            $message = 'Error';
+            $response = [
+                "message" => $message,
+                "data" => [
+                    "error" => 'Credenciais Inválidas'
+                ]
+            ];
+            return response()->json($response, 401);
+        }
     }
 
     /**
