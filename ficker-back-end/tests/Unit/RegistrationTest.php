@@ -3,16 +3,20 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 
 class RegistrationTest extends TestCase
+
 {
+
+    use RefreshDatabase;
+
     public function test_users_can_not_register_without_a_name(): void
     {
         $size = count(User::all());
 
         $this->post('/api/register', [
-            'name' => null,
             'email' => 'testemail@test.com',
             'password' => 'passwordtest',
             'password_confirmation' => 'passwordtest'
@@ -27,7 +31,6 @@ class RegistrationTest extends TestCase
 
         $this->post('/api/register', [
             'name' => 'Test User',
-            'email' => null,
             'password' => 'passwordtest',
             'password_confirmation' => 'passwordtest'
         ]);
@@ -42,7 +45,6 @@ class RegistrationTest extends TestCase
         $this->post('/api/register', [
             'name' => 'Test User',
             'email' => 'testemail@test.com',
-            'password' => null,
             'password_confirmation' => 'passwordtest'
         ]);
 
@@ -57,7 +59,6 @@ class RegistrationTest extends TestCase
             'name' => 'Test User',
             'email' => 'testemail@test.com',
             'password' => 'passwordtest',
-            'password_confirmation' => null
         ]);
 
         $this->assertEquals($size, count(User::all()));
@@ -72,6 +73,20 @@ class RegistrationTest extends TestCase
             'email' => 'testemail@test.com',
             'password' => 'passwordtest',
             'password_confirmation' => 'passwordtest2'
+        ]);
+
+        $this->assertEquals($size, count(User::all()));
+    }
+
+    public function test_users_can_not_register_with_invalid_password(): void
+    {
+        $size = count(User::all());
+
+        $this->post('/api/register', [
+            'name' => 'Test User',
+            'email' => 'testemail@test.com',
+            'password' => '1234567',
+            'password_confirmation' => '1234567'
         ]);
 
         $this->assertEquals($size, count(User::all()));
