@@ -41,3 +41,49 @@ services:
       #definição do serviço via traefik proxy
       - traefik.http.services.laravel-svc.loadbalancer.server.port=80
       # - traefik.http.routers.laravel-rtr.middlewares=basic-auth@file
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes:
+      - './mysql:/var/lib/mysql'
+    networks:
+      - traefik-public
+#      - interna
+    environment:
+      ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: ficker
+      MYSQL_DATABASE: ficker
+      MYSQL_USER: ficker
+      MYSQL_PASSWORD: ficker
+
+############ phpmyadmim ############
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - MYSQL_ROOT_PASSWORD=ficker
+      - PMA_HOST=mysql
+      - TZ=America/Maceio
+    ports:
+      - '9090:80'
+    depends_on:
+      - mysql
+    networks:
+      - traefik-public
+ #     - interna
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      ## HTTP Routers
+      - traefik.http.routers.phpmyadmin-rtr.entrypoints=web
+      # - traefik.http.routers.phpmyadmin-rtr.entrypoints=websecure
+      - traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.localhost`)
+      - traefik.http.routers.phpmyadmin-rtr.tls=true
+      # - traefik.http.routers.phpmyadmin-rtr.tls.certresolver=letsencrypt
+      ## HTTP Services
+      - traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80
+      # - traefik.http.routers.phpmyadmim-rtr.middlewares=basic-auth@file
