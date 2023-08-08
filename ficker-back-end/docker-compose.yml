@@ -10,8 +10,6 @@ services:
   laravel:
     #nome do container definido usando o valor da variável
     container_name: laravel-php8.1
-    #imagem do container que será baixada do repositório dockerhub ou harbor
-    #image: harbor.dev.cbm.al.gov.br/dev-local/cakephp:5.6
     #build:
     #  context: .
     #  dockerfile: ./Dockerfile
@@ -22,22 +20,22 @@ services:
       - 8080:80
     networks:
       - traefik-public
- #     - interna
+    #     - interna
     #seção onde é definida a montagem bind para o volume da aplicação em desenvolvimento
     #Necessário mapear diretório do host que contém a aplicação a ser desenvolvida
     volumes:
-      - /home/guilherme/Documentos/projetos/Ficker/ficker-back-end:/app
+      - /root/Ficker/ficker-back-end:/app
     environment:
       - APP_ENV=local
     labels:
       - traefik.enable=true
       - traefik.network=traefik-public
       #definição da porta de entrada do traefik proxy
-      #- traefik.http.routers.laravel-rtr.entrypoints=websecure
+      # - traefik.http.routers.laravel-rtr.entrypoints=websecure
       #definição da rota via traefik proxy
-      - traefik.http.routers.laravel-rtr.rule=Host(`ficker.localhost`)
+      - traefik.http.routers.laravel-rtr.rule=Host(`back.ficker.tech`)
       - traefik.http.routers.laravel-rtr.tls=true
-      # - traefik.http.routers.laravel-rtr.tls.certresolver=letsencrypt
+      - traefik.http.routers.laravel-rtr.tls.certresolver=letsencrypt
       #definição do serviço via traefik proxy
       - traefik.http.services.laravel-svc.loadbalancer.server.port=80
       # - traefik.http.routers.laravel-rtr.middlewares=basic-auth@file
@@ -51,7 +49,7 @@ services:
       - './mysql:/var/lib/mysql'
     networks:
       - traefik-public
-#      - interna
+    #      - interna
     environment:
       ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: ficker
@@ -59,7 +57,7 @@ services:
       MYSQL_USER: ficker
       MYSQL_PASSWORD: ficker
 
-############ phpmyadmim ############
+  ############ phpmyadmim ############
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
@@ -73,17 +71,17 @@ services:
       - mysql
     networks:
       - traefik-public
- #     - interna
+    #     - interna
     restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
       ## HTTP Routers
-      - traefik.http.routers.phpmyadmin-rtr.entrypoints=web
-      # - traefik.http.routers.phpmyadmin-rtr.entrypoints=websecure
-      - traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.localhost`)
+      # - traefik.http.routers.phpmyadmin-rtr.entrypoints=web
+      - traefik.http.routers.phpmyadmin-rtr.entrypoints=websecure
+      - traefik.http.routers.phpmyadmin-rtr.rule=Host(`phpmyadmin.ficker.tech`)
       - traefik.http.routers.phpmyadmin-rtr.tls=true
-      # - traefik.http.routers.phpmyadmin-rtr.tls.certresolver=letsencrypt
+      - traefik.http.routers.phpmyadmin-rtr.tls.certresolver=letsencrypt
       ## HTTP Services
       - traefik.http.services.phpmyadmin-svc.loadbalancer.server.port=80
       # - traefik.http.routers.phpmyadmim-rtr.middlewares=basic-auth@file
