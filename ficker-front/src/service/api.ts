@@ -23,10 +23,10 @@ export const request = async ({
   params,
   loaderStateSetter,
 }: RequestParams) => {
-  const baseUrl = "localhost:3000";
+  const baseUrl = "localhost:8080/api";
   const config: AxiosRequestConfig = {
     method,
-    baseURL: `https://${baseUrl}/${endpoint}`,
+    baseURL: `http://${baseUrl}/${endpoint}`,
     data,
     params,
     timeout: 7000,
@@ -42,9 +42,8 @@ export const request = async ({
   try {
     result = await axios(config);
   } catch (error: any) {
-    console.error(error.response.data);
     return null;
   }
   toggleLoader(loaderStateSetter, false);
-  return result.data;
+  return result;
 };

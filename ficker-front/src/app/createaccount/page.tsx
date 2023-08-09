@@ -11,6 +11,7 @@ const CreateAccountPage = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -26,6 +27,7 @@ const CreateAccountPage = () => {
           password: password,
         },
       });
+      console.log(response);
     } catch (error) {
       //TODO: create treatment to errors
       console.log(error);
@@ -34,6 +36,14 @@ const CreateAccountPage = () => {
 
   return (
     <div>
+      {/* <dialog open className={styles.dialog}>
+        <div className={styles.dialogContent}>
+          <p>Conta criada com sucesso!</p>
+          <Link href={"/login"} style={{ textDecoration: "none" }}>
+            <button className={styles.button}>Fazer Login</button>
+          </Link>
+        </div>
+      </dialog> */}
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
         <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
           <Image src="/logo.png" alt="Logo" width={130} height={27} />
@@ -92,9 +102,7 @@ const CreateAccountPage = () => {
             className={styles.input}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-          {error ? (
-            <p style={{ color: "red" }}>*As senhas precisam ser iguais</p>
-          ) : null}
+          {error ? <p style={{ color: "red" }}>*As senhas precisam ser iguais</p> : null}
           <div
             style={{
               display: "flex",
@@ -106,8 +114,8 @@ const CreateAccountPage = () => {
             <button type="submit" className={styles.button}>
               Cadastrar
             </button>
-            <Link href={"/login"} style={{ textDecoration: 'none' }}>
-              <p style={{ fontSize: 14, marginTop: 20, color: 'black'}}>Já possui cadastro?</p>
+            <Link href={"/login"} style={{ textDecoration: "none" }}>
+              <p style={{ fontSize: 14, marginTop: 20, color: "black" }}>Já possui cadastro?</p>
             </Link>
           </div>
         </form>
