@@ -23,10 +23,10 @@ export const request = async ({
   params,
   loaderStateSetter,
 }: RequestParams) => {
-  const baseUrl = "localhost:8080/api";
+  const baseUrl = "back.ficker.tech/api";
   const config: AxiosRequestConfig = {
     method,
-    baseURL: `http://${baseUrl}/${endpoint}`,
+    baseURL: `https://${baseUrl}/${endpoint}`,
     data,
     params,
     timeout: 7000,

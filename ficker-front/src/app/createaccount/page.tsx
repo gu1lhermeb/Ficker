@@ -25,6 +25,7 @@ const CreateAccountPage = () => {
           name: name,
           email: email,
           password: password,
+          password_confirmation: confirmPassword,
         },
       });
       console.log(response);
