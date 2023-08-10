@@ -2,6 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./entertransaction.module.scss";
+import { Col, Row } from "antd";
+import CustomMenu from "@/components/CustomMenu";
 
 const EnterTransaction = () => {
   return (
@@ -12,20 +14,18 @@ const EnterTransaction = () => {
         </Link>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <div style={{ background: "#fff", height: "90vh", minWidth: "15vw", paddingTop: 70 }}>
-          <div style={{ display: "flex" }}></div>
-        </div>
-        <div style={{ paddingTop: 10, width: "85%" }}>
-          <div style={{ padding: 20 }}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <CustomMenu />
+        <Col style={{ paddingTop: 10 }} lg={20}>
+          <Row justify={"space-between"} style={{ padding: 20 }}>
+            <Col xs={24} lg={10}>
               <h3>Entradas</h3>
-              <div>
-                <input className={styles.input} placeholder="Procurar..." />
-                <button className={styles.button}>Nova Transação</button>
-              </div>
-            </div>
-          </div>
-          <div>
+            </Col>
+            <Col xs={24} lg={6}>
+              <input className={styles.input} placeholder="Procurar..." />
+              <button className={styles.button}>Nova Transação</button>
+            </Col>
+          </Row>
+          <Col xs={20} lg={24}>
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -48,8 +48,8 @@ const EnterTransaction = () => {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
+          </Col>
+        </Col>
       </div>
     </div>
   );

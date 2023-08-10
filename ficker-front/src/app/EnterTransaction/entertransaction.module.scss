@@ -34,6 +34,24 @@
   }
 }
 
+.menuButton {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 10px;
+  color: #cccccc;
+  align-items: center;
+  display: flex;
+  font-size: 1rem;
+  padding: 10px;
+  &:hover {
+    background-color: #6C5DD3;
+    color: #cccccc;
+    border-radius: 8px;
+  }
+}
+
 .table {
   width: 100%;
   border-spacing:20px;
