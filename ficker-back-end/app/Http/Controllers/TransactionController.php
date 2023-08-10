@@ -11,16 +11,16 @@ use App\Models\Category;
 class TransactionController extends Controller
 {
 
-    public function store(Request $request) : JsonResponse 
+    public function store(Request $request) : JsonResponse
     {
 
         $request->validate([
             'description' => ['required', 'string', 'max:255'],
             'date' => ['required', 'date'],
-            'category_id' => ['required'],
+            'type' => ['required'],
             'value' => ['required', 'decimal:0,2']
         ]);
-        
+
         if($request->category_id == '0') { // Assumindo que o value da option NOVA seja 0
 
             $request->validate([

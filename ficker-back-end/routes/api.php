@@ -19,6 +19,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/transaction', [TransactionController::class, 'store']);
+Route::middleware(['auth:sanctum'])->post('/transaction', [TransactionController::class, 'store']);
 
 require __DIR__.'/auth.php';
