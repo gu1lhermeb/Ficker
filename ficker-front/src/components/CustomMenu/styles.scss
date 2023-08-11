@@ -9,3 +9,21 @@
 :where(.css-dev-only-do-not-override-fpg3f5).ant-menu-light .ant-menu-item-selected, :where(.css-dev-only-do-not-override-fpg3f5).ant-menu-light>.ant-menu .ant-menu-item-selected {
   color: #fff;
 }
+
+.burger-icon {
+  margin: 5px;
+  display: none; 
+  color: #6C5DD3;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .burger-icon {
+    display: flex;
+  }
+
+  .menu {
+    display: none;
+  }
+}

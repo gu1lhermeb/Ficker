@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { ContainerOutlined, DesktopOutlined, PieChartOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Button, Menu } from "antd";
+import { Menu } from "antd";
 import Image from "next/image";
 import "./styles.scss";
+import Link from "next/link";
+import { Cookies } from "react-cookie";
+import { BarsOutlined } from "@ant-design/icons";
+
 type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
@@ -23,9 +26,21 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Início", "1", <Image src="/despesas.svg" alt="Logo" width={25} height={25} />),
-  getItem("Entradas", "2", <Image src="/bolsa-de-dinheiro.svg" alt="Logo" width={25} height={25} />),
-  getItem("Saídas", "3", <Image src="/wallet.svg" alt="Logo" width={25} height={25} />),
+  getItem(
+    <Link href={"/"}>Início</Link>,
+    "1",
+    <Image src="/despesas.svg" alt="Logo" width={25} height={25} />
+  ),
+  getItem(
+    <Link href={"/EnterTransaction"}>Entradas</Link>,
+    "2",
+    <Image src="/bolsa-de-dinheiro.svg" alt="Logo" width={25} height={25} />
+  ),
+  getItem(
+    <Link href={"/Outputs"}>Saídas</Link>,
+    "3",
+    <Image src="/wallet.svg" alt="Logo" width={25} height={25} />
+  ),
   getItem("Meus cartões", "4", <Image src="/cartoes-de-credito.svg" alt="Logo" width={25} height={25} />),
   getItem("Análises", "5", <Image src="/analise.svg" alt="Logo" width={25} height={25} />),
   getItem("Meu perfil", "6", <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />),
@@ -33,21 +48,26 @@ const items: MenuItem[] = [
 ];
 
 const CustomMenu: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const cookie = new Cookies();
+  const menu = cookie.get("menu");
+  const [showMenu, setShowMenu] = useState(window.innerWidth > 768);
 
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   return (
     <div>
-      <Menu
-        style={{ width: 250, height: "90vh" }}
-        defaultSelectedKeys={["1"]}
-        mode="inline"
-        inlineCollapsed={collapsed}
-        items={items}
-      />
+      <BarsOutlined onClick={toggleMenu} className="burger-icon" />
+      {showMenu && (
+        <Menu
+          style={{ width: 250, height: "90vh" }}
+          defaultSelectedKeys={[menu.toString()]}
+          mode="inline"
+          items={items}
+          onClick={({ key }) => cookie.set("menu", key)}
+        />
+      )}
     </div>
   );
 };

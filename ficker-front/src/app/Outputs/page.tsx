@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "./entertransaction.module.scss";
+import styles from "../EnterTransaction/entertransaction.module.scss";
 import { Col, Row } from "antd";
 import CustomMenu from "@/components/CustomMenu";
 
-const EnterTransaction = () => {
+const Outputs = () => {
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
@@ -18,7 +18,7 @@ const EnterTransaction = () => {
         <Col style={{ paddingTop: 10 }} lg={20}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
             <Col xs={24} lg={10}>
-              <h3>Entradas</h3>
+              <h3>Saídas</h3>
             </Col>
             <Col xs={24} lg={6}>
               <input className={styles.input} placeholder="Procurar..." />
@@ -44,7 +44,7 @@ const EnterTransaction = () => {
                   </td>
                   <td>Curso de Java</td>
                   <td>13/04/2023</td>
-                  <td style={{ color: "green" }}>R$12.000</td>
+                  <td style={{ color: "red" }}>-R$12.000</td>
                 </tr>
               </tbody>
             </table>
@@ -55,4 +55,4 @@ const EnterTransaction = () => {
   );
 };
 
-export default EnterTransaction;
+export default Outputs;
