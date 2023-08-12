@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import Image from "next/image";
@@ -62,7 +62,7 @@ const CustomMenu: React.FC = () => {
       {showMenu && (
         <Menu
           style={{ width: 250, height: "90vh" }}
-          defaultSelectedKeys={[menu.toString()]}
+          defaultSelectedKeys={menu ? [menu.toString()] : ["1"]}
           mode="inline"
           items={items}
           onClick={({ key }) => cookie.set("menu", key)}

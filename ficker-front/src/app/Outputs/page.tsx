@@ -2,10 +2,30 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../EnterTransaction/entertransaction.module.scss";
-import { Col, Row } from "antd";
+import { Col, DatePicker, Modal, Row, Select } from "antd";
 import CustomMenu from "@/components/CustomMenu";
+import { useState } from "react";
+import type { DatePickerProps } from "antd";
 
 const Outputs = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
@@ -15,6 +35,87 @@ const Outputs = () => {
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <CustomMenu />
+        <Modal
+          title="Saídas"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          okText={"Adicionar"}
+          cancelText={"Cancelar"}
+          okButtonProps={{
+            style: {
+              background: "#6C5DD3",
+              border: "none",
+              color: "#fff",
+              borderRadius: 5,
+            },
+          }}
+          cancelButtonProps={{
+            style: {
+              background: "#F8FAFC",
+              border: "none",
+              color: "#6C5DD3",
+              borderRadius: 5,
+            },
+          }}
+        >
+          <Col>
+            <Col>
+              <label>Descrição</label>
+            </Col>
+            <Col>
+              <input className={styles.input} style={{ width: "95%" }} />
+            </Col>
+          </Col>
+          <Col style={{ marginTop: 20 }}>
+            <Col>
+              <label>Data:</label>
+            </Col>
+            <Col>
+              <DatePicker
+                onChange={onChange}
+                className={styles.input}
+                placeholder="dd/mm/aaaa"
+                format={"DD/MM/YYYY"}
+              />
+            </Col>
+          </Col>
+          <Row style={{ marginTop: 20 }}>
+            <Col>
+              <Col>
+                <label>Categoria:</label>
+              </Col>
+              <Col lg={24}>
+                <Select
+                  className={styles.input}
+                  style={{ width: 150, height: 35 }}
+                  options={
+                    [
+                      // { value: "1", label: "Alimentação" },
+                      // { value: "2", label: "Educação" },
+                    ]
+                  }
+                />
+              </Col>
+            </Col>
+            <Col>
+              <Col>
+                <label>Descrição da Categoria:</label>
+              </Col>
+              <Col>
+                <input className={styles.input} />
+              </Col>
+            </Col>
+          </Row>
+          <Col style={{ marginTop: 20, marginBottom: 20 }}>
+            <Col>
+              <label>Valor:</label>
+            </Col>
+            <Col>
+              <input className={styles.input} placeholder="R$" />
+            </Col>
+          </Col>
+        </Modal>
         <Col style={{ paddingTop: 10 }} lg={20}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
             <Col xs={24} lg={10}>
@@ -22,7 +123,9 @@ const Outputs = () => {
             </Col>
             <Col xs={24} lg={6}>
               <input className={styles.input} placeholder="Procurar..." />
-              <button className={styles.button}>Nova Transação</button>
+              <button className={styles.button} onClick={showModal}>
+                Nova Transação
+              </button>
             </Col>
           </Row>
           <Col xs={20} lg={24}>
