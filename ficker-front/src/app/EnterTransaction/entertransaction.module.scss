@@ -86,3 +86,23 @@
 .ant-select-selection {
   background-color: green;
 }
+
+.modalButtonPurple {
+  background-color: #6C5DD3;
+  color: #fff;
+  border-radius: 5px;
+  margin-left: 10px;
+  height: 35px;
+  width: 100px;
+  border: none;
+  cursor: pointer;
+}
+
+.modalButtonWhite {
+    background: #F8FAFC;
+    border: none;
+    color: #6C5DD3;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Manrope", sans-serif !important;
+}
