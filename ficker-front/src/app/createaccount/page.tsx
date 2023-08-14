@@ -4,6 +4,8 @@ import styles from "./createaccount.module.scss";
 import Link from "next/link";
 import { useState } from "react";
 import { request } from "@/service/api";
+import { AxiosError } from "axios";
+import { message as msg } from "antd";
 
 const CreateAccountPage = () => {
   const [name, setName] = useState<string>("");
@@ -11,7 +13,7 @@ const CreateAccountPage = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string[]>([]);
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -28,28 +30,30 @@ const CreateAccountPage = () => {
           password_confirmation: confirmPassword,
         },
       });
-      console.log(response);
+      localStorage.setItem("token", response!.data.token);
+      msg.success("Cadastro realizado com sucesso!");
+      return (window.location.href = "/login");
     } catch (error) {
-      //TODO: create treatment to errors
-      console.log(error);
+      if (error instanceof AxiosError) {
+        setMessage(Object.values(error.response?.data.errors));
+      }
     }
   };
 
   return (
     <div>
-      {/* <dialog open className={styles.dialog}>
-        <div className={styles.dialogContent}>
-          <p>Conta criada com sucesso!</p>
-          <Link href={"/login"} style={{ textDecoration: "none" }}>
-            <button className={styles.button}>Fazer Login</button>
-          </Link>
-        </div>
-      </dialog> */}
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
         <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
           <Image src="/logo.png" alt="Logo" width={130} height={27} />
         </Link>
       </div>
+      {message.length > 0 ? (
+        <div className={styles.errorContainer}>
+          {message.map((item) => (
+            <p style={{ color: "#ee4848" }}>{item}</p>
+          ))}
+        </div>
+      ) : null}
       <div className={styles.container}>
         <form
           className={styles.form}
