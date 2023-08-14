@@ -42,7 +42,7 @@ export const request = async ({
   try {
     result = await axios(config);
   } catch (error: any) {
-    return null;
+    throw error;
   }
   toggleLoader(loaderStateSetter, false);
   return result;

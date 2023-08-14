@@ -32,7 +32,7 @@ const CreateAccountPage = () => {
       });
       localStorage.setItem("token", response!.data.token);
       msg.success("Cadastro realizado com sucesso!");
-      return (window.location.href = "/login");
+      return (window.location.href = "/");
     } catch (error) {
       if (error instanceof AxiosError) {
         setMessage(Object.values(error.response?.data.errors));
