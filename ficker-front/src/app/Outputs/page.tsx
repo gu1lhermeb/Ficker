@@ -2,10 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../EnterTransaction/entertransaction.module.scss";
-import { Col, DatePicker, Modal, Row, Select } from "antd";
+import { Col, Row } from "antd";
 import CustomMenu from "@/components/CustomMenu";
 import { useState } from "react";
-import type { DatePickerProps } from "antd";
 import { OutputModal } from "./modal";
 
 const Outputs = () => {
@@ -13,18 +12,6 @@ const Outputs = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const onChange: DatePickerProps["onChange"] = (date, dateString) => {
-    console.log(date, dateString);
   };
 
   return (
