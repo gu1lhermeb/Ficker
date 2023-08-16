@@ -24,6 +24,7 @@ export const request = async ({
   loaderStateSetter,
 }: RequestParams) => {
   const baseUrl = "back.ficker.tech/api";
+  const token = localStorage.getItem("token");
   const config: AxiosRequestConfig = {
     method,
     baseURL: `https://${baseUrl}/${endpoint}`,
@@ -32,7 +33,7 @@ export const request = async ({
     timeout: 7000,
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer `,
+      Authorization: `Bearer ${token}`,
       ...headers,
     },
   };

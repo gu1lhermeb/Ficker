@@ -21,7 +21,7 @@ export default function Login() {
         },
       });
       if (response!.status === 200) {
-        localStorage.setItem("token", response!.data.token);
+        localStorage.setItem("token", response!.data.data.token);
         return (window.location.href = "/");
       }
     } catch (error) {
