@@ -20,7 +20,7 @@ class TransactionController extends Controller
             'type' => ['required'],
             'value' => ['required', 'decimal:0,2']
         ]);
-
+        
         if($request->category_id == '0') { // Assumindo que o value da option NOVA seja 0
 
             $request->validate([
@@ -29,7 +29,6 @@ class TransactionController extends Controller
 
             $category = Category::create([
                 'category_description' => $request->category_description,
-                'type' => $request->type
             ]);
 
         } else {
