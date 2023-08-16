@@ -19,7 +19,6 @@ class TransactionTest extends TestCase
 
         $category = Category::create([
             'category_description' => 'lalalalalala',
-            'type' => 'ENTRADA'
         ]);
 
         $this->post('/api/register',[
