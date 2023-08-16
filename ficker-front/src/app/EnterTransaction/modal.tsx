@@ -111,6 +111,7 @@ export const EnterTransactionModal = ({ isModalOpen, setIsModalOpen }: EnterTran
               />
             </Form.Item>
           </Col>
+          {showDescriptionCategory ? (
             <Col>
               <label>Descrição da Categoria:</label>
               <Form.Item
@@ -120,6 +121,7 @@ export const EnterTransactionModal = ({ isModalOpen, setIsModalOpen }: EnterTran
                 <Input className={styles.input} />
               </Form.Item>
             </Col>
+            ) : null}
         </Row>
         <Col style={{ marginBottom: 20 }} xl={15}>
           <label>Valor:</label>
