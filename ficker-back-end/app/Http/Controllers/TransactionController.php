@@ -52,4 +52,14 @@ class TransactionController extends Controller
 
         return response()->json($response, 201);
     }
+
+    public function show() :JsonResponse
+    {
+        $categories = Category::all();
+        $response = [];
+        foreach($categories as $category){
+            array_push($response, $category);
+        }
+        return response()->json($response, 200);
+    }
 }
