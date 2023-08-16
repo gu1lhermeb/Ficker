@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
+use Illuminate\Cache\Repository;
 
 class TransactionController extends Controller
 {
@@ -52,12 +53,21 @@ class TransactionController extends Controller
         return response()->json($response, 201);
     }
 
-    public function show() :JsonResponse
+    public function showCategories() :JsonResponse
     {
         $categories = Category::all();
         $response = [];
         foreach($categories as $category){
             array_push($response, $category);
+        }
+        return response()->json($response, 200);
+    }
+
+    public function showTransactions(){
+        $transactions = Transaction::where('user_id', Auth::user()->id)->get();
+        $response = [];
+        foreach($transactions  as $transaction){
+            array_push($response, $transaction);
         }
         return response()->json($response, 200);
     }
