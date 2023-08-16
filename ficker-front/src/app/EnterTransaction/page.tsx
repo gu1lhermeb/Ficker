@@ -4,8 +4,15 @@ import Image from "next/image";
 import styles from "./entertransaction.module.scss";
 import { Col, Row } from "antd";
 import CustomMenu from "@/components/CustomMenu";
+import { useState } from "react";
+import {EnterTransactionModal} from "./modal";
 
-const EnterTransaction = () => {
+const EnterTransaction = () => {3
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
@@ -15,6 +22,7 @@ const EnterTransaction = () => {
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <CustomMenu />
+        <EnterTransactionModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         <Col style={{ paddingTop: 10 }} lg={20}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
             <Col xs={24} lg={10}>
@@ -22,7 +30,9 @@ const EnterTransaction = () => {
             </Col>
             <Col xs={24} lg={6}>
               <input className={styles.input} placeholder="Procurar..." />
-              <button className={styles.button}>Nova Transação</button>
+              <button className={styles.button} onClick={showModal}>
+                Nova Transação
+              </button>
             </Col>
           </Row>
           <Col xs={20} lg={24}>
