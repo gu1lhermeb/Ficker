@@ -30,7 +30,6 @@ class TransactionController extends Controller
 
             $category = Category::create([
                 'category_description' => $request->category_description,
-                'type' => $request->type
             ]);
 
         } else {
