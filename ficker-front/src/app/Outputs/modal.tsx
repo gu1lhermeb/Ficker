@@ -11,13 +11,33 @@ interface OutputModalProps {
   setIsModalOpen: (value: boolean) => void;
 }
 
+interface Category {
+  id: number;
+  category_description: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) => {
   const [showDescriptionCategory, setShowDescriptionCategory] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [form] = Form.useForm();
 
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
+  };
+
+  const getCategories = async () => {
+    try {
+      const response = await request({
+        method: "GET",
+        endpoint: "categories",
+      });
+      setCategories(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleFinish = async () => {
@@ -30,7 +50,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
         data: {
           ...values,
           date: dayjs(values.date).format("YYYY-MM-DD"),
-          type: "entrada",
+          type: "saída",
         },
       });
       message.success("Transação adicionada com sucesso!");
@@ -44,6 +64,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
   };
 
   useEffect(() => {
+    getCategories();
     form.resetFields();
   }, []);
 
@@ -106,7 +127,10 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
                 style={{ width: 200, height: 35 }}
                 options={[
                   { value: 0, label: "Nova" },
-                  { value: 1, label: "Ao" },
+                  ...categories.map((category) => ({
+                    value: category.id,
+                    label: category.category_description,
+                  })),
                 ]}
               />
             </Form.Item>

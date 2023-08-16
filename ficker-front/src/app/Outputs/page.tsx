@@ -4,15 +4,48 @@ import Image from "next/image";
 import styles from "../EnterTransaction/entertransaction.module.scss";
 import { Col, Row } from "antd";
 import CustomMenu from "@/components/CustomMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OutputModal } from "./modal";
+import { request } from "@/service/api";
+import dayjs from "dayjs";
+
+interface Transaction {
+  id: number;
+  user_id: number;
+  category_id: number;
+  card_id: number;
+  description: string;
+  date: Date;
+  type: string;
+  value: number;
+  installments: number;
+  created_at: Date;
+  updated_at: Date;
+}
 
 const Outputs = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
+
+  const getTransactions = async () => {
+    try {
+      const response = await request({
+        method: "GET",
+        endpoint: "transactions",
+      });
+      setTransactions(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTransactions();
+  }, [isModalOpen]);
 
   return (
     <div>
@@ -47,16 +80,20 @@ const Outputs = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                    <button style={{ background: "none", border: "none" }} onClick={() => {}}>
-                      <Image src="/edit.png" alt="Editar" width={20} height={20} />
-                    </button>
-                  </td>
-                  <td>Curso de Java</td>
-                  <td>13/04/2023</td>
-                  <td style={{ color: "red" }}>-R$12.000</td>
-                </tr>
+                <>
+                  {transactions.map((transaction) => (
+                    <tr key={transaction.id}>
+                      <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <button style={{ background: "none", border: "none" }} onClick={() => {}}>
+                          <Image src="/edit.png" alt="Editar" width={20} height={20} />
+                        </button>
+                      </td>
+                      <td>{transaction.description}</td>
+                      <td>{dayjs(transaction.date).format("DD/MM/YYYY")}</td>
+                      <td style={{ color: "red" }}>-R${transaction.value}</td>
+                    </tr>
+                  ))}
+                </>
               </tbody>
             </table>
           </Col>
