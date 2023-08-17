@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import "./styles.scss";
 import Link from "next/link";
 import { Cookies } from "react-cookie";
 import { BarsOutlined } from "@ant-design/icons";
+import useMediaQuery from "use-media-antd-query";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -50,7 +51,8 @@ const items: MenuItem[] = [
 const CustomMenu: React.FC = () => {
   const cookie = new Cookies();
   const menu = cookie.get("menu");
-  const [showMenu, setShowMenu] = useState(window.innerWidth > 768);
+  const colSize = useMediaQuery();
+  const [showMenu, setShowMenu] = useState<boolean>(colSize === "xs" ? false : true);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);

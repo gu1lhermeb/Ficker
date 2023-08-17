@@ -87,6 +87,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
       <Form
         form={form}
         name="basic"
+        data-testid="form"
         onFinish={handleFinish}
         onFinishFailed={(errorInfo) => console.log(errorInfo)}
         onValuesChange={(changedValues) => {
@@ -101,13 +102,14 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
             name="description"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
           >
-            <Input className={styles.input} style={{ width: "95%" }} />
+            <Input className={styles.input} style={{ width: "95%" }} data-testid="description" />
           </Form.Item>
         </Col>
         <Col style={{ marginTop: 20 }}>
           <label>Data:</label>
           <Form.Item name="date" rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}>
             <DatePicker
+              data-testid="date"
               onChange={onChange}
               className={styles.input}
               placeholder="dd/mm/aaaa"
@@ -123,6 +125,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
               rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
             >
               <Select
+                data-testid="category_id"
                 className={styles.input}
                 style={{ width: 200, height: 35 }}
                 options={[
@@ -142,7 +145,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
                 name="category_description"
                 rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
               >
-                <Input className={styles.input} />
+                <Input className={styles.input} data-testid="category_description" />
               </Form.Item>
             </Col>
           ) : null}
@@ -150,7 +153,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
         <Col style={{ marginBottom: 20 }} xl={15}>
           <label>Valor:</label>
           <Form.Item name="value" rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}>
-            <Input className={styles.input} placeholder="R$" />
+            <Input className={styles.input} placeholder="R$" data-testid="value" />
           </Form.Item>
         </Col>
         <Row>
