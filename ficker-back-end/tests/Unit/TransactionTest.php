@@ -22,7 +22,7 @@ class TransactionTest extends TestCase
         ]);
 
         $this->post('/api/register',[
-            'name' => 'Teste User',
+            'name' => 'Kenji',
             'email' => 'testemail@test.com',
             'password' => 'passwordtest',
             'password_confirmation' => 'passwordtest'
@@ -30,7 +30,7 @@ class TransactionTest extends TestCase
 
         $this->post('/api/transaction',[
             'category_id' => $category->id,
-            'description' => 'lala dodo',
+            'description' => 'Mc Donalds',
             'date' => '2023-01-03',
             'type' => 'entrada',
             'value' => 50.99

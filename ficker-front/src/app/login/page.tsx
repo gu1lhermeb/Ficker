@@ -1,13 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styles from "./login.module.scss";
 import Image from "next/image";
 import { request } from "@/service/api";
 import Link from "next/link";
+import { message } from "antd";
+import MainContext from "@/context";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { setAuth } = useContext(MainContext);
 
   const handleSubmit = async () => {
     try {
@@ -19,9 +22,13 @@ export default function Login() {
           password: password,
         },
       });
+      if (response!.status === 200) {
+        setAuth(true);
+        localStorage.setItem("token", response!.data.data.token);
+        return (window.location.href = "/");
+      }
     } catch (error) {
-      //TODO: create treatment to errors
-      console.log(error);
+      message.error("Senha ou email incorreto!");
     }
   };
   return (
@@ -68,11 +75,11 @@ export default function Login() {
             </button>
           </div>
           <div style={{ textAlign: "center", marginTop: 10 }}>
-            <Link href={"/recoveryaccount"} style={{ textDecoration: 'none' }}>
-              <p style={{ fontSize: 14, marginTop: 20, color: 'black'}}>Esqueceu a senha?</p>
+            <Link href={"/recoveryaccount"} style={{ textDecoration: "none" }}>
+              <p style={{ fontSize: 14, marginTop: 20, color: "black" }}>Esqueceu a senha?</p>
             </Link>
-            <Link href={"/createaccount"} style={{ textDecoration: 'none' }}>
-              <p style={{ fontSize: 14, marginTop: -11, color: 'black'}}>Cadastre-se</p>
+            <Link href={"/createaccount"} style={{ textDecoration: "none" }}>
+              <p style={{ fontSize: 14, marginTop: -11, color: "black" }}>Cadastre-se</p>
             </Link>
           </div>
         </form>

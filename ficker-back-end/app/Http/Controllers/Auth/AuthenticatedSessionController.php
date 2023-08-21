@@ -35,9 +35,6 @@ class AuthenticatedSessionController extends Controller
             $message = 'Error';
             $response = [
                 "message" => $message,
-                "data" => [
-                    "error" => 'Credenciais Inválidas'
-                ]
             ];
             return response()->json($response, 401);
         }

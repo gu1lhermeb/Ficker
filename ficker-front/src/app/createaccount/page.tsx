@@ -4,6 +4,8 @@ import styles from "./createaccount.module.scss";
 import Link from "next/link";
 import { useState } from "react";
 import { request } from "@/service/api";
+import { AxiosError } from "axios";
+import { message as msg } from "antd";
 
 const CreateAccountPage = () => {
   const [name, setName] = useState<string>("");
@@ -11,6 +13,7 @@ const CreateAccountPage = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
+  const [message, setMessage] = useState<string[]>([]);
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -24,11 +27,16 @@ const CreateAccountPage = () => {
           name: name,
           email: email,
           password: password,
+          password_confirmation: confirmPassword,
         },
       });
+      localStorage.setItem("token", response!.data.data.token);
+      msg.success("Cadastro realizado com sucesso!");
+      return (window.location.href = "/");
     } catch (error) {
-      //TODO: create treatment to errors
-      console.log(error);
+      if (error instanceof AxiosError) {
+        setMessage(Object.values(error.response?.data.errors));
+      }
     }
   };
 
@@ -39,6 +47,13 @@ const CreateAccountPage = () => {
           <Image src="/logo.png" alt="Logo" width={130} height={27} />
         </Link>
       </div>
+      {message.length > 0 ? (
+        <div className={styles.errorContainer}>
+          {message.map((item) => (
+            <p style={{ color: "#ee4848" }}>{item}</p>
+          ))}
+        </div>
+      ) : null}
       <div className={styles.container}>
         <form
           className={styles.form}
@@ -92,9 +107,7 @@ const CreateAccountPage = () => {
             className={styles.input}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-          {error ? (
-            <p style={{ color: "red" }}>*As senhas precisam ser iguais</p>
-          ) : null}
+          {error ? <p style={{ color: "red" }}>*As senhas precisam ser iguais</p> : null}
           <div
             style={{
               display: "flex",
@@ -106,8 +119,8 @@ const CreateAccountPage = () => {
             <button type="submit" className={styles.button}>
               Cadastrar
             </button>
-            <Link href={"/login"} style={{ textDecoration: 'none' }}>
-              <p style={{ fontSize: 14, marginTop: 20, color: 'black'}}>Já possui cadastro?</p>
+            <Link href={"/login"} style={{ textDecoration: "none" }}>
+              <p style={{ fontSize: 14, marginTop: 20, color: "black" }}>Já possui cadastro?</p>
             </Link>
           </div>
         </form>
