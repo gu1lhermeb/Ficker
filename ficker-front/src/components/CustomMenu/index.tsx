@@ -45,7 +45,11 @@ const items: MenuItem[] = [
   getItem("Meus cartões", "4", <Image src="/cartoes-de-credito.svg" alt="Logo" width={25} height={25} />),
   getItem("Análises", "5", <Image src="/analise.svg" alt="Logo" width={25} height={25} />),
   getItem("Meu perfil", "6", <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />),
-  getItem("Sair", "7", <Image src="/exit1.svg" alt="Logo" width={25} height={25} />),
+  getItem(
+    "Sair",
+    "7",
+    <Image src="/exit1.svg" alt="Logo" width={25} height={25} onClick={() => alert("a")} />
+  ),
 ];
 
 const CustomMenu: React.FC = () => {
@@ -67,7 +71,14 @@ const CustomMenu: React.FC = () => {
           defaultSelectedKeys={menu ? [menu.toString()] : ["1"]}
           mode="inline"
           items={items}
-          onClick={({ key }) => cookie.set("menu", key)}
+          onClick={({ key }) => {
+            cookie.set("menu", key);
+            if (key === "7") {
+              cookie.remove("menu");
+              localStorage.clear();
+              window.location.href = "/login";
+            }
+          }}
         />
       )}
     </div>

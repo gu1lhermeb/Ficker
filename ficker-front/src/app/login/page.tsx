@@ -1,14 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styles from "./login.module.scss";
 import Image from "next/image";
 import { request } from "@/service/api";
 import Link from "next/link";
 import { message } from "antd";
+import MainContext from "@/context";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { setAuth } = useContext(MainContext);
 
   const handleSubmit = async () => {
     try {
@@ -21,6 +23,7 @@ export default function Login() {
         },
       });
       if (response!.status === 200) {
+        setAuth(true);
         localStorage.setItem("token", response!.data.data.token);
         return (window.location.href = "/");
       }
