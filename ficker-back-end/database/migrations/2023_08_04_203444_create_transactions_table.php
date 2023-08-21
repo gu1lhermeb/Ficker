@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('card_id')->constrained('cards')->onDelete('cascade');
+            $table->foreignId('card_id')->nullable()->constrained('cards')->onDelete('cascade');
             $table->string('description');
-            $table->datetime('date');
+            $table->date('date');
             $table->string('type');
             $table->double('value');
-            $table->integer('installments');
+            $table->integer('installments')->nullable()->default(0);
             $table->timestamps();
         });
     }
