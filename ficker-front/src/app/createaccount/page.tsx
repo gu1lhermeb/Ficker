@@ -30,7 +30,7 @@ const CreateAccountPage = () => {
           password_confirmation: confirmPassword,
         },
       });
-      localStorage.setItem("token", response!.data.token);
+      localStorage.setItem("token", response!.data.data.token);
       msg.success("Cadastro realizado com sucesso!");
       return (window.location.href = "/");
     } catch (error) {
