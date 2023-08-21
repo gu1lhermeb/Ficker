@@ -11,6 +11,13 @@ class Card extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'flag_id',
+        'descriptiom',
+        'expiration'
+    ];
+
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
