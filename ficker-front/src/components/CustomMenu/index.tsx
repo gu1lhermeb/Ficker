@@ -42,13 +42,31 @@ const items: MenuItem[] = [
     "3",
     <Image src="/wallet.svg" alt="Logo" width={25} height={25} />
   ),
-  getItem("Meus cartões", "4", <Image src="/cartoes-de-credito.svg" alt="Logo" width={25} height={25} />),
-  getItem("Análises", "5", <Image src="/analise.svg" alt="Logo" width={25} height={25} />),
-  getItem("Meu perfil", "6", <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />),
+  getItem(
+    <Link href={"/carts"}>Meus cartões</Link>,
+    "4",
+    <Image src="/cartoes-de-credito.svg" alt="Logo" width={25} height={25} />
+  ),
+  getItem(
+    "Análises",
+    "5",
+    <Image src="/analise.svg" alt="Logo" width={25} height={25} />
+  ),
+  getItem(
+    "Meu perfil",
+    "6",
+    <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />
+  ),
   getItem(
     "Sair",
     "7",
-    <Image src="/exit1.svg" alt="Logo" width={25} height={25} onClick={() => alert("a")} />
+    <Image
+      src="/exit1.svg"
+      alt="Logo"
+      width={25}
+      height={25}
+      onClick={() => alert("a")}
+    />
   ),
 ];
 
@@ -56,7 +74,9 @@ const CustomMenu: React.FC = () => {
   const cookie = new Cookies();
   const menu = cookie.get("menu");
   const colSize = useMediaQuery();
-  const [showMenu, setShowMenu] = useState<boolean>(colSize === "xs" ? false : true);
+  const [showMenu, setShowMenu] = useState<boolean>(
+    colSize === "xs" ? false : true
+  );
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);

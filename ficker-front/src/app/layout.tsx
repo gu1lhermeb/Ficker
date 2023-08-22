@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
