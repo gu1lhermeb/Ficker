@@ -14,8 +14,9 @@ class Card extends Model
     protected $fillable = [
         'user_id',
         'flag_id',
-        'descriptiom',
-        'expiration'
+        'description',
+        'expiration',
+        'best_day'
     ];
 
     public function transactions(): HasMany

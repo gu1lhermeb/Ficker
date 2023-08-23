@@ -7,16 +7,46 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $flags = [
+
+            [
+                'description' => 'Mastercard'
+            ],
+
+            [
+                'description' => 'Visa'
+            ],
+
+            [
+                'description' => 'Hipercard'
+            ],
+
+            [
+                'description' => 'Elo'
+            ],
+
+            [
+                'description' => 'Alelo'
+            ],
+
+            [
+                'description' => 'American Express'
+            ],
+
+            [
+                'description' => 'Diners Club'
+            ],
+
+        ];
+
+        collect($flags)->each( function($flag) {
+
+            \App\Models\Flag::create($flag);
+
+        });
     }
 }

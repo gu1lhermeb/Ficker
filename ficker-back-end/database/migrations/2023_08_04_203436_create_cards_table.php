@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('flag_id')->constrained('flags')->onDelete('cascade');
             $table->string('description');
-            $table->date('expiration');
+            $table->integer('expiration');
+            $table->integer('best_day');
             $table->timestamps();
         });
     }
