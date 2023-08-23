@@ -26,10 +26,10 @@ Route::middleware(['auth:sanctum'])->get('/transactions', [TransactionController
 
 Route::middleware(['auth:sanctum'])->get('/categories', [TransactionController::class, 'showCategories']);
 
+Route::middleware(['auth:sanctum'])->post('/card', [CardController::class, 'store']);
+
 Route::middleware(['auth:sanctum'])->get('/cards', [CardController::class, 'showCards']);
 
-Route::middleware(['auth:sanctum'])->post('/cards/store', [CardController::class, 'store']);
-
-Route::middleware(['auth:sanctum'])->get('/cards/flags', [CardController::class, 'showFlags']);
+Route::middleware(['auth:sanctum'])->get('flags', [CardController::class, 'showFlags']);
 
 require __DIR__.'/auth.php';
