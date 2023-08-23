@@ -10,6 +10,10 @@ class Flag extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'description'
+    ];
+
     public function cards(): HasMany
     {
         return $this->hasMany(Card::class);
