@@ -24,7 +24,7 @@ services:
     #seção onde é definida a montagem bind para o volume da aplicação em desenvolvimento
     #Necessário mapear diretório do host que contém a aplicação a ser desenvolvida
     volumes:
-      - /root/Ficker/ficker-back-end:/app
+      - /home/guilherme/Documentos/projetos/Ficker/ficker-back-end:/app
     environment:
       - APP_ENV=local
     labels:
