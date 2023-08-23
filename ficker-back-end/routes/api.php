@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\CardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,11 @@ Route::middleware(['auth:sanctum'])->post('/transaction', [TransactionController
 Route::middleware(['auth:sanctum'])->get('/transactions', [TransactionController::class, 'showTransactions']);
 
 Route::middleware(['auth:sanctum'])->get('/categories', [TransactionController::class, 'showCategories']);
+
+Route::middleware(['auth:sanctum'])->get('/cards', [CardController::class, 'showCards']);
+
+Route::middleware(['auth:sanctum'])->post('/cards/store', [CardController::class, 'store']);
+
+Route::middleware(['auth:sanctum'])->get('/cards/flags', [CardController::class, 'showFlags']);
 
 require __DIR__.'/auth.php';
