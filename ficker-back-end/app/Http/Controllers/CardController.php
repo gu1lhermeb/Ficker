@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Card;
+use App\Models\Flag;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -31,5 +32,25 @@ class CardController extends Controller
         ];
 
         return response()->json($response, 201);
+    }
+
+    public function showCards() :JsonResponse
+    {
+        $cards = Auth::user()->cards;
+        $response = [];
+        foreach($cards as $card){
+            array_push($response, $card);
+        }
+        return response()->json($response, 200);
+    }
+
+    public function showFlags() :JsonResponse
+    {
+        $flags = Flag::all();
+        $response = [];
+        foreach($flags as $flag){
+            array_push($response, $flag);
+        }
+        return response()->json($response, 200);
     }
 }
