@@ -11,7 +11,7 @@ interface CardModalProps {
 
 interface Flag {
   id: number;
-  flag_description: string;
+  description: string;
   created_at: Date;
   updated_at: Date;
 }
@@ -29,7 +29,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
     try {
       const response = await request({
         method: "GET",
-        endpoint: "categories", //VERIFICAR ENDPOINT DO RETORNO DAS BANDEIRAS DE CARTÕES
+        endpoint: "flags",
       });
       setFlags(response.data);
     } catch (error) {
@@ -42,7 +42,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
       const values = await form.validateFields();
       await request({
         method: "POST",
-        endpoint: "transaction", //VERIFICAR ENDPOINT DO CADASTRO DE CARTÕES
+        endpoint: "card",
         data: {
           ...values,
         },
@@ -83,23 +83,23 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
         onFinishFailed={(errorInfo) => console.log(errorInfo)}
       >
         <Col>
-            <label>Bandeira:</label>
-            <Form.Item
-              name="flag_id"
-              rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
-            >
-              <Select
-                data-testid="flag_id"
-                className={styles.input}
-                style={{ width: 200, height: 35 }}
-                options={[
-                  ...flags.map((flag) => ({
-                    value: flag.id,
-                    label: flag.flag_description,
-                  })),
-                ]}
-              />
-            </Form.Item>
+          <label>Bandeira:</label>
+          <Form.Item
+            name="flag_id"
+            rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
+          >
+            <Select
+              data-testid="flag_id"
+              className={styles.input}
+              style={{ width: 200, height: 35 }}
+              options={[
+                ...flags.map((flag) => ({
+                  value: flag.id,
+                  label: flag.description,
+                })),
+              ]}
+            />
+          </Form.Item>
         </Col>
         <Col style={{ marginTop: 20 }}>
           <label>Descrição</label>
@@ -111,45 +111,37 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
           </Form.Item>
         </Col>
         <Col style={{ marginTop: 20 }}>
-            <label>Vencimento:</label>
-            <Form.Item
-            name="due_date"
+          <label>Vencimento:</label>
+          <Form.Item
+            name="expiration"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
-            >
-            <Select
-                data-testid="due_date"
-                className={styles.input}
-                style={{ width: 200, height: 35 }}
-            >
-                {/* Renderize as opções com os dias do mês */}
-                {Array.from({ length: 31 }, (_, index) => (
+          >
+            <Select data-testid="expiration" className={styles.input} style={{ width: 200, height: 35 }}>
+              {/* Renderize as opções com os dias do mês */}
+              {Array.from({ length: 31 }, (_, index) => (
                 <Select.Option key={index + 1} value={index + 1}>
-                    {index + 1}
+                  {index + 1}
                 </Select.Option>
-                ))}
+              ))}
             </Select>
-            </Form.Item>
+          </Form.Item>
         </Col>
         <Col style={{ marginTop: 20 }}>
-            <label>Melhor Dia de Compra:</label>
-            <Form.Item
-            name="best_purchase_day"
+          <label>Melhor Dia de Compra:</label>
+          <Form.Item
+            name="best_day"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
-            >
-            <Select
-                data-testid="best_purchase_day"
-                className={styles.input}
-                style={{ width: 200, height: 35 }}
-            >
-                {/* Renderize as opções com os dias do mês */}
-                {Array.from({ length: 31 }, (_, index) => (
+          >
+            <Select data-testid="best_day" className={styles.input} style={{ width: 200, height: 35 }}>
+              {/* Renderize as opções com os dias do mês */}
+              {Array.from({ length: 31 }, (_, index) => (
                 <Select.Option key={index + 1} value={index + 1}>
-                    {index + 1}
+                  {index + 1}
                 </Select.Option>
-                ))}
+              ))}
             </Select>
-            </Form.Item>
-        </Col>       
+          </Form.Item>
+        </Col>
         <Row>
           <Button className={styles.modalButtonWhite} onClick={handleCancel}>
             Cancelar
