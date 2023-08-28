@@ -15,10 +15,10 @@ class CardController extends Controller
     {
 
         $request->validate([
-            'description' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'min:2', 'max:50'],
             'flag_id' => ['required'],
-            'expiration' => ['required', 'integer', 'min_digits:2', 'max_digits:2'],
-            'best_day' => ['required', 'integer', 'min_digits:2', 'max_digits:2']
+            'expiration' => ['required', 'integer', 'min:1', 'max:31'],
+            'best_day' => ['required', 'integer', 'min:1', 'max:31']
         ]);
 
         $card = Card::create([
