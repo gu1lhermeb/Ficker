@@ -21,7 +21,7 @@ class TransactionController extends Controller
             'type' => ['required'],
             'value' => ['required', 'decimal:0,2']
         ]);
-        
+
         if($request->category_id == '0') { // Assumindo que o value da option NOVA seja 0
 
             $request->validate([
@@ -39,6 +39,7 @@ class TransactionController extends Controller
 
         $transaction = Transaction::create([
             'user_id' => Auth::user()->id,
+            'card_id' => $request->card_id,
             'category_id' => $category->id,
             'description' => $request->description,
             'date' => $request->date,
