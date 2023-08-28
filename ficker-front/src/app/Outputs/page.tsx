@@ -60,10 +60,10 @@ const Outputs = () => {
         <OutputModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         <Col style={{ paddingTop: 10 }} lg={20}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
-            <Col xs={24} lg={10}>
+            <Col xs={24} lg={15}>
               <h3>Saídas</h3>
             </Col>
-            <Col xs={24} lg={6}>
+            <Col xs={24} lg={9}>
               <input className={styles.input} placeholder="Procurar..." />
               <button className={styles.button} onClick={showModal}>
                 Nova Transação

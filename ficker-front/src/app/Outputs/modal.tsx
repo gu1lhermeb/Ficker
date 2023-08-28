@@ -70,7 +70,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
 
   return (
     <Modal
-      title="Saídas"
+      title="Nova Saída"
       open={isModalOpen}
       onCancel={handleCancel}
       okButtonProps={{
@@ -96,7 +96,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
           }
         }}
       >
-        <Col>
+        <Col style={{ marginTop: 20 }}>
           <label>Descrição</label>
           <Form.Item
             name="description"
@@ -105,7 +105,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
             <Input className={styles.input} style={{ width: "95%" }} data-testid="description" />
           </Form.Item>
         </Col>
-        <Col style={{ marginTop: 20 }}>
+        <Col >
           <label>Data:</label>
           <Form.Item name="date" rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}>
             <DatePicker
@@ -117,7 +117,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
             />
           </Form.Item>
         </Col>
-        <Row style={{ marginTop: 20 }}>
+        <Row>
           <Col>
             <label>Categoria:</label>
             <Form.Item
@@ -127,7 +127,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
               <Select
                 data-testid="category_id"
                 className={styles.input}
-                style={{ width: 200, height: 35 }}
+                style={{ width: 200, height: 40 }}
                 options={[
                   { value: 0, label: "Nova" },
                   ...categories.map((category) => ({
@@ -150,7 +150,7 @@ export const OutputModal = ({ isModalOpen, setIsModalOpen }: OutputModalProps) =
             </Col>
           ) : null}
         </Row>
-        <Col style={{ marginBottom: 20 }} xl={15}>
+        <Col xl={15}>
           <label>Valor:</label>
           <Form.Item name="value" rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}>
             <Input className={styles.input} placeholder="R$" data-testid="value" />

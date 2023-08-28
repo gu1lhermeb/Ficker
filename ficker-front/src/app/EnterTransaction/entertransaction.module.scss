@@ -7,6 +7,7 @@
   color: #F8FAFC;
   cursor: pointer;
   margin-top: 20px;
+  height: 40px;
 
   &:hover {
     opacity: 0.7;
@@ -16,7 +17,7 @@
 
 .input {
   padding: 0px 10px;
-  height: 33px;
+  height: 40px;
   margin-right: 20px;
   border: 1px solid #F8FAFC;
   border-radius: 5px;
@@ -45,6 +46,7 @@
   display: flex;
   font-size: 1rem;
   padding: 10px;
+  height: 40px;
   &:hover {
     background-color: #6C5DD3;
     color: #cccccc;
@@ -92,7 +94,7 @@
   color: #fff;
   border-radius: 5px;
   margin-left: 10px;
-  height: 35px;
+  height: 40px;
   width: 100px;
   border: none;
   cursor: pointer;
@@ -103,6 +105,8 @@
     border: none;
     color: #6C5DD3;
     border-radius: 5px;
+    height: 40px;
+  width: 100px;
     cursor: pointer;
     font-family: "Manrope", sans-serif !important;
 }

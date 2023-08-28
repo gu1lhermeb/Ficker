@@ -1,6 +1,6 @@
 "use client";
 import { request } from "@/service/api";
-import styles from "../carts/cards.module.scss";
+import styles from "../EnterTransaction/entertransaction.module.scss";
 import { Modal, Col, Row, Select, Form, Button, Input, message } from "antd";
 import { useEffect, useState } from "react";
 
@@ -82,7 +82,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
         onFinish={handleFinish}
         onFinishFailed={(errorInfo) => console.log(errorInfo)}
       >
-        <Col>
+        <Col style={{ marginTop: 20 }}>
           <label>Bandeira:</label>
           <Form.Item
             name="flag_id"
@@ -91,7 +91,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
             <Select
               data-testid="flag_id"
               className={styles.input}
-              style={{ width: 200, height: 35 }}
+              style={{ width: 200, height: 40 }}
               options={[
                 ...flags.map((flag) => ({
                   value: flag.id,
@@ -116,7 +116,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
             name="expiration"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
           >
-            <Select data-testid="expiration" className={styles.input} style={{ width: 200, height: 35 }}>
+            <Select data-testid="expiration" className={styles.input} style={{ width: 200, height: 40 }}>
               {/* Renderize as opções com os dias do mês */}
               {Array.from({ length: 31 }, (_, index) => (
                 <Select.Option key={index + 1} value={index + 1}>
@@ -132,7 +132,7 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
             name="best_day"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
           >
-            <Select data-testid="best_day" className={styles.input} style={{ width: 200, height: 35 }}>
+            <Select data-testid="best_day" className={styles.input} style={{ width: 200, height: 40 }}>
               {/* Renderize as opções com os dias do mês */}
               {Array.from({ length: 31 }, (_, index) => (
                 <Select.Option key={index + 1} value={index + 1}>

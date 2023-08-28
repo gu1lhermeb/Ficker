@@ -74,7 +74,7 @@ export const EnterTransactionModal = ({ isModalOpen, setIsModalOpen }: EnterTran
           }
         }}
       >
-        <Col>
+        <Col style={{ marginTop: 20 }}>
           <label>Descrição</label>
           <Form.Item
             name="description"
@@ -103,7 +103,7 @@ export const EnterTransactionModal = ({ isModalOpen, setIsModalOpen }: EnterTran
             >
               <Select
                 className={styles.input}
-                style={{ width: 200, height: 35 }}
+                style={{ width: 200, height: 40 }}
                 options={[
                   { value: 0, label: "Nova" },
                   { value: 1, label: "Ao" },
