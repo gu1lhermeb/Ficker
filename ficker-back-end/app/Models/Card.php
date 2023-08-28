@@ -16,7 +16,6 @@ class Card extends Model
         'flag_id',
         'description',
         'expiration',
-        'best_day'
     ];
 
     public function transactions(): HasMany
