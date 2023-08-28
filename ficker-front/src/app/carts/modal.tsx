@@ -126,22 +126,6 @@ export const NewCardModal = ({ isModalOpen, setIsModalOpen }: CardModalProps) =>
             </Select>
           </Form.Item>
         </Col>
-        <Col style={{ marginTop: 20 }}>
-          <label>Melhor Dia de Compra:</label>
-          <Form.Item
-            name="best_day"
-            rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
-          >
-            <Select data-testid="best_day" className={styles.input} style={{ width: 200, height: 40 }}>
-              {/* Renderize as opções com os dias do mês */}
-              {Array.from({ length: 31 }, (_, index) => (
-                <Select.Option key={index + 1} value={index + 1}>
-                  {index + 1}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
         <Row>
           <Button className={styles.modalButtonWhite} onClick={handleCancel}>
             Cancelar
