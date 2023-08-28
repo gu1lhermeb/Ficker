@@ -72,20 +72,31 @@ class CardController extends Controller
 
     public function showBestDay(Request $request) :JsonResponse
     {
-        $user_id = Auth::user()->id;
-        $card_id = $request->card_id;
-        $card = Card::where('id', $card_id)
-                    ->where('user_id', $user_id)
-                    ->first();
+        try {
 
-        $best_day = $card->best_day;
+            $user_id = Auth::user()->id;
+            $card_id = $request->card_id;
+            $card = Card::where('id', $card_id)
+                        ->where('user_id', $user_id)
+                        ->first();
 
-        $message = "Cartão encontrado";
-        $response = [
-            "message" => $message,
-            "best_day" => $best_day
-        ];
+            $best_day = $card->best_day;
 
-        return response()->json($response, 200);
+            $message = "Cartão encontrado";
+            $response = [
+                "message" => $message,
+                "best_day" => $best_day
+            ];
+
+            return response()->json($response, 200);
+
+        } catch (\Exception $e) {
+            $errorMessage = "Cartão não encontrado";
+            $response = [
+                "error" => $errorMessage
+            ];
+
+            return response()->json($response, 404);
+        }
     }
 }
