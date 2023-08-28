@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\Card;
 use Illuminate\Cache\Repository;
 
 class TransactionController extends Controller
@@ -22,7 +23,25 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        if($request->category_id == '0') { // Assumindo que o value da option NOVA seja 0
+        if (!(is_null($request->card_id))) {
+
+            try {
+
+                Card::findOrFail($request->card_id); // Verificando se o cartão existe no banco
+
+            } catch (\Exception $e) {
+                $errorMessage = "Error: Cartão não encontrado.";
+                $response = [
+                    "data" => [
+                        "error" => "$errorMessage"
+                    ]
+                ];
+    
+                return response()->json($response, 404);
+            }
+        }
+
+        if($request->category_id == '0') { // Cadastrando nova categoria
 
             $request->validate([
                 'category_description' => ['required', 'string', 'max:255'],
@@ -34,7 +53,7 @@ class TransactionController extends Controller
 
         } else {
 
-            $category = Category::find($request->category_id); // Assumindo que o value das options sejam o respectivo id da categoria
+            $category = Category::find($request->category_id);
         }
 
         $transaction = Transaction::create([
