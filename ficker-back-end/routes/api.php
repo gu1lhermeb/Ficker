@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
+use App\Models\Card;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/cards', [CardController::class, 'showCards']);
     Route::get('/flags', [CardController::class, 'showFlags']);
     Route::post('/best-day', [CardController::class, 'showBestDay']);
+    Route::post('/invoice-card', [CardController::class, 'invoiceCard']);
 });
 
 require __DIR__.'/auth.php';
