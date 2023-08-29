@@ -15,7 +15,7 @@ const EnterTransaction = () => {3
   };
   return (
     <div>
-      <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
+      <div style={{ background: "#fff", padding: 10, alignItems: "center"}}>
         <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
           <Image src="/logo.png" alt="Logo" width={130} height={27} />
         </Link>
@@ -23,38 +23,51 @@ const EnterTransaction = () => {3
       <div style={{ display: "flex", flexDirection: "row" }}>
         <CustomMenu />
         <EnterTransactionModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-        <Col style={{ paddingTop: 10 }} lg={20}>
+        <Col style={{ paddingTop: 10 }} lg={19}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
-            <Col xs={24} lg={15}>
+            <Col xs={24} lg={10}>
               <h3>Entradas</h3>
             </Col>
-            <Col xs={24} lg={9}>
+            <Col xs={24} lg={7}>
               <input className={styles.input} placeholder="Procurar..." />
               <button className={styles.button} onClick={showModal}>
                 Nova Transação
               </button>
             </Col>
           </Row>
-          <Col xs={20} lg={24}>
+          <Col xs={20} lg={22}>
             <table className={styles.table}>
-              <thead>
+              <thead className={styles.thead}>
                 <tr>
-                  <th style={{ width: 100 }}>Editar</th>
+                  <th>Editar</th>
                   <th>Descrição</th>
-                  <th style={{ width: 200 }}>Data</th>
-                  <th style={{ width: 150 }}>Valor</th>
+                  <th>Data</th>
+                  <th>Categoria</th>
+                  <th>Valor</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <td className={styles.tdEdit}>
                     <button style={{ background: "none", border: "none" }} onClick={() => {}}>
                       <Image src="/edit.png" alt="Editar" width={20} height={20} />
                     </button>
                   </td>
-                  <td>Curso de Java</td>
-                  <td>13/04/2023</td>
-                  <td style={{ color: "green" }}>R$12.000</td>
+                  <td className={styles.tdDescription}>Curso de Java</td>
+                  <td className={styles.tdDate}>13/04/2023</td>
+                  <td className={styles.tdCategory}>Outros</td>
+                  <td className={styles.tdValue} style={{ color: "green" }}>R$12.000</td>
+                </tr>
+                <tr>
+                  <td className={styles.tdEdit}>
+                    <button style={{ background: "none", border: "none" }} onClick={() => {}}>
+                      <Image src="/edit.png" alt="Editar" width={20} height={20} />
+                    </button>
+                  </td>
+                  <td className={styles.tdDescription}>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
+                  <td className={styles.tdDate}>13/04/2023</td>
+                  <td className={styles.tdCategory}>Outros</td>
+                  <td className={styles.tdValue} style={{ color: "green" }}>R$12.000</td>
                 </tr>
               </tbody>
             </table>

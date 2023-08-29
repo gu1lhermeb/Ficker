@@ -58,12 +58,12 @@ const Outputs = () => {
       <div style={{ display: "flex", flexDirection: "row" }}>
         <CustomMenu />
         <OutputModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-        <Col style={{ paddingTop: 10 }} lg={20}>
+        <Col style={{ paddingTop: 10 }} lg={19}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
-            <Col xs={24} lg={15}>
+            <Col xs={24} lg={10}>
               <h3>Saídas</h3>
             </Col>
-            <Col xs={24} lg={9}>
+            <Col xs={24} lg={7}>
               <input className={styles.input} placeholder="Procurar..." />
               <button className={styles.button} onClick={showModal}>
                 Nova Transação
@@ -77,28 +77,30 @@ const Outputs = () => {
               </Row>
             </Col>
           ) : (
-            <Col xs={20} lg={24}>
+            <Col xs={20} lg={22}>
               <table className={styles.table}>
-                <thead>
+                <thead className={styles.thead}>
                   <tr>
-                    <th style={{ width: 100 }}>Editar</th>
+                    <th>Editar</th>
                     <th>Descrição</th>
-                    <th style={{ width: 200 }}>Data</th>
-                    <th style={{ width: 150 }}>Valor</th>
+                    <th>Data</th>
+                    <th>Categoria</th>
+                    <th>Valor</th>
                   </tr>
                 </thead>
                 <tbody>
                   <>
                     {transactions?.map((transaction) => (
                       <tr key={transaction.id}>
-                        <td style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <td className={styles.tdEdit}>
                           <button style={{ background: "none", border: "none" }} onClick={() => {}}>
                             <Image src="/edit.png" alt="Editar" width={20} height={20} />
                           </button>
                         </td>
-                        <td>{transaction.description}</td>
-                        <td>{dayjs(transaction.date).format("DD/MM/YYYY")}</td>
-                        <td style={{ color: "red" }}>-R${transaction.value}</td>
+                        <td className={styles.tdDescription}>{transaction.description}</td>
+                        <td className={styles.tdDate}>{dayjs(transaction.date).format("DD/MM/YYYY")}</td>
+                        <td className={styles.tdCategory}>Outros</td>
+                        <td className={styles.tdValue} style={{ color: "red" }}>-R${transaction.value}</td>
                       </tr>
                     ))}
                   </>
