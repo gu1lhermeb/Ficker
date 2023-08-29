@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
-use Illuminate\Cache\Repository;
 
 class TransactionController extends Controller
 {
@@ -36,7 +35,7 @@ class TransactionController extends Controller
                         "error" => "$errorMessage"
                     ]
                 ];
-    
+
                 return response()->json($response, 404);
             }
         }
@@ -90,5 +89,37 @@ class TransactionController extends Controller
             array_push($response, $transaction);
         }
         return response()->json($response, 200);
+    }
+
+    public function transactionCredit(Request $request) :JsonResponse
+    {
+        $request->validate([
+            'description' => ['required', 'string', 'max:50'],
+            'date' => ['required', 'date'],
+            'type' => ['required'],
+            'value' => ['required', 'decimal:0,2']
+        ]);
+
+        if (!(is_null($request->card_id))) {
+
+            try {
+
+                Card::findOrFail($request->card_id); // Verificando se o cartão existe no banco
+
+            } catch (\Exception $e) {
+                $errorMessage = "Error: Cartão não encontrado.";
+                $response = [
+                    "data" => [
+                        "error" => "$errorMessage"
+                    ]
+                ];
+
+                return response()->json($response, 404);
+            }
+        }
+
+
+        $user_id = Auth::user()->id;
+        return response()->json();
     }
 }
