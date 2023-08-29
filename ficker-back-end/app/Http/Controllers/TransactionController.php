@@ -24,11 +24,13 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
+        // Verificando se o cartão existe no banco
+
         if (!(is_null($request->card_id))) {
 
             try {
 
-                Card::findOrFail($request->card_id); // Verificando se o cartão existe no banco
+                Card::findOrFail($request->card_id);
 
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
@@ -42,7 +44,9 @@ class TransactionController extends Controller
             }
         }
 
-        if($request->category_id == '0') { // Cadastrando nova categoria
+        // Cadastrando nova categoria
+
+        if ($request->category_id == '0') {
 
             $request->validate([
                 'category_description' => ['required', 'string', 'max:255'],
@@ -57,21 +61,50 @@ class TransactionController extends Controller
             $category = Category::find($request->category_id);
         }
 
-        $transaction = Transaction::create([
-            'user_id' => Auth::user()->id,
-            'card_id' => $request->card_id,
-            'category_id' => $category->id,
-            'description' => $request->description,
-            'date' => $request->date,
-            'type' => $request->type,
-            'value' => $request->value
-        ]);
+        // Cadastrando transação
 
-        $response = [
-            'transaction' => $transaction
-        ];
+        if (!(is_null($request->installments))) { // Com parcelas
 
-        return response()->json($response, 201);
+            $response = [];
+
+            for ($i = 1; $i <= $request->installments; $i++) {
+
+                $transaction = Transaction::create([
+                    'user_id' => Auth::user()->id,
+                    'card_id' => $request->card_id,
+                    'category_id' => $category->id,
+                    'description' => $request->description." ".$i."/".$request->installments,
+                    'date' => $request->date,
+                    'type' => $request->type,
+                    'value' => $request->value / $request->installments,
+                    'installments' => $request->installments
+                ]);
+
+                array_push($response, $transaction);
+            }
+
+            return response()->json($response, 201);
+
+        } else { // Sem parcelas
+
+            $transaction = Transaction::create([
+                'user_id' => Auth::user()->id,
+                'card_id' => $request->card_id,
+                'category_id' => $category->id,
+                'description' => $request->description,
+                'date' => $request->date,
+                'type' => $request->type,
+                'value' => $request->value
+            ]);
+    
+            $response = [
+                'transaction' => $transaction
+            ];
+    
+            return response()->json($response, 201);
+
+        }
+
     }
 
     public function showCategories(): JsonResponse

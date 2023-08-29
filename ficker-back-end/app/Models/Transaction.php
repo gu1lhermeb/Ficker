@@ -19,6 +19,7 @@ class Transaction extends Model
         'date',
         'type',
         'value',
+        'installments'
     ];
 
     public function user(): BelongsTo
