@@ -13,11 +13,12 @@ use Illuminate\Cache\Repository;
 class TransactionController extends Controller
 {
 
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
 
         $request->validate([
             'description' => ['required', 'string', 'max:50'],
+            'category_id' => ['required'],
             'date' => ['required', 'date'],
             'type' => ['required'],
             'value' => ['required', 'decimal:0,2']
@@ -73,7 +74,7 @@ class TransactionController extends Controller
         return response()->json($response, 201);
     }
 
-    public function showCategories() :JsonResponse
+    public function showCategories(): JsonResponse
     {
         $categories = Category::all();
         $response = [];
@@ -83,8 +84,9 @@ class TransactionController extends Controller
         return response()->json($response, 200);
     }
 
-    public function showTransactions(){
-        $transactions = Transaction::where('user_id', Auth::user()->id)->get();
+    public function showTransactions(): JsonResponse
+    {
+        $transactions = Auth::user()->transactions;
         $response = [];
         foreach($transactions  as $transaction){
             array_push($response, $transaction);
