@@ -7,22 +7,46 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\Card;
 use Illuminate\Cache\Repository;
 
 class TransactionController extends Controller
 {
 
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
 
         $request->validate([
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:50'],
+            'category_id' => ['required'],
             'date' => ['required', 'date'],
             'type' => ['required'],
             'value' => ['required', 'decimal:0,2']
         ]);
-        
-        if($request->category_id == '0') { // Assumindo que o value da option NOVA seja 0
+
+        // Verificando se o cartão existe no banco
+
+        if (!(is_null($request->card_id))) {
+
+            try {
+
+                Card::findOrFail($request->card_id);
+
+            } catch (\Exception $e) {
+                $errorMessage = "Error: Cartão não encontrado.";
+                $response = [
+                    "data" => [
+                        "error" => "$errorMessage"
+                    ]
+                ];
+
+                return response()->json($response, 404);
+            }
+        }
+
+        // Cadastrando nova categoria
+
+        if ($request->category_id == '0') {
 
             $request->validate([
                 'category_description' => ['required', 'string', 'max:255'],
@@ -34,26 +58,56 @@ class TransactionController extends Controller
 
         } else {
 
-            $category = Category::find($request->category_id); // Assumindo que o value das options sejam o respectivo id da categoria
+            $category = Category::find($request->category_id);
         }
 
-        $transaction = Transaction::create([
-            'user_id' => Auth::user()->id,
-            'category_id' => $category->id,
-            'description' => $request->description,
-            'date' => $request->date,
-            'type' => $request->type,
-            'value' => $request->value
-        ]);
+        // Cadastrando transação
 
-        $response = [
-            'transaction' => $transaction
-        ];
+        if (!(is_null($request->installments))) { // Com parcelas
 
-        return response()->json($response, 201);
+            $response = [];
+
+            for ($i = 1; $i <= $request->installments; $i++) {
+
+                $transaction = Transaction::create([
+                    'user_id' => Auth::user()->id,
+                    'card_id' => $request->card_id,
+                    'category_id' => $category->id,
+                    'description' => $request->description." ".$i."/".$request->installments,
+                    'date' => $request->date,
+                    'type' => $request->type,
+                    'value' => $request->value / $request->installments,
+                    'installments' => $i
+                ]);
+
+                array_push($response, $transaction);
+            }
+
+            return response()->json($response, 201);
+
+        } else { // Sem parcelas
+
+            $transaction = Transaction::create([
+                'user_id' => Auth::user()->id,
+                'card_id' => $request->card_id,
+                'category_id' => $category->id,
+                'description' => $request->description,
+                'date' => $request->date,
+                'type' => $request->type,
+                'value' => $request->value
+            ]);
+
+            $response = [
+                'transaction' => $transaction
+            ];
+
+            return response()->json($response, 201);
+
+        }
+
     }
 
-    public function showCategories() :JsonResponse
+    public function showCategories(): JsonResponse
     {
         $categories = Category::all();
         $response = [];
@@ -63,8 +117,9 @@ class TransactionController extends Controller
         return response()->json($response, 200);
     }
 
-    public function showTransactions(){
-        $transactions = Transaction::where('user_id', Auth::user()->id)->get();
+    public function showTransactions(): JsonResponse
+    {
+        $transactions = Auth::user()->transactions;
         $response = [];
         foreach($transactions  as $transaction){
             array_push($response, $transaction);

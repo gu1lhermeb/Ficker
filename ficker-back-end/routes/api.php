@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
+use App\Models\Card;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,16 +21,15 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum'])->post('/transaction', [TransactionController::class, 'store']);
-
-Route::middleware(['auth:sanctum'])->get('/transactions', [TransactionController::class, 'showTransactions']);
-
-Route::middleware(['auth:sanctum'])->get('/categories', [TransactionController::class, 'showCategories']);
-
-Route::middleware(['auth:sanctum'])->post('/card', [CardController::class, 'store']);
-
-Route::middleware(['auth:sanctum'])->get('/cards', [CardController::class, 'showCards']);
-
-Route::middleware(['auth:sanctum'])->get('flags', [CardController::class, 'showFlags']);
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::post('/transaction', [TransactionController::class, 'store']);
+    Route::get('/transactions', [TransactionController::class, 'showTransactions']);
+    Route::get('/categories', [TransactionController::class, 'showCategories']);
+    Route::post('/card', [CardController::class, 'store']);
+    Route::get('/cards', [CardController::class, 'showCards']);
+    Route::get('/flags', [CardController::class, 'showFlags']);
+    Route::post('/best/day', [CardController::class, 'showBestDay']);
+    Route::post('/invoice/card', [CardController::class, 'invoiceCard']);
+});
 
 require __DIR__.'/auth.php';

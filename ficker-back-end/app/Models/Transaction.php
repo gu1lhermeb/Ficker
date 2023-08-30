@@ -13,11 +13,13 @@ class Transaction extends Model
 
     protected $fillable = [
         'user_id',
+        'card_id',
         'category_id',
         'description',
         'date',
         'type',
         'value',
+        'installments'
     ];
 
     public function user(): BelongsTo
