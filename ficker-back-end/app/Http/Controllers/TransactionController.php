@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
-use Illuminate\Cache\Repository;
+use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -68,19 +68,37 @@ class TransactionController extends Controller
             $response = [];
 
             for ($i = 1; $i <= $request->installments; $i++) {
+                if ($i == 1){
+                    $date = $request->date;
+                    $transaction = Transaction::create([
+                        'user_id' => Auth::user()->id,
+                        'card_id' => $request->card_id,
+                        'category_id' => $category->id,
+                        'description' => $request->description." ".$i."/".$request->installments,
+                        'date' => $date,
+                        'type' => $request->type,
+                        'value' => $request->value / $request->installments,
+                        'installments' => $i
+                    ]);
 
-                $transaction = Transaction::create([
-                    'user_id' => Auth::user()->id,
-                    'card_id' => $request->card_id,
-                    'category_id' => $category->id,
-                    'description' => $request->description." ".$i."/".$request->installments,
-                    'date' => $request->date,
-                    'type' => $request->type,
-                    'value' => $request->value / $request->installments,
-                    'installments' => $i
-                ]);
+                    array_push($response, $transaction);
+                } else {
+                    $date = $request->date;
+                    $date = Carbon::parse($date)->addMonth()->format('Y-m-d');
+                    $transaction = Transaction::create([
+                        'user_id' => Auth::user()->id,
+                        'card_id' => $request->card_id,
+                        'category_id' => $category->id,
+                        'description' => $request->description." ".$i."/".$request->installments,
+                        'date' => $date,
+                        'type' => $request->type,
+                        'value' => $request->value / $request->installments,
+                        'installments' => $i
+                    ]);
 
-                array_push($response, $transaction);
+                    array_push($response, $transaction);
+                }
+
             }
 
             return response()->json($response, 201);
