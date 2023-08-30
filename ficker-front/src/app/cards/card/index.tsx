@@ -24,13 +24,16 @@ interface CardProps {
 
 function CardPage({ card }: CardProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [totalValue, setTotalValue] = useState<number>(0);
   const getCardData = async () => {
     try {
       const response = await request({
         method: "POST",
         endpoint: `invoice/card`,
       });
-      console.log(response);
+      if (response.data.data.total > 0) {
+        setTotalValue(response.data.data.total);
+      }
     } catch (error) {}
   };
 
@@ -40,7 +43,7 @@ function CardPage({ card }: CardProps) {
 
   useEffect(() => {
     getCardData();
-  }, []);
+  }, [isModalOpen]);
 
   return (
     <Col xl={24}>
@@ -67,7 +70,7 @@ function CardPage({ card }: CardProps) {
         </Col>
         <Col xl={6}>
           <Col>
-            <CardInformation card={card} />
+            <CardInformation card={card} totalValue={totalValue} />
           </Col>
           <Col xl={22}>
             <Row justify={"end"}>

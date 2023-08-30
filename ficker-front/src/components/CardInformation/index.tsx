@@ -16,8 +16,9 @@ interface Card {
 
 interface CardProps {
   card: Card;
+  totalValue?: number;
 }
-export const CardInformation = ({ card }: CardProps) => {
+export const CardInformation = ({ card, totalValue }: CardProps) => {
   const { Text, Title } = Typography;
 
   const showDate = (date: number) => {
@@ -54,7 +55,7 @@ export const CardInformation = ({ card }: CardProps) => {
         </Row>
         <Col>
           <Text type="secondary">Próxima fatura:</Text>
-          <Title level={4}>R$ 300,20</Title>
+          <Title level={4}>R${totalValue?.toString()}</Title>
         </Col>
         <Row justify={"end"}>
           <Col>
