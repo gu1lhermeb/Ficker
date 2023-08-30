@@ -1,10 +1,10 @@
 "use client";
 import { request } from "@/service/api";
-import styles from "../EnterTransaction/entertransaction.module.scss";
 import { Modal, Col, DatePicker, Row, Select, Form, Button, Input, message } from "antd";
 import type { DatePickerProps } from "antd";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import styles from "../../EnterTransaction/entertransaction.module.scss";
 
 interface CardTransactionModalProps {
   isModalOpen: boolean;
@@ -156,11 +156,7 @@ export const CardTransactionModal = ({ isModalOpen, setIsModalOpen }: CardTransa
             name="installments"
             rules={[{ required: true, message: "Esse campo precisa ser preenchido!" }]}
           >
-            <Select
-              data-testid="installments"
-              className={styles.input}
-              style={{ width: 150, height: 35 }}
-            >
+            <Select data-testid="installments" className={styles.input} style={{ width: 150, height: 35 }}>
               {Array.from({ length: 12 }, (_, index) => (
                 <Select.Option key={index + 1} value={index + 1}>
                   {`${index + 1}x`}
