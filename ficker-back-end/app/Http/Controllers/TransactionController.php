@@ -39,7 +39,7 @@ class TransactionController extends Controller
                         "error" => "$errorMessage"
                     ]
                 ];
-    
+
                 return response()->json($response, 404);
             }
         }
@@ -77,7 +77,7 @@ class TransactionController extends Controller
                     'date' => $request->date,
                     'type' => $request->type,
                     'value' => $request->value / $request->installments,
-                    'installments' => $request->installments
+                    'installments' => $i
                 ]);
 
                 array_push($response, $transaction);
@@ -96,11 +96,11 @@ class TransactionController extends Controller
                 'type' => $request->type,
                 'value' => $request->value
             ]);
-    
+
             $response = [
                 'transaction' => $transaction
             ];
-    
+
             return response()->json($response, 201);
 
         }
