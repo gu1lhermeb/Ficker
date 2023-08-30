@@ -43,6 +43,10 @@ export const request = async ({
   try {
     result = await axios(config);
   } catch (error: any) {
+    if (error.response.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
     throw error;
   }
   toggleLoader(loaderStateSetter, false);

@@ -34,5 +34,5 @@ export default function Home() {
 
   if (auth) return <EnterTransaction />;
 
-  return <EnterTransaction />;
+  return <HomeScreen />;
 }

@@ -43,20 +43,12 @@ const items: MenuItem[] = [
     <Image src="/wallet.svg" alt="Logo" width={25} height={25} />
   ),
   getItem(
-    <Link href={"/carts"}>Meus cartões</Link>,
+    <Link href={"/cards"}>Meus cartões</Link>,
     "4",
     <Image src="/cartoes-de-credito.svg" alt="Logo" width={25} height={25} />
   ),
-  getItem(
-    "Análises",
-    "5",
-    <Image src="/analise.svg" alt="Logo" width={25} height={25} />
-  ),
-  getItem(
-    "Meu perfil",
-    "6",
-    <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />
-  ),
+  getItem("Análises", "5", <Image src="/analise.svg" alt="Logo" width={25} height={25} />),
+  getItem("Meu perfil", "6", <Image src="/perfil2.svg" alt="Logo" width={25} height={25} />),
   getItem(
     "Sair",
     "7",
@@ -65,7 +57,10 @@ const items: MenuItem[] = [
       alt="Logo"
       width={25}
       height={25}
-      onClick={() => alert("a")}
+      onClick={() => {
+        localStorage.clear();
+        window.location.href = "/login";
+      }}
     />
   ),
 ];
@@ -74,9 +69,7 @@ const CustomMenu: React.FC = () => {
   const cookie = new Cookies();
   const menu = cookie.get("menu");
   const colSize = useMediaQuery();
-  const [showMenu, setShowMenu] = useState<boolean>(
-    colSize === "xs" ? false : true
-  );
+  const [showMenu, setShowMenu] = useState<boolean>(colSize === "xs" ? false : true);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
