@@ -8,6 +8,7 @@ import { NewCardModal } from "./modal";
 import { useEffect, useState } from "react";
 import { request } from "@/service/api";
 import dayjs from "dayjs";
+import CardPage from "./card";
 
 interface Card {
   best_day: number;
@@ -25,6 +26,7 @@ const Cards = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<Card>({} as Card);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -52,14 +54,12 @@ const Cards = () => {
 
   useEffect(() => {
     getCards();
-  }, []);
+  }, [isModalOpen]);
+
   return (
     <div>
       <div style={{ background: "#fff", padding: 10, alignItems: "center" }}>
-        <Link
-          href={"/"}
-          style={{ background: "#fff", padding: 10, alignItems: "center" }}
-        >
+        <Link href={"/"} style={{ background: "#fff", padding: 10, alignItems: "center" }}>
           <Image src="/logo.png" alt="Logo" width={130} height={27} />
         </Link>
       </div>
@@ -69,7 +69,9 @@ const Cards = () => {
         <Col style={{ paddingTop: 10 }} lg={20}>
           <Row justify={"space-between"} style={{ padding: 20 }}>
             <Col xs={24} lg={15}>
-              <h3>Meus cartões</h3>
+              <h3>{`Meus cartões ${
+                Object.keys(selectedCard).length > 0 ? ">" + selectedCard.description : ""
+              }`}</h3>
             </Col>
             <Col xs={24} lg={9}>
               <input className={styles.input} placeholder="Procurar..." />
@@ -84,67 +86,64 @@ const Cards = () => {
             </Row>
           ) : (
             <Row justify={"start"}>
-              {cards.map((card) => (
+              {Object.keys(selectedCard).length > 0 ? (
+                <CardPage card={selectedCard} />
+              ) : (
                 <>
-                  <Link href={`cards/${card.id}`}>
-                    <Col
-                      style={{
-                        padding: 20,
-                        background: "#fff",
-                        borderRadius: 8,
-                        margin: 20,
-                        boxShadow: "0px 1px 2px 2px rgba(0,0,0,0.1)",
-                      }}
-                      lg={6}
-                      xs={20}
-                    >
-                      <div>
-                        <Row align={"middle"} style={{ marginBottom: 15 }}>
-                          {card.flag_id === 1 ? (
-                            <Image
-                              src={"/mastercard.png"}
-                              alt="Logo"
-                              width={39}
-                              height={30}
-                            />
-                          ) : (
-                            <Image
-                              src={"/visa.png"}
-                              alt="Logo"
-                              width={39}
-                              height={12}
-                            />
-                          )}
-                          <Text type="secondary" style={{ marginLeft: 10 }}>
-                            {card.description}
-                          </Text>
-                        </Row>
-                        <Col>
-                          <Text type="secondary">Próxima fatura:</Text>
-                          <Title level={4}>R$ 300,20</Title>
-                        </Col>
-                        <Row justify={"end"}>
+                  {cards.map((card) => (
+                    <>
+                      {/* TODO: passar isso como CardInformation */}
+                      <Col
+                        style={{
+                          padding: 20,
+                          background: "#fff",
+                          borderRadius: 8,
+                          margin: 20,
+                          boxShadow: "0px 1px 2px 2px rgba(0,0,0,0.1)",
+                          cursor: "pointer",
+                        }}
+                        lg={6}
+                        xs={20}
+                        onClick={() => setSelectedCard(card)}
+                      >
+                        <div>
+                          <Row align={"middle"} style={{ marginBottom: 15 }}>
+                            {card.flag_id === 1 ? (
+                              <Image src={"/mastercard.png"} alt="Logo" width={39} height={30} />
+                            ) : (
+                              <Image src={"/visa.png"} alt="Logo" width={39} height={12} />
+                            )}
+                            <Text type="secondary" style={{ marginLeft: 10 }}>
+                              {card.description}
+                            </Text>
+                          </Row>
                           <Col>
-                            <Col>
-                              <Text type="secondary">Próxima fatura:</Text>
-                            </Col>
-                            <Row justify={"end"}>
-                              <Col>
-                                <Text type="secondary">
-                                  {card.expiration}/
-                                  {showDate(card.expiration) < 10
-                                    ? "0" + showDate(card.expiration)
-                                    : showDate(card.expiration)}
-                                </Text>
-                              </Col>
-                            </Row>
+                            <Text type="secondary">Próxima fatura:</Text>
+                            <Title level={4}>R$ 300,20</Title>
                           </Col>
-                        </Row>
-                      </div>
-                    </Col>
-                  </Link>
+                          <Row justify={"end"}>
+                            <Col>
+                              <Col>
+                                <Text type="secondary">Próxima fatura:</Text>
+                              </Col>
+                              <Row justify={"end"}>
+                                <Col>
+                                  <Text type="secondary">
+                                    {card.expiration}/
+                                    {showDate(card.expiration) < 10
+                                      ? "0" + showDate(card.expiration)
+                                      : showDate(card.expiration)}
+                                  </Text>
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </div>
+                      </Col>
+                    </>
+                  ))}
                 </>
-              ))}
+              )}
             </Row>
           )}
         </Col>
