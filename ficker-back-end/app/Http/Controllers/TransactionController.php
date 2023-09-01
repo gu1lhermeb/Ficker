@@ -21,7 +21,7 @@ class TransactionController extends Controller
             'description' => ['required', 'string', 'max:50'],
             'category_id' => ['required'],
             'date' => ['required', 'date'],
-            'type' => ['required'],
+            'type_id' => ['required'],
             'value' => ['required', 'decimal:0,2']
         ]);
 
@@ -64,43 +64,15 @@ class TransactionController extends Controller
 
         // Cadastrando transação
 
-        if ($request->installments) { // Com parcelas
+        if ($request->installments === 0){ // Sem parcelas
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
-                'category_id' => $category,
-                'card_id' => $request->card_id,
+                'category_id' => $category->id,
                 'description' => $request->description,
                 'date' => $request->date,
                 'value' => $request->value,
-                'installments' => $request->value
-            ]);
-
-            $installments = Installment::create([
-                'transaction_id' => $transaction->id,
-                'description' => $request->description,
-                'value' => $request->value,
-                'card_id' => $request->card_id,
-                'pay_day' => ''
-            ]);
-
-            $response = [
-                'data' => [
-                    'transaction' => $transaction,
-                    'installments' => $installments
-                ]
-            ];
-
-            return response()->json($response, 201);
-
-        } else { // Sem parcelas
-
-            $transaction = Transaction::create([
-                'user_id' => Auth::user()->id,
-                'category_id' => $category,
-                'description' => $request->description,
-                'date' => $request->date,
-                'value' => $request->value,
+                'type_id' => $request->type_id
             ]);
 
             $response = [
@@ -111,9 +83,62 @@ class TransactionController extends Controller
 
             return response()->json($response, 201);
 
-        }
+        } else {
 
-    }
+            if (!(is_null($request->installments))) { // Com parcelas
+
+                $transaction = Transaction::create([
+                    'user_id' => Auth::user()->id,
+                    'category_id' => $category->id,
+                    'card_id' => $request->card_id,
+                    'description' => $request->description,
+                    'date' => $request->date,
+                    'value' => $request->value,
+                    'installments' => $request->installments,
+                    'type_id' => $request->type_id
+                ]);
+
+                $response = [];
+                $pay_day = date('Y-m-d');
+                $new_pay_day_formated = $pay_day;
+                $i = $request->installments;
+                $value = (float)$request->value / (float)$request->installments;
+
+                for($i = 1; $i <= $request->installments; $i++){
+
+                    if($i == 1){
+                        $installment = Installment::create([
+                            'transaction_id' => $transaction->id,
+                            'description' => $request->description,
+                            'value' => $value,
+                            'card_id' => $request->card_id,
+                            'pay_day' => $pay_day
+                        ]);
+
+                        array_push($response, $installment);
+
+                    } else {
+                        $new_pay_day = strtotime('+1 months', strtotime($pay_day));
+                        $new_pay_day_formated = date('Y-m-d', $new_pay_day);
+                        $installment = Installment::create([
+                            'transaction_id' => $transaction->id,
+                            'description' => $request->description,
+                            'value' => $value,
+                            'card_id' => $request->card_id,
+                            'pay_day' => $new_pay_day_formated
+                        ]);
+
+                        array_push($response, $installment);
+                    }
+
+                    $pay_day = $new_pay_day_formated;
+
+                    }
+
+                    return response()->json($response, 200);
+                }
+            }
+        }
 
     public function showCategories(): JsonResponse
     {
