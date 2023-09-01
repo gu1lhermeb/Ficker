@@ -78,8 +78,9 @@ class TransactionController extends Controller
 
             $installments = Installment::create([
                 'transaction_id' => $transaction->id,
-                'description' => '',
+                'description' => $request->description,
                 'value' => $request->value,
+                'card_id' => $request->card_id,
                 'pay_day' => ''
             ]);
 

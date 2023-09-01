@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
+            $table->foreignId('card_id')->nullable()->constrained('cards')->onDelete('cascade');
             $table->string('description');
             $table->double('value');
             $table->date('pay_day');
