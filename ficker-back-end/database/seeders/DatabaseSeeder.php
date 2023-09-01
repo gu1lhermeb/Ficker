@@ -80,9 +80,10 @@ class DatabaseSeeder extends Seeder
 
         $card = Card::create([
             'user_id' => $admin->id,
-            'flag_id' => 4,
+            'flag_id' => 1,
             'description' => 'Cartão Nubank',
             'expiration' => 1,
+            'closure' => 24
         ]);
 
         Category::create([
