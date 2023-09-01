@@ -17,7 +17,7 @@ class Transaction extends Model
         'category_id',
         'description',
         'date',
-        'type',
+        'type_id',
         'value',
         'installments'
     ];
@@ -35,6 +35,11 @@ class Transaction extends Model
     public function card(): BelongsTo
     {
         return $this->belongsTo(Card::class);
+    }
+
+    public function installments(): HasMany
+    {
+        return $this->hasMany(Installment::class);
     }
 
 }

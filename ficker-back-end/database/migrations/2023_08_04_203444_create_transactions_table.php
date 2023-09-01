@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('card_id')->nullable()->constrained('cards')->onDelete('cascade');
             $table->string('description');
             $table->date('date');
-            $table->string('type');
             $table->double('value');
             $table->integer('installments')->nullable()->default(0);
             $table->timestamps();
