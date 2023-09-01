@@ -26,6 +26,7 @@ class CardController extends Controller
             'flag_id' => $request->flag_id,
             'description' => $request->description,
             'expiration' => $request->expiration,
+            'closure' => $request->closure
         ]);
 
         $response = [

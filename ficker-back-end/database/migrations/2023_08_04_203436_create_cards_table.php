@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('flag_id')->constrained('flags')->onDelete('cascade');
             $table->string('description');
             $table->integer('expiration');
+            $table->integer('closure');
             $table->timestamps();
         });
     }
