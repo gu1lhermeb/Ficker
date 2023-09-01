@@ -54,6 +54,24 @@ class DatabaseSeeder extends Seeder
 
         });
 
+        $types = [
+            [
+                'description' => 'Entrada'
+            ],
+            [
+                'description' => 'Saída'
+            ],
+            [
+                'description' => 'Crédito'
+            ]
+        ];
+
+        collect($types)->each( function($type) {
+
+            \App\Models\Type::create($type);
+
+        });
+
         $admin = User::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
@@ -68,31 +86,29 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Category::create([
-            'category_description' => 'Entrada',
+            'category_description' => 'Lazer',
         ]);
 
         Category::create([
-            'category_description' => 'Saida',
+            'category_description' => 'Alimentação',
         ]);
 
         Transaction::create([
             'user_id' => $admin->id,
             'description' => 'Salário',
             'date' => '2023-01-03',
-            'type' => 'Entrada',
+            'type_id' => 1,
             'value' => 1500,
             'category_id' => 1,
-            'description' => 'Entrada'
         ]);
 
         Transaction::create([
             'user_id' => $admin->id,
             'description' => 'Compra na Adidas',
             'date' => '2023-01-03',
-            'type' => 'Saida',
+            'type_id' => 2,
             'value' => 300,
             'category_id' => 2,
-            'description' => 'Saida',
             'card_id' => $card->id,
         ]);
     }
