@@ -123,46 +123,4 @@ class CardController extends Controller
             return response()->json($response, 404);
         }
     }
-
-    public function invoiceCard(Request $request) :JsonResponse
-    {
-        try {
-            $user_id = Auth::user()->id;
-            $card_id = $request->card_id;
-            $transactions = Transaction::where('card_id', $card_id)
-                        ->where('user_id', $user_id)
-                        ->get();
-
-            if($transactions->IsEmpty()){
-                $message = "Esse cartão não possui nenhuma transação";
-            } else {
-                $message = "Transações Encontradas";
-            }
-
-            $total = 0;
-
-            foreach($transactions as $transaction){
-                if ($transaction->category_id == 2){
-                    $total+= $transaction->value;
-                }
-            }
-            $response = [
-                "message" => $message,
-                "data" => [
-                    "total" => $total
-                ]
-            ];
-            return response()->json($response, 200);
-
-        } catch (\Exception $e) {
-            $errorMessage = "Error: " .$e->getMessage();
-            $response = [
-                "data" => [
-                    "error" => $errorMessage
-                ]
-            ];
-
-            return response()->json($response, 404);
-        }
-    }
 }

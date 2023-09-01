@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
+use App\Models\Installment;
 use Carbon\Carbon;
 
 class TransactionController extends Controller
@@ -63,43 +64,31 @@ class TransactionController extends Controller
 
         // Cadastrando transação
 
-        if (!(is_null($request->installments))) { // Com parcelas
+        if ($request->installments) { // Com parcelas
 
-            $response = [];
+            $transaction = Transaction::create([
+                'user_id' => Auth::user()->id,
+                'category_id' => $category,
+                'card_id' => $request->card_id,
+                'description' => $request->description,
+                'date' => $request->date,
+                'value' => $request->value,
+                'installments' => $request->value
+            ]);
 
-            for ($i = 1; $i <= $request->installments; $i++) {
-                if ($i == 1){
-                    $date = $request->date;
-                    $transaction = Transaction::create([
-                        'user_id' => Auth::user()->id,
-                        'card_id' => $request->card_id,
-                        'category_id' => $category->id,
-                        'description' => $request->description." ".$i."/".$request->installments,
-                        'date' => $date,
-                        'type' => $request->type,
-                        'value' => $request->value / $request->installments,
-                        'installments' => $i
-                    ]);
+            $installments = Installment::create([
+                'transaction_id' => $transaction->id,
+                'description' => '',
+                'value' => $request->value,
+                'pay_day' => ''
+            ]);
 
-                    array_push($response, $transaction);
-                } else {
-                    $date = $request->date;
-                    $date = Carbon::parse($date)->addMonth()->format('Y-m-d');
-                    $transaction = Transaction::create([
-                        'user_id' => Auth::user()->id,
-                        'card_id' => $request->card_id,
-                        'category_id' => $category->id,
-                        'description' => $request->description." ".$i."/".$request->installments,
-                        'date' => $date,
-                        'type' => $request->type,
-                        'value' => $request->value / $request->installments,
-                        'installments' => $i
-                    ]);
-
-                    array_push($response, $transaction);
-                }
-
-            }
+            $response = [
+                'data' => [
+                    'transaction' => $transaction,
+                    'installments' => $installments
+                ]
+            ];
 
             return response()->json($response, 201);
 
@@ -107,16 +96,16 @@ class TransactionController extends Controller
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
-                'card_id' => $request->card_id,
-                'category_id' => $category->id,
+                'category_id' => $category,
                 'description' => $request->description,
                 'date' => $request->date,
-                'type' => $request->type,
-                'value' => $request->value
+                'value' => $request->value,
             ]);
 
             $response = [
-                'transaction' => $transaction
+                'data' => [
+                    'trasanction' => $transaction
+                ]
             ];
 
             return response()->json($response, 201);
