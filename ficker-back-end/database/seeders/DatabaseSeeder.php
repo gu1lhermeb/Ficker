@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $flags = [
 
             [
-                'description' => 'Mastercard'
+                'description' => 'Mastercard',
             ],
 
             [
@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Saída'
             ],
             [
-                'description' => 'Crédito'
+                'description' => 'Cartão de Crédito'
             ]
         ];
 
@@ -88,10 +88,12 @@ class DatabaseSeeder extends Seeder
 
         Category::create([
             'category_description' => 'Lazer',
+            'type_id' => 1
         ]);
 
         Category::create([
             'category_description' => 'Alimentação',
+            'type_id' => 2
         ]);
 
         Transaction::create([
