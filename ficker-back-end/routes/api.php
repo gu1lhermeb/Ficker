@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CategoryController;
 use App\Models\Card;
 
 /*
@@ -26,7 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/transactions/incomes', [TransactionController::class, 'showIncomes']); // Entradas
     Route::get('/transactions/outgoings', [TransactionController::class, 'showOutgoings']); // Saídas
     Route::get('/transactions/{id}', [TransactionController::class, 'showTransactionInstallments']); // Parcelas de uma transação
-    Route::get('/categories/{id}', [TransactionController::class, 'showCategories']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
+    Route::get('/categories/{id}', [CategoryController::class, 'showCategories']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
     Route::get('/cards/{id}', [TransactionController::class, 'showCardTransactions']); // Transações de um cartão de crédito

@@ -13,7 +13,7 @@ class Category extends Model
 
     protected $fillable = [
         'category_description',
-        'type'
+        'type_id'
     ];
 
     public function transactions(): HasMany

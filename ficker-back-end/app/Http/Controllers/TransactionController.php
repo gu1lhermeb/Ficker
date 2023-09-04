@@ -33,30 +33,28 @@ class TransactionController extends Controller
             try {
 
                 Card::findOrFail($request->card_id);
-
+    
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
                     "data" => [
-                        "error" => "$errorMessage"
+                        "error" => $errorMessage
                     ]
                 ];
-
+    
                 return response()->json($response, 404);
             }
         }
 
         // Cadastrando nova categoria
 
-        if ($request->category_id == '0') {
+        if ($request->category_id == 0) {
 
             $request->validate([
-                'category_description' => ['required', 'string', 'max:50', 'unique:App\Models\Category,category_description'],
+                'category_description' => ['required', 'string', 'max:50', 'unique:categories'],
             ]);
 
-            $category = Category::create([
-                'category_description' => $request->category_description,
-            ]);
+            $category = CategoryController::store($request->category_description, $request->type_id);
 
         } else {
 
@@ -65,7 +63,7 @@ class TransactionController extends Controller
 
         // Cadastrando transação
 
-        if ($request->installments === 0){ // Sem parcelas
+        if (is_null($request->installments)) { // Sem parcelas
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,

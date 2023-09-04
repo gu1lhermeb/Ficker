@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('description');
             $table->date('date');
             $table->double('value');
-            $table->integer('installments')->nullable()->default(0);
+            $table->integer('installments')->nullable();
             $table->timestamps();
         });
     }
