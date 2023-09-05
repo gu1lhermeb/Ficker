@@ -145,7 +145,9 @@ class TransactionController extends Controller
 
             $response = [];
             foreach($transactions  as $transaction){
-                array_push($response, $transaction);
+                if($transaction->type_id == $id){
+                    array_push($response, $transaction);
+                }
             }
 
             return response()->json($response, 200);
@@ -169,7 +171,7 @@ class TransactionController extends Controller
 
             $transactions = Transaction::findOrFail([
                 'card_id' => $id,
-                'type_id' => 3
+                'type_id' => 2
             ]);
 
             $response = [];
