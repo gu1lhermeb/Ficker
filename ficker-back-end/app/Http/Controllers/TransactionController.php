@@ -32,6 +32,18 @@ class TransactionController extends Controller
 
                 Card::findOrFail($request->card_id);
 
+                if ($request->type_id != 3) {
+
+                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
+                    $response = [
+                        "data" => [
+                            "error" => $errorMessage
+                        ]
+                    ];
+    
+                    return response()->json($response, 404);
+                }
+
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
@@ -138,16 +150,14 @@ class TransactionController extends Controller
     {
         try {
 
-            $transactions = Transaction::findOrFail([
+            $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
-            ]);
+            ])->get();
 
             $response = [];
             foreach($transactions  as $transaction){
-                if($transaction->type_id == $id){
-                    array_push($response, $transaction);
-                }
+                array_push($response, $transaction);
             }
 
             return response()->json($response, 200);
@@ -169,16 +179,13 @@ class TransactionController extends Controller
     {
         try {
 
-            $transactions = Transaction::findOrFail([
-                'card_id' => $id,
-                'type_id' => 2
-            ]);
+            $transactions = Transaction::where([
+                'card_id' => $id
+            ])->get();
 
             $response = [];
             foreach($transactions  as $transaction){
-                if($transaction->card_id == $id){
-                    array_push($response, $transaction);
-                }
+                array_push($response, $transaction);
             }
 
             return response()->json($response, 200);
@@ -198,9 +205,9 @@ class TransactionController extends Controller
     {
         try {
 
-            $installments = Installment::findOrFail([
+            $installments = Installment::where([
                 'transaction_id' => $id
-            ]);
+            ])->get();
 
             $response = [];
             foreach($installments  as $installment){
