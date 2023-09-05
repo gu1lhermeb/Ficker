@@ -81,47 +81,4 @@ class CardController extends Controller
             return response()->json($response, 404);
         }
     }
-
-    public function showBestDay(Request $request) :JsonResponse
-    {
-        try {
-
-            $user_id = Auth::user()->id;
-            $card_id = $request->card_id;
-            $card = Card::where('id', $card_id)
-                        ->where('user_id', $user_id)
-                        ->first();
-
-            $expiration = $card->expiration;
-            $best_day = $expiration - 9;
-
-            if($best_day < 0){
-                $last_month = strtotime('last month');
-                $days_last_month = date("t", $last_month);
-                $days_last_month_int = (int) $days_last_month;
-                $best_day = $days_last_month_int - abs($best_day);
-            } elseif($expiration == 9){
-                $last_month_last_day = date("d", strtotime("last day of last month"));
-                $best_day = (int)$last_month_last_day;
-            }
-
-            $message = "Cartão encontrado";
-            $response = [
-                "message" => $message,
-                "best_day" => $best_day
-            ];
-
-            return response()->json($response, 200);
-
-        } catch (\Exception $e) {
-            $errorMessage = "Cartão não encontrado";
-            $response = [
-                "data" => [
-                    "error" => $errorMessage
-                ]
-            ];
-
-            return response()->json($response, 404);
-        }
-    }
 }
