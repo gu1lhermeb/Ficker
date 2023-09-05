@@ -23,13 +23,27 @@ class CategoryController extends Controller
 
     public function showCategories($id): JsonResponse
     {
-        $categories = Type::find($id)->categories;
+        try {
 
-        $response = [];
-        foreach($categories as $category){
-            array_push($response, $category);
+            $categories = Type::find($id)->categories;
+
+            $response = [];
+            foreach($categories as $category){
+                array_push($response, $category);
+            }
+            
+            return response()->json($response, 200);
+ 
+        } catch(\Exception $e) {
+
+            $errorMessage = "Nenhuma categoria encontrada.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+
+            return response()->json($response, 404);
         }
-        
-        return response()->json($response, 200);
     }
 }

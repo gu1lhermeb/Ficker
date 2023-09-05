@@ -9,7 +9,6 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
-use App\Models\Type;
 use Carbon\Carbon;
 
 class TransactionController extends Controller
@@ -136,25 +135,13 @@ class TransactionController extends Controller
             }
         }
 
-    public function showCategories($id): JsonResponse
-    {
-        $categories = Type::find($id)->categories;
-
-        $response = [];
-        foreach($categories as $category){
-            array_push($response, $category);
-        }
-        
-        return response()->json($response, 200);
-    }
-
-    public function showIncomes(): JsonResponse
+    public function showTransactions($id): JsonResponse
     {
         try {
 
             $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
-                'type_id' => 1
+                'type_id' => $id
             ]);
     
             $response = [];
@@ -166,7 +153,7 @@ class TransactionController extends Controller
 
         } catch(\Exception $e) {
 
-            $errorMessage = "Nenhuma transação de entrada encontrada.";
+            $errorMessage = "Erro: Nenhuma transação encontrada.";
             $response = [
                 "data" => [
                     "error" => $errorMessage
@@ -174,34 +161,6 @@ class TransactionController extends Controller
             ];
             return response()->json($response, 404);
 
-        }
-    }
-
-    public function showOutgoings(): JsonResponse
-    {
-        try {
-
-            $transactions = Transaction::where([
-                'user_id' => Auth::user()->id,
-                'type_id' => 2
-            ]);
-    
-            $response = [];
-            foreach($transactions  as $transaction){
-                array_push($response, $transaction);
-            }
-    
-            return response()->json($response, 200);
-
-        } catch(\Exception $e) {
-
-            $errorMessage = "Nenhuma transação de saída encontrada.";
-            $response = [
-                "data" => [
-                    "error" => $errorMessage
-                ]
-            ];
-            return response()->json($response, 404);
         }
     }
 
@@ -222,7 +181,7 @@ class TransactionController extends Controller
 
         } catch(\Exception $e) {
 
-            $errorMessage = "Este cartão não possui transações.";
+            $errorMessage = "Erro: Este cartão não possui transações.";
             $response = [
                 "data" => [
                     "error" => $errorMessage
@@ -232,7 +191,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function showTransactionInstallments($id): JsonResponse
+    public function showInstallments($id): JsonResponse
     {
         try {
 
@@ -249,7 +208,7 @@ class TransactionController extends Controller
 
         } catch(\Exception $e) {
 
-            $errorMessage = "Esta transação não possui parcelas.";
+            $errorMessage = "Erro: Esta transação não possui parcelas.";
             $response = [
                 "data" => [
                     "error" => $errorMessage
