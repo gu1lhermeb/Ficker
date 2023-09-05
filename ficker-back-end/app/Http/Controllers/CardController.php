@@ -7,8 +7,10 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Card;
 use App\Models\Flag;
 use App\Models\Transaction;
+use Dotenv\Repository\RepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\isNull;
 
 class CardController extends Controller
 {
@@ -18,6 +20,7 @@ class CardController extends Controller
             'description' => ['required', 'string', 'min:2', 'max:50'],
             'flag_id' => ['required'],
             'expiration' => ['required', 'integer', 'min:1', 'max:31'],
+            'closure' => ['required', 'integer', 'min:1', 'max:31']
         ]);
 
 
@@ -39,7 +42,6 @@ class CardController extends Controller
     public function showCards() :JsonResponse
     {
         try {
-
             $cards = Auth::user()->cards;
             $response = [];
             foreach($cards as $card){
