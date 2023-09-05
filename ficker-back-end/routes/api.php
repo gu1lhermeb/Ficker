@@ -31,8 +31,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
     Route::get('/flags', [CardController::class, 'showFlags']);
-    Route::post('/best/day', [CardController::class, 'showBestDay']);
-    Route::post('/invoice/card', [CardController::class, 'invoiceCard']);
 });
 
 require __DIR__.'/auth.php';

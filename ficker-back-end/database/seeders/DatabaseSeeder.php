@@ -61,9 +61,6 @@ class DatabaseSeeder extends Seeder
             [
                 'description' => 'Saída'
             ],
-            [
-                'description' => 'Cartão de Crédito'
-            ]
         ];
 
         collect($types)->each( function($type) {

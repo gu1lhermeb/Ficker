@@ -9,7 +9,6 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
-use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -32,7 +31,7 @@ class TransactionController extends Controller
             try {
 
                 Card::findOrFail($request->card_id);
-    
+
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
@@ -40,7 +39,7 @@ class TransactionController extends Controller
                         "error" => $errorMessage
                     ]
                 ];
-    
+
                 return response()->json($response, 404);
             }
         }
@@ -139,16 +138,18 @@ class TransactionController extends Controller
     {
         try {
 
-            $transactions = Transaction::where([
+            $transactions = Transaction::findOrFail([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
             ]);
-    
+
             $response = [];
             foreach($transactions  as $transaction){
-                array_push($response, $transaction);
+                if($transaction->type_id == $id){
+                    array_push($response, $transaction);
+                }
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {
@@ -168,19 +169,21 @@ class TransactionController extends Controller
     {
         try {
 
-            $transactions = Transaction::where([
-                'card_id' => $id
+            $transactions = Transaction::findOrFail([
+                'card_id' => $id,
+                'type_id' => 2
             ]);
-    
+
             $response = [];
             foreach($transactions  as $transaction){
-                array_push($response, $transaction);
+                if($transaction->card_id == $id){
+                    array_push($response, $transaction);
+                }
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {
-
             $errorMessage = "Erro: Este cartão não possui transações.";
             $response = [
                 "data" => [
@@ -195,15 +198,15 @@ class TransactionController extends Controller
     {
         try {
 
-            $installments = Installment::where([
+            $installments = Installment::findOrFail([
                 'transaction_id' => $id
             ]);
-    
+
             $response = [];
             foreach($installments  as $installment){
                 array_push($response, $installment);
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {
