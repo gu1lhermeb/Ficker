@@ -24,31 +24,34 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        try {
+        if(!(is_null($request->card_id))) {
+            
+            try {
 
-            Card::findOrFail($request->card_id);
-
-            if ($request->type_id != 3) {
-
-                $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
+                Card::findOrFail($request->card_id);
+    
+                if ($request->type_id != 3) {
+    
+                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
+                    $response = [
+                        "data" => [
+                            "error" => $errorMessage
+                        ]
+                    ];
+    
+                    return response()->json($response, 404);
+                }
+    
+            } catch (\Exception $e) {
+                $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
                     "data" => [
                         "error" => $errorMessage
                     ]
                 ];
-
+    
                 return response()->json($response, 404);
             }
-
-        } catch (\Exception $e) {
-            $errorMessage = "Error: Cartão não encontrado.";
-            $response = [
-                "data" => [
-                    "error" => $errorMessage
-                ]
-            ];
-
-            return response()->json($response, 404);
         }
 
         // Cadastrando nova categoria
