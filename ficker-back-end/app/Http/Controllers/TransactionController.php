@@ -24,28 +24,13 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        // Verificando se o cartão existe no banco
+        try {
 
-        if (!(is_null($request->card_id))) {
+            Card::findOrFail($request->card_id);
 
-            try {
+            if ($request->type_id != 3) {
 
-                Card::findOrFail($request->card_id);
-
-                if ($request->type_id != 3) {
-
-                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
-                    $response = [
-                        "data" => [
-                            "error" => $errorMessage
-                        ]
-                    ];
-    
-                    return response()->json($response, 404);
-                }
-
-            } catch (\Exception $e) {
-                $errorMessage = "Error: Cartão não encontrado.";
+                $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
                 $response = [
                     "data" => [
                         "error" => $errorMessage
@@ -54,6 +39,16 @@ class TransactionController extends Controller
 
                 return response()->json($response, 404);
             }
+
+        } catch (\Exception $e) {
+            $errorMessage = "Error: Cartão não encontrado.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+
+            return response()->json($response, 404);
         }
 
         // Cadastrando nova categoria
@@ -110,6 +105,10 @@ class TransactionController extends Controller
             $new_pay_day_formated = $pay_day;
             $i = $request->installments;
             $value = (float)$request->value / (float)$request->installments;
+            $value = (float) number_format($value,2,'.','');
+            $firstInstallment = $request->value - ($value * ($i-1));
+            $firstInstallment =  (float) number_format($firstInstallment,2,'.','');
+
 
             for($i = 1; $i <= $request->installments; $i++){
 
@@ -117,7 +116,7 @@ class TransactionController extends Controller
                     $installment = Installment::create([
                         'transaction_id' => $transaction->id,
                         'description' => $request->description,
-                        'value' => $value,
+                        'value' => $firstInstallment,
                         'card_id' => $request->card_id,
                         'pay_day' => $pay_day
                     ]);
