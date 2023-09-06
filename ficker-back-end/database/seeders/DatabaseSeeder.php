@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $admin->id,
             'description' => 'Compra na Adidas',
             'date' => '2023-01-03',
-            'type_id' => 2,
+            'type_id' => 3,
             'value' => 300,
             'category_id' => 2,
             'card_id' => $card->id,

@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/categories/type/{id}', [CategoryController::class, 'showCategories']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
+    Route::get('/card/{id}/invoice', [CardController::class, 'showInvoiceCard']);
     Route::get('/flags', [CardController::class, 'showFlags']);
 });
 
