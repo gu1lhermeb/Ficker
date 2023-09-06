@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Saída'
             ],
             [
-                'description' => 'Cartão de Crédito'
+                'description' => 'Cartão de crédito'
             ]
         ];
 
@@ -78,13 +78,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin123'),
         ]);
 
-        $card = Card::create([
-            'user_id' => $admin->id,
-            'flag_id' => 1,
-            'description' => 'Cartão Nubank',
-            'expiration' => 1,
-            'closure' => 24
-        ]);
+        $card = Card::factory()->create();
 
         Category::create([
             'category_description' => 'Lazer',
@@ -109,7 +103,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $admin->id,
             'description' => 'Compra na Adidas',
             'date' => '2023-01-03',
-            'type_id' => 2,
+            'type_id' => 3,
             'value' => 300,
             'category_id' => 2,
             'card_id' => $card->id,

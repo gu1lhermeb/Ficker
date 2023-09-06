@@ -7,8 +7,10 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Card;
 use App\Models\Flag;
 use App\Models\Transaction;
+use App\Models\Installment;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\isNull;
 
 class CardController extends Controller
 {
@@ -18,6 +20,7 @@ class CardController extends Controller
             'description' => ['required', 'string', 'min:2', 'max:50'],
             'flag_id' => ['required'],
             'expiration' => ['required', 'integer', 'min:1', 'max:31'],
+            'closure' => ['required', 'integer', 'min:1', 'max:31']
         ]);
 
 
@@ -39,7 +42,6 @@ class CardController extends Controller
     public function showCards() :JsonResponse
     {
         try {
-
             $cards = Auth::user()->cards;
             $response = [];
             foreach($cards as $card){
@@ -82,45 +84,39 @@ class CardController extends Controller
         }
     }
 
-    public function showBestDay(Request $request) :JsonResponse
+    public function showInvoiceCard($id): JsonResponse
     {
+
         try {
-
-            $user_id = Auth::user()->id;
-            $card_id = $request->card_id;
-            $card = Card::where('id', $card_id)
-                        ->where('user_id', $user_id)
-                        ->first();
-
-            $expiration = $card->expiration;
-            $best_day = $expiration - 9;
-
-            if($best_day < 0){
-                $last_month = strtotime('last month');
-                $days_last_month = date("t", $last_month);
-                $days_last_month_int = (int) $days_last_month;
-                $best_day = $days_last_month_int - abs($best_day);
-            } elseif($expiration == 9){
-                $last_month_last_day = date("d", strtotime("last day of last month"));
-                $best_day = (int)$last_month_last_day;
+            $card = Card::findOrFail($id);
+            $installments = Installment::where([
+                'card_id' => $card->id
+            ])->get();
+            $date_now = date('Y-m');
+            $day_now = date('d');
+            $invoice = 0;
+            foreach($installments as $installment){
+                $new_installment = date('Y-m', strtotime($installment->pay_day));
+                if($new_installment == $date_now and $day_now < $card->closure){
+                    $invoice += $installment->value;
+                }
             }
 
-            $message = "Cartão encontrado";
             $response = [
-                "message" => $message,
-                "best_day" => $best_day
+                'data' => [
+                    'invoice' => $invoice
+                ]
             ];
 
             return response()->json($response, 200);
 
         } catch (\Exception $e) {
-            $errorMessage = "Cartão não encontrado";
+            $errorMessage = "Erro: " + $e;
             $response = [
                 "data" => [
                     "error" => $errorMessage
                 ]
             ];
-
             return response()->json($response, 404);
         }
     }

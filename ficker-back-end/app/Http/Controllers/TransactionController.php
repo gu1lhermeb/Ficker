@@ -9,7 +9,6 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
-use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -25,13 +24,23 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        // Verificando se o cartão existe no banco
-
-        if (!(is_null($request->card_id))) {
-
+        if(!(is_null($request->card_id))) {
+            
             try {
 
                 Card::findOrFail($request->card_id);
+    
+                if ($request->type_id != 3) {
+    
+                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
+                    $response = [
+                        "data" => [
+                            "error" => $errorMessage
+                        ]
+                    ];
+    
+                    return response()->json($response, 404);
+                }
     
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
@@ -99,6 +108,10 @@ class TransactionController extends Controller
             $new_pay_day_formated = $pay_day;
             $i = $request->installments;
             $value = (float)$request->value / (float)$request->installments;
+            $value = (float) number_format($value,2,'.','');
+            $firstInstallment = $request->value - ($value * ($i-1));
+            $firstInstallment =  (float) number_format($firstInstallment,2,'.','');
+
 
             for($i = 1; $i <= $request->installments; $i++){
 
@@ -106,7 +119,7 @@ class TransactionController extends Controller
                     $installment = Installment::create([
                         'transaction_id' => $transaction->id,
                         'description' => $request->description,
-                        'value' => $value,
+                        'value' => $firstInstallment,
                         'card_id' => $request->card_id,
                         'pay_day' => $pay_day
                     ]);
@@ -142,13 +155,13 @@ class TransactionController extends Controller
             $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
-            ]);
-    
+            ])->get();
+
             $response = [];
             foreach($transactions  as $transaction){
                 array_push($response, $transaction);
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {
@@ -170,17 +183,16 @@ class TransactionController extends Controller
 
             $transactions = Transaction::where([
                 'card_id' => $id
-            ]);
-    
+            ])->get();
+
             $response = [];
             foreach($transactions  as $transaction){
                 array_push($response, $transaction);
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {
-
             $errorMessage = "Erro: Este cartão não possui transações.";
             $response = [
                 "data" => [
@@ -197,13 +209,13 @@ class TransactionController extends Controller
 
             $installments = Installment::where([
                 'transaction_id' => $id
-            ]);
-    
+            ])->get();
+
             $response = [];
             foreach($installments  as $installment){
                 array_push($response, $installment);
             }
-    
+
             return response()->json($response, 200);
 
         } catch(\Exception $e) {

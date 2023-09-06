@@ -26,13 +26,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/transaction', [TransactionController::class, 'store']);
     Route::get('/transactions/type/{id}', [TransactionController::class, 'showTransactions']); // Entradas ou saídas
     Route::get('/transactions/card/{id}', [TransactionController::class, 'showCardTransactions']); // Transações de um cartão de crédito
-    //Route::get('/transactions/{id}', [TransactionController::class, 'showInstallments']); // Parcelas de uma transação
+    Route::get('/transactions/{id}/installments', [TransactionController::class, 'showInstallments']); // Parcelas de uma transação
     Route::get('/categories/type/{id}', [CategoryController::class, 'showCategories']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
+    Route::get('/card/{id}/invoice', [CardController::class, 'showInvoiceCard']);
     Route::get('/flags', [CardController::class, 'showFlags']);
-    Route::post('/best/day', [CardController::class, 'showBestDay']);
-    Route::post('/invoice/card', [CardController::class, 'invoiceCard']);
 });
 
 require __DIR__.'/auth.php';

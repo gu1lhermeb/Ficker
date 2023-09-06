@@ -31,9 +31,9 @@ class CategoryController extends Controller
             foreach($categories as $category){
                 array_push($response, $category);
             }
-            
+
             return response()->json($response, 200);
- 
+
         } catch(\Exception $e) {
 
             $errorMessage = "Nenhuma categoria encontrada.";
