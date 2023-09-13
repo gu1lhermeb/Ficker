@@ -147,6 +147,9 @@ class TransactionController extends Controller
 
             $transaction = Transaction::find($id);
 
+            $description = CategoryController::showCategory($transaction->category_id);
+            $transaction->category_description = $description;
+
             $response = [
                 "transaction" => $transaction
             ];
@@ -175,6 +178,8 @@ class TransactionController extends Controller
 
             $response = [];
             foreach($transactions  as $transaction){
+                $description = CategoryController::showCategory($transaction->category_id);
+                $transaction->category_description = $description;
                 array_push($response, $transaction);
             }
 
@@ -203,6 +208,8 @@ class TransactionController extends Controller
 
             $response = [];
             foreach($transactions  as $transaction){
+                $description = CategoryController::showCategory($transaction->category_id);
+                $transaction->category_description = $description;
                 array_push($response, $transaction);
             }
 
