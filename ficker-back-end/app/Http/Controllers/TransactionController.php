@@ -164,7 +164,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function showTypeTransactions($id): JsonResponse
+    public function showTransactions($id): JsonResponse
     {
         try {
 
@@ -286,7 +286,6 @@ class TransactionController extends Controller
             ];
             return response()->json($response, 404);
         }
-
     }
 
     public function destroy($id) {
