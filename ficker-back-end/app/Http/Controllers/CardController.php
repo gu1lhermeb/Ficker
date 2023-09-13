@@ -45,6 +45,8 @@ class CardController extends Controller
             $cards = Auth::user()->cards;
             $response = [];
             foreach($cards as $card){
+                $invoice = Self::showInvoiceCard($card->id);
+                $card->invoice = $invoice;
                 array_push($response, $card);
             }
             return response()->json($response, 200);
@@ -84,7 +86,7 @@ class CardController extends Controller
         }
     }
 
-    public function showInvoiceCard($id): JsonResponse
+    public function showInvoiceCard($id)
     {
 
         try {
@@ -102,13 +104,7 @@ class CardController extends Controller
                 }
             }
 
-            $response = [
-                'data' => [
-                    'invoice' => $invoice
-                ]
-            ];
-
-            return response()->json($response, 200);
+            return $invoice;
 
         } catch (\Exception $e) {
             $errorMessage = "Erro: " + $e;

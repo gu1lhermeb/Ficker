@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
             $response = [
                 "message" => $message,
             ];
-            return response()->json($response, 401);
+            return response()->json($response, 404);
         }
     }
 
