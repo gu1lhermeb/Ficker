@@ -21,18 +21,12 @@ class CategoryController extends Controller
         return $category;
     }
 
-    public function showCategories($id): JsonResponse
+    public function showTypeCategories($id): JsonResponse
     {
         try {
 
-            if($id == null) {
-
-                $categories = Category::all();
-                
-            } else {
-
-                $categories = Type::find($id)->categories;
-            }
+            
+            $categories = Type::find($id)->categories;
 
             $response = [];
             foreach($categories as $category){
@@ -54,26 +48,26 @@ class CategoryController extends Controller
         }
     }
 
-    // public function showCategories(): JsonResponse
-    // {
-    //     try {
-    //         $categories = Category::all();
+    public function showCategories(): JsonResponse
+    {
+        try {
+            $categories = Category::all();
 
-    //         $response = [];
-    //         foreach($categories as $category){
-    //             array_push($response, $category);
-    //         }
+            $response = [];
+            foreach($categories as $category){
+                array_push($response, $category);
+            }
 
-    //         return response()->json($response, 200);
-    //     } catch (\Exception $e) {
-    //         $errorMessage = "Error: " . $e;
-    //         $response = [
-    //             "data" => [
-    //                 "error" => $errorMessage
-    //             ]
-    //         ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = "Error: " . $e;
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
 
-    //         return response()->json($response, 404);
-    //     }
-    // }
+            return response()->json($response, 404);
+        }
+    }
 }
