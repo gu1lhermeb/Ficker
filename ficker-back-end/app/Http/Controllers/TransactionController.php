@@ -24,23 +24,16 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        if(!(is_null($request->card_id))) {
+        if($request->type_id == 3) {
+
+            $request->validate([
+                'installments' => ['required', 'min:1', 'max:12'],
+                'card_id' => ['required']
+            ]);
             
             try {
 
                 Card::findOrFail($request->card_id);
-    
-                if ($request->type_id != 3) {
-    
-                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
-                    $response = [
-                        "data" => [
-                            "error" => $errorMessage
-                        ]
-                    ];
-    
-                    return response()->json($response, 404);
-                }
     
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
@@ -148,7 +141,30 @@ class TransactionController extends Controller
             }
         }
 
-    public function showTransactions($id): JsonResponse
+        public function showTransaction($id): JsonResponse
+    {
+        try {
+
+            $transaction = Transaction::find($id);
+
+            $response = [
+                "transaction" => $transaction
+            ];
+
+            return response()->json($response, 200);
+
+        } catch(\Exception $e) {
+            $errorMessage = "Erro: Transação não encontrada.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+    }
+
+    public function showTypeTransactions($id): JsonResponse
     {
         try {
 
@@ -229,5 +245,68 @@ class TransactionController extends Controller
             return response()->json($response, 404);
         }
 
+    }
+
+    public function update(Request $request) {
+
+        try {
+
+            Transaction::findOrFail($request->id);
+
+        } catch(\Exception $e) {    
+
+            $errorMessage = "Erro: Esta transação não existe.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+
+        try {
+
+            Transaction::findOrFail($request->id)->update($request->all());
+
+            $transaction = Transaction::find($request->id);
+
+            $response = [
+                "transaction" => $transaction
+            ];
+
+            return response()->json($response, 200);
+
+        } catch(\Exception $e) {
+
+            $errorMessage = "Erro: Teste.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+
+    }
+
+    public function destroy($id) {
+
+        try{
+
+            Transaction::findOrFail($id)->delete();
+
+            return response(204);
+
+        } catch(\Exception $e) {
+
+            $errorMessage = "Erro: Esta transação não existe.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+
+        }
     }
 }

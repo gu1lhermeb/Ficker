@@ -25,6 +25,7 @@ class CategoryController extends Controller
     {
         try {
 
+            
             $categories = Type::find($id)->categories;
 
             $response = [];
