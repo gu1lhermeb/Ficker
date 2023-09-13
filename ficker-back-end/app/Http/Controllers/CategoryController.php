@@ -24,8 +24,6 @@ class CategoryController extends Controller
     public function showTypeCategories($id): JsonResponse
     {
         try {
-
-            
             $categories = Type::find($id)->categories;
 
             $response = [];
@@ -38,6 +36,28 @@ class CategoryController extends Controller
         } catch(\Exception $e) {
 
             $errorMessage = "Nenhuma categoria encontrada.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public static function showCategory($id)
+    {
+        try {
+
+            $category = Category::find($id);
+
+            $description = $category->category_description;
+
+            return $description;
+
+        } catch (\Exception $e) {
+            $errorMessage = "Error: " . $e;
             $response = [
                 "data" => [
                     "error" => $errorMessage
