@@ -24,23 +24,16 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        if(!(is_null($request->card_id))) {
+        if($request->type_id == 3) {
+
+            $request->validate([
+                'installments' => ['required', 'min:1', 'max:12'],
+                'card_id' => ['required']
+            ]);
             
             try {
 
                 Card::findOrFail($request->card_id);
-    
-                if ($request->type_id != 3) {
-    
-                    $errorMessage = "Error: Tipo de transação inválido para cartão de crédito.";
-                    $response = [
-                        "data" => [
-                            "error" => $errorMessage
-                        ]
-                    ];
-    
-                    return response()->json($response, 404);
-                }
     
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
