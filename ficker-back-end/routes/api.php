@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/cards', [CardController::class, 'showCards']);
     // Route::get('/card/{id}/invoice', [CardController::class, 'showInvoiceCard']);
     Route::get('/flags', [CardController::class, 'showFlags']);
+    Route::get('/balance', [TransactionController::class, 'balance']); //Mostra o saldo atual;
 });
 
 require __DIR__.'/auth.php';
