@@ -2,6 +2,8 @@ _Ficker - Finance Tracker_
 <br>
 Sistema de Controle de Finanças - PROINT ( Projeto Integrador )
 
+_Repositório do front_ - https://github.com/alandysson/ficker-front
+
 _Stacks:_
 
 - PHP 8.1.9 - _back-end_
