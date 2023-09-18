@@ -10,15 +10,32 @@ use App\Models\Type;
 class CategoryController extends Controller
 {
 
-    public static function store($description, $type)
+    public static function storeTransaction($description, $type) :JsonResponse
     {
-        $category = Category::create([
+        try {
+            $category = Category::create([
 
-            'category_description' => $description,
-            'type_id' => $type
-        ]);
+                'category_description' => $description,
+                'type_id' => $type
+            ]);
 
-        return $category;
+            $response = [
+                'data' => [
+                    'category' => $category
+                ]
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errorMessage = "A categoria não foi criada";
+            $response = [
+                'Error' => [
+                    'message' => $errorMessage,
+                    'error' => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
     }
 
     public function showTypeCategories($id): JsonResponse
@@ -38,7 +55,8 @@ class CategoryController extends Controller
             $errorMessage = "Nenhuma categoria encontrada.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
 
@@ -60,7 +78,8 @@ class CategoryController extends Controller
             $errorMessage = "Error: " . $e;
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
 
@@ -83,7 +102,36 @@ class CategoryController extends Controller
             $errorMessage = "Error: " . $e;
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public static function store(Request $request) :JsonResponse
+    {
+        try {
+            $category = Category::create([
+
+                'category_description' => $request->category_description,
+                'type_id' => $request->type_id
+            ]);
+
+            $response = [
+                'data' => [
+                    'category' => $category
+                ]
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errorMessage = "A categoria não foi criada";
+            $response = [
+                'Error' => [
+                    'message' => $errorMessage,
+                    'error' => $e
                 ]
             ];
 

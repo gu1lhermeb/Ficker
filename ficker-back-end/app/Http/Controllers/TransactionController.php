@@ -39,7 +39,8 @@ class TransactionController extends Controller
                 $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
                     "data" => [
-                        "error" => $errorMessage
+                        "message" => $errorMessage,
+                        "error" => $e
                     ]
                 ];
 
@@ -55,7 +56,7 @@ class TransactionController extends Controller
                 'category_description' => ['required', 'string', 'max:50', 'unique:categories'],
             ]);
 
-            $category = CategoryController::store($request->category_description, $request->type_id);
+            $category = CategoryController::storeTransaction($request->category_description, $request->type_id);
 
         } else {
 
@@ -160,7 +161,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Transação não encontrada.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -190,7 +192,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Nenhuma transação encontrada.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -219,7 +222,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Este cartão não possui transações.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -246,7 +250,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Esta transação não possui parcelas.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -265,7 +270,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Esta transação não existe.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -288,7 +294,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Teste.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -308,7 +315,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Esta transação não existe.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
@@ -326,9 +334,12 @@ class TransactionController extends Controller
 
             return response()->json($reponse, 200);
         } catch (\Exception $e) {
-            $message = 'Nenhuma transação foi encontrada';
+            $errorMessage = 'Nenhuma transação foi encontrada';
             $response = [
-                'Error' => $message
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
             ];
 
             return response()->json($response, 404);
