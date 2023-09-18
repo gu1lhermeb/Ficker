@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Category;
 use App\Models\Type;
+use App\Models\Transaction;
 
 class CategoryController extends Controller
 {
@@ -94,12 +95,21 @@ class CategoryController extends Controller
 
             $response = [];
             foreach($categories as $category){
+                $ammount = 0;
+                foreach(Transaction::where('category_id', $category->id)->get() as $transaction){
+                    $transactionMonth = date('m',strtotime($transaction->date));
+                    $currentMonth = date('m');
+                    if($transactionMonth === $currentMonth){
+                        $ammount += $transaction->value;
+                    };
+                };
+                $category->ammount = $ammount;
                 array_push($response, $category);
             }
-
             return response()->json($response, 200);
+
         } catch (\Exception $e) {
-            $errorMessage = "Error: " . $e;
+            $errorMessage = "Nenhuma categoria foi encontrada";
             $response = [
                 "data" => [
                     "message" => $errorMessage,
