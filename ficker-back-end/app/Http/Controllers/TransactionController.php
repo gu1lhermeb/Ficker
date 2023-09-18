@@ -30,11 +30,11 @@ class TransactionController extends Controller
                 'installments' => ['required', 'min:1', 'max:12'],
                 'card_id' => ['required']
             ]);
-            
+
             try {
 
                 Card::findOrFail($request->card_id);
-    
+
             } catch (\Exception $e) {
                 $errorMessage = "Error: Cartão não encontrado.";
                 $response = [
@@ -42,7 +42,7 @@ class TransactionController extends Controller
                         "error" => $errorMessage
                     ]
                 ];
-    
+
                 return response()->json($response, 404);
             }
         }
@@ -260,7 +260,7 @@ class TransactionController extends Controller
 
             Transaction::findOrFail($request->id);
 
-        } catch(\Exception $e) {    
+        } catch(\Exception $e) {
 
             $errorMessage = "Erro: Esta transação não existe.";
             $response = [
@@ -313,6 +313,25 @@ class TransactionController extends Controller
             ];
             return response()->json($response, 404);
 
+        }
+    }
+
+    public function showAllTransactions() :JsonResponse
+    {
+        try {
+            $transactions = Transaction::orderBy('date', 'desc')->get();
+            $reponse = [
+                'transactions' => $transactions
+            ];
+
+            return response()->json($reponse, 200);
+        } catch (\Exception $e) {
+            $message = 'Nenhuma transação foi encontrada';
+            $response = [
+                'Error' => $message
+            ];
+
+            return response()->json($response, 404);
         }
     }
 }

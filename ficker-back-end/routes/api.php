@@ -24,6 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/transaction', [TransactionController::class, 'store']);
+    Route::get('/transactions', [TransactionController::class, 'showAllTransactions']);
     Route::get('/transactions/{id}', [TransactionController::class, 'showTransaction']);
     Route::get('/transactions/type/{id}', [TransactionController::class, 'showTransactions']); // Entradas ou saídas
     Route::get('/transactions/card/{id}', [TransactionController::class, 'showCardTransactions']); // Transações de um cartão de crédito

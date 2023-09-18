@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /mysql
 /lang
+compose-local.yml
