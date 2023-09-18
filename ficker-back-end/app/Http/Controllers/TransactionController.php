@@ -174,7 +174,7 @@ class TransactionController extends Controller
             $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
-            ])->get();
+            ])->orderBy('date', 'desc')->get();
 
             $response = [];
             foreach($transactions  as $transaction){
