@@ -6,6 +6,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SpendingController;
+use App\Http\Controllers\BalanceController;
 
 
 /*
@@ -41,7 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/spending', [SpendingController::class, 'showSpending']);
     Route::post('/spending/store', [SpendingController::class, 'store']);
     Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
-    Route::get('/balance', [TransactionController::class, 'balance']); //Mostra o saldo atual;
+    Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
 });
 
 require __DIR__.'/auth.php';
