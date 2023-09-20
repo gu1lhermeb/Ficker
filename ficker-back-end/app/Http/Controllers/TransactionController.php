@@ -279,7 +279,7 @@ class TransactionController extends Controller
 
         try {
 
-            Transaction::findOrFail($request->id)->update($request->all());
+            Transaction::find($request->id)->update($request->all());
 
             $transaction = Transaction::find($request->id);
 

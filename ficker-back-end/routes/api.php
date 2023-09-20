@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CategoryController;
-use App\Models\Card;
+use App\Http\Controllers\SpendingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
     Route::get('/flags', [CardController::class, 'showFlags']);
+    Route::get('/spending', [SpendingController::class, 'showSpending']);
+    Route::post('/spending/store', [SpendingController::class, 'store']);
+    Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
+
 });
 
 require __DIR__.'/auth.php';
