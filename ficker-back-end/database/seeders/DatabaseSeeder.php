@@ -81,11 +81,13 @@ class DatabaseSeeder extends Seeder
         // $card = Card::factory()->create();
 
         Category::create([
+            'user_id' => $admin->id,
             'category_description' => 'Lazer',
             'type_id' => 1
         ]);
 
         Category::create([
+            'user_id' => $admin->id,
             'category_description' => 'Alimentação',
             'type_id' => 2
         ]);

@@ -6,25 +6,47 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Category;
 use App\Models\Type;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
 
-    public static function store($description, $type)
+    public static function storeTransaction($description, $type) :JsonResponse
     {
-        $category = Category::create([
+        try {
+            $category = Category::create([
+                'user_id' => Auth::user()->id,
+                'category_description' => $description,
+                'type_id' => $type
+            ]);
 
-            'category_description' => $description,
-            'type_id' => $type
-        ]);
+            $response = [
+                'data' => [
+                    'category' => $category
+                ]
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errorMessage = "A categoria não foi criada";
+            $response = [
+                'Error' => [
+                    'message' => $errorMessage,
+                    'error' => $e
+                ]
+            ];
 
-        return $category;
+            return response()->json($response, 404);
+        }
     }
 
     public function showTypeCategories($id): JsonResponse
     {
         try {
-            $categories = Type::find($id)->categories;
+            $categories = Category::where([
+                'user_id' => Auth::user()->id,
+                'type_id' => $id
+            ])->get();
 
             $response = [];
             foreach($categories as $category){
@@ -38,7 +60,8 @@ class CategoryController extends Controller
             $errorMessage = "Nenhuma categoria encontrada.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
 
@@ -60,7 +83,8 @@ class CategoryController extends Controller
             $errorMessage = "Error: " . $e;
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
 
@@ -71,19 +95,57 @@ class CategoryController extends Controller
     public function showCategories(): JsonResponse
     {
         try {
-            $categories = Category::all();
+            $categories = Auth::user()->categories;
 
             $response = [];
             foreach($categories as $category){
+                $ammount = 0;
+                foreach(Transaction::where('category_id', $category->id)->get() as $transaction){
+                    $transactionMonth = date('m',strtotime($transaction->date));
+                    $currentMonth = date('m');
+                    if($transactionMonth === $currentMonth){
+                        $ammount += $transaction->value;
+                    };
+                };
+                $category->ammount = $ammount;
                 array_push($response, $category);
             }
-
             return response()->json($response, 200);
+
         } catch (\Exception $e) {
-            $errorMessage = "Error: " . $e;
+            $errorMessage = "Nenhuma categoria foi encontrada";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public static function store(Request $request) :JsonResponse
+    {
+        try {
+            $category = Category::create([
+                'user_id' => Auth::user()->id,
+                'category_description' => $request->category_description,
+                'type_id' => $request->type_id
+            ]);
+
+            $response = [
+                'data' => [
+                    'category' => $category
+                ]
+            ];
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errorMessage = "A categoria não foi criada";
+            $response = [
+                'Error' => [
+                    'message' => $errorMessage,
+                    'error' => $e
                 ]
             ];
 

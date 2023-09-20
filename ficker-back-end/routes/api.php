@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CategoryController;
-use App\Models\Card;
+use App\Http\Controllers\SpendingController;
+use App\Http\Controllers\BalanceController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,13 +33,16 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/transactions/{id}/installments', [TransactionController::class, 'showInstallments']); // Parcelas de uma transação
     Route::delete('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
     Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
+    Route::post('/category/store', [CategoryController::class, 'store']);
     Route::get('/categories', [CategoryController::class, 'showCategories']);
     Route::get('/categories/type/{id}', [CategoryController::class, 'showTypeCategories']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
-    // Route::get('/card/{id}/invoice', [CardController::class, 'showInvoiceCard']);
     Route::get('/flags', [CardController::class, 'showFlags']);
-    Route::get('/balance', [TransactionController::class, 'balance']); //Mostra o saldo atual;
+    Route::get('/spending', [SpendingController::class, 'showSpending']);
+    Route::post('/spending/store', [SpendingController::class, 'store']);
+    Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
+    Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
 });
 
 require __DIR__.'/auth.php';
