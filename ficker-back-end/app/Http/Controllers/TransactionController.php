@@ -359,7 +359,8 @@ class TransactionController extends Controller
             $errorMessage = "Erro: Não foi posssivel realizar o cálculo do saldo.";
             $response = [
                 "data" => [
-                    "error" => $errorMessage
+                    "message" => $errorMessage,
+                    "error" => $e
                 ]
             ];
             return response()->json($response, 404);
