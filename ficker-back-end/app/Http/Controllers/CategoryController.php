@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\Category;
 use App\Models\Type;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -15,7 +16,7 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::create([
-
+                'user_id' => Auth::user()->id,
                 'category_description' => $description,
                 'type_id' => $type
             ]);
@@ -42,7 +43,10 @@ class CategoryController extends Controller
     public function showTypeCategories($id): JsonResponse
     {
         try {
-            $categories = Type::find($id)->categories;
+            $categories = Category::where([
+                'user_id' => Auth::user()->id,
+                'type_id' => $id
+            ])->get();
 
             $response = [];
             foreach($categories as $category){
@@ -91,7 +95,7 @@ class CategoryController extends Controller
     public function showCategories(): JsonResponse
     {
         try {
-            $categories = Category::all();
+            $categories = Auth::user()->categories;
 
             $response = [];
             foreach($categories as $category){
@@ -125,7 +129,7 @@ class CategoryController extends Controller
     {
         try {
             $category = Category::create([
-
+                'user_id' => Auth::user()->id,
                 'category_description' => $request->category_description,
                 'type_id' => $request->type_id
             ]);

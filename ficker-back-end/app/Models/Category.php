@@ -12,6 +12,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'category_description',
         'type_id'
     ];
@@ -24,5 +25,10 @@ class Category extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

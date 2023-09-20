@@ -24,8 +24,8 @@ class BalanceController extends Controller
         $balance = $incomes - $outgoings;
 
         $spending = Spending::where('user_id', Auth::user()->id)
-                                    ->latest()
-                                    ->first('value');
+                                ->latest()
+                                ->first('value');
 
     
         // $spending->spending = $spending->value;
