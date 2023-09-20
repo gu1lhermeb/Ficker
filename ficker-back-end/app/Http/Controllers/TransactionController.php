@@ -346,25 +346,4 @@ class TransactionController extends Controller
             return response()->json($response, 404);
         }
     }
-    public function balance(): JsonResponse {
-
-        try {
-            $balanceService = new Balance();
-            $user = Auth::user()->id;
-            $balance = $balanceService->calculateBalance($user);
-            return response()->json($balance, 200);
-
-        } catch(\Exception $e) {
-
-            $errorMessage = "Erro: Não foi posssivel realizar o cálculo do saldo.";
-            $response = [
-                "data" => [
-                    "message" => $errorMessage,
-                    "error" => $e
-                ]
-            ];
-            return response()->json($response, 404);
-        }
-    }
-
 }
