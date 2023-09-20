@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
+use App\Services\Balance;
 
 class TransactionController extends Controller
 {
@@ -345,4 +346,24 @@ class TransactionController extends Controller
             return response()->json($response, 404);
         }
     }
+    public function balance(): JsonResponse {
+
+        try {
+            $balanceService = new Balance();
+            $user = Auth::user()->id;
+            $balance = $balanceService->calculateBalance($user);
+            return response()->json($balance, 200);
+
+        } catch(\Exception $e) {
+
+            $errorMessage = "Erro: Não foi posssivel realizar o cálculo do saldo.";
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+    }
+
 }
