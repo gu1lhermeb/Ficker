@@ -38,14 +38,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
     Route::get('/flags', [CardController::class, 'showFlags']);
-<<<<<<< HEAD
     Route::get('/spending', [SpendingController::class, 'showSpending']);
     Route::post('/spending/store', [SpendingController::class, 'store']);
     Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
-
-=======
     Route::get('/balance', [TransactionController::class, 'balance']); //Mostra o saldo atual;
->>>>>>> origin/featureCalculateBalance
 });
 
 require __DIR__.'/auth.php';
