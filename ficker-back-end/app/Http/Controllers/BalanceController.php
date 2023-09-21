@@ -27,9 +27,6 @@ class BalanceController extends Controller
                                 ->latest()
                                 ->first('value');
 
-    
-        // $spending->spending = $spending->value;
-
         $spending->balance = $balance;
 
         $real = Transaction::whereMonth('date', now()->month)

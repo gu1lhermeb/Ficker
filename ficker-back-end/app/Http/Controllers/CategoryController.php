@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Category;
-use App\Models\Type;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
 
-    public static function storeTransaction($description, $type) :JsonResponse
+    public static function storeTransaction($description, $type)
     {
         try {
             $category = Category::create([
@@ -21,12 +20,8 @@ class CategoryController extends Controller
                 'type_id' => $type
             ]);
 
-            $response = [
-                'data' => [
-                    'category' => $category
-                ]
-            ];
-            return response()->json($response, 201);
+            return $category;
+
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [
