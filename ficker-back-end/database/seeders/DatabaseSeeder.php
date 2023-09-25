@@ -9,12 +9,15 @@ use App\Models\User;
 use App\Models\Card;
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\Spending;
 
 class DatabaseSeeder extends Seeder
 {
 
     public function run(): void
     {
+
+        // Bandeiras de cartão de crédito
 
         $flags = [
 
@@ -54,15 +57,14 @@ class DatabaseSeeder extends Seeder
 
         });
 
+        // Tipos de transação
+
         $types = [
             [
                 'description' => 'Entrada'
             ],
             [
                 'description' => 'Saída'
-            ],
-            [
-                'description' => 'Cartão de crédito'
             ]
         ];
 
@@ -72,43 +74,48 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        $admin = User::create([
+        //Usuário
+
+        $user = User::create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin123'),
         ]);
 
-        // $card = Card::factory()->create();
+        // Cartão de crédito
 
-        Category::create([
-            'user_id' => $admin->id,
-            'category_description' => 'Lazer',
-            'type_id' => 1
-        ]);
+        $card = Card::factory()->create();
 
-        Category::create([
-            'user_id' => $admin->id,
-            'category_description' => 'Alimentação',
-            'type_id' => 2
-        ]);
+        // Categorias
 
-        Transaction::create([
-            'user_id' => $admin->id,
-            'description' => 'Salário',
-            'date' => '2023-01-03',
-            'type_id' => 1,
-            'value' => 1500,
-            'category_id' => 1,
-        ]);
+        $categories = [
+            [
+                'category_description' => 'Lazer'
+            ],
+            [
+                'category_description' => 'Alimentação'
+            ],
+            [
+                'category_description' => 'Filhos'
+            ],
+            [
+                'category_description' => 'Valorant'
+            ],
+        ];
 
-        // Transaction::create([
-        //     'user_id' => $admin->id,
-        //     'description' => 'Compra na Adidas',
-        //     'date' => '2023-01-03',
-        //     'type_id' => 3,
-        //     'value' => 300,
-        //     'category_id' => 2,
-        //     'card_id' => $card->id,
-        // ]);
+        collect($categories)->each( function($category) {
+
+            \App\Models\Category::factory()->create($category);
+
+        });
+
+        // Transações
+
+        Transaction::factory()->count(4)->create();
+
+        // Gasto planejado
+
+        Spending::factory()->create();
+
     }
 }

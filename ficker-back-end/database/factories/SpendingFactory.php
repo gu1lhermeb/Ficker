@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Card>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Spending>
  */
-class CardFactory extends Factory
+class SpendingFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,7 @@ class CardFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'flag_id' => 1,
-            'description' => 'Cartão Nubank',
-            'expiration' => 7,
-            'closure' => 24
+            'planned_spending' => random_int(1000, 5000)
         ];
     }
 }
