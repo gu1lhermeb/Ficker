@@ -17,7 +17,7 @@ class CardController extends Controller
     public function store(Request $request) : JsonResponse
     {
         $request->validate([
-            'description' => ['required', 'string', 'min:2', 'max:50'],
+            'card_description' => ['required', 'string', 'min:2', 'max:50'],
             'flag_id' => ['required'],
             'expiration' => ['required', 'integer', 'min:1', 'max:31'],
             'closure' => ['required', 'integer', 'min:1', 'max:31']
@@ -27,7 +27,7 @@ class CardController extends Controller
         $card = Card::create([
             'user_id' => Auth::user()->id,
             'flag_id' => $request->flag_id,
-            'description' => $request->description,
+            'card_description' => $request->card_description,
             'expiration' => $request->expiration,
             'closure' => $request->closure
         ]);

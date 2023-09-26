@@ -17,7 +17,7 @@ class FlagFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => 'Visa'
+            'flag_description' => 'Visa'
         ];
     }
 }

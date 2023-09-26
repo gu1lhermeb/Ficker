@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('spendings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->onDelete('cascade');
-            $table->double('value');
+            $table->double('planned_spending');
             $table->timestamps();
         });
     }

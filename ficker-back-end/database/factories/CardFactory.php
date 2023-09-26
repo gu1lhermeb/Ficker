@@ -19,7 +19,7 @@ class CardFactory extends Factory
         return [
             'user_id' => 1,
             'flag_id' => 1,
-            'description' => 'Cartão Nubank',
+            'card_description' => 'Cartão Nubank',
             'expiration' => 7,
             'closure' => 24
         ];

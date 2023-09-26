@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->foreignId('card_id')->nullable()->constrained('cards')->onDelete('cascade');
-            $table->string('description');
-            $table->double('value');
+            $table->string('installment_description');
+            $table->double('installment_value');
             $table->date('pay_day');
             $table->timestamps();
         });

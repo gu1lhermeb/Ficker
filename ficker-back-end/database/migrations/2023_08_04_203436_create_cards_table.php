@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('flag_id')->constrained('flags')->onDelete('cascade');
-            $table->string('description');
+            $table->string('card_description');
             $table->integer('expiration');
             $table->integer('closure');
             $table->timestamps();

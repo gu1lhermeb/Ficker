@@ -17,7 +17,7 @@ class TransactionController extends Controller
     {
 
         $request->validate([
-            'description' => ['required', 'string', 'max:50'],
+            'transaction_description' => ['required', 'string', 'max:50'],
             'category_id' => ['required'],
             'date' => ['required', 'date'],
             'type_id' => ['required'],
@@ -72,7 +72,7 @@ class TransactionController extends Controller
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
                 'category_id' => $category->id,
-                'description' => $request->description,
+                'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
                 'value' => $request->value,
                 'type_id' => $request->type_id
@@ -92,7 +92,7 @@ class TransactionController extends Controller
                 'user_id' => Auth::user()->id,
                 'category_id' => $category->id,
                 'card_id' => $request->card_id,
-                'description' => $request->description,
+                'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
                 'value' => $request->value,
                 'installments' => $request->installments,  
@@ -114,7 +114,7 @@ class TransactionController extends Controller
             if($i == 1){
                 $installment = Installment::create([
                     'transaction_id' => $transaction->id,
-                    'description' => $request->description,
+                    'installment_description' => $request->installment_description,
                     'value' => $firstInstallment,
                     'card_id' => $request->card_id,
                     'pay_day' => $pay_day
@@ -127,7 +127,7 @@ class TransactionController extends Controller
                 $new_pay_day_formated = date('Y-m-d', $new_pay_day);
                 $installment = Installment::create([
                     'transaction_id' => $transaction->id,
-                    'description' => $request->description,
+                    'installment_description' => $request->installment_description,
                     'value' => $value,
                     'card_id' => $request->card_id,
                     'pay_day' => $new_pay_day_formated

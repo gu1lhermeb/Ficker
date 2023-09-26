@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Card;
 use App\Models\Transaction;
-use App\Models\Category;
 use App\Models\Spending;
 
 class DatabaseSeeder extends Seeder
@@ -22,31 +21,31 @@ class DatabaseSeeder extends Seeder
         $flags = [
 
             [
-                'description' => 'Mastercard',
+                'flag_description' => 'Mastercard',
             ],
 
             [
-                'description' => 'Visa'
+                'flag_description' => 'Visa'
             ],
 
             [
-                'description' => 'Hipercard'
+                'flag_description' => 'Hipercard'
             ],
 
             [
-                'description' => 'Elo'
+                'flag_description' => 'Elo'
             ],
 
             [
-                'description' => 'Alelo'
+                'flag_description' => 'Alelo'
             ],
 
             [
-                'description' => 'American Express'
+                'flag_description' => 'American Express'
             ],
 
             [
-                'description' => 'Diners Club'
+                'flag_description' => 'Diners Club'
             ],
 
         ];
@@ -61,10 +60,10 @@ class DatabaseSeeder extends Seeder
 
         $types = [
             [
-                'description' => 'Entrada'
+                'type_description' => 'Entrada'
             ],
             [
-                'description' => 'Saída'
+                'type_description' => 'Saída'
             ]
         ];
 
