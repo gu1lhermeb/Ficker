@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->foreignIdFor(Category::class)->onDelete('cascade');
-            $table->foreignIdFor(Card::class)->onDelete('cascade');
+            $table->foreignIdFor(Card::class)->nullable()->onDelete('cascade');
             $table->string('transaction_description');
             $table->date('date');
             $table->double('transaction_value');

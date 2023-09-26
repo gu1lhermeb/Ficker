@@ -108,6 +108,29 @@ class DatabaseSeeder extends Seeder
 
         });
 
+        // Métodos de pagamento
+
+        $payment_methods = [
+            [
+                'payment_method_description' => 'Dinheiro'
+            ],
+            [
+                'payment_method_description' => 'Pix'
+            ],
+            [
+                'payment_method_description' => 'Débito'
+            ],
+            [
+                'payment_method_description' => 'Crédito'
+            ]
+        ];
+
+        collect($payment_methods)->each( function($payment_method) {
+
+            \App\Models\PaymentMethod::factory()->create($payment_method);
+
+        });
+
         // Transações
 
         Transaction::factory()->count(4)->create();
