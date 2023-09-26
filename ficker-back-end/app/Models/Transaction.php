@@ -15,6 +15,7 @@ class Transaction extends Model
         'user_id',
         'card_id',
         'category_id',
+        'payment_method_id',
         'description',
         'date',
         'type_id',
