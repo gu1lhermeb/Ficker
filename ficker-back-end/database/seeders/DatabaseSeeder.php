@@ -118,10 +118,10 @@ class DatabaseSeeder extends Seeder
                 'payment_method_description' => 'Pix'
             ],
             [
-                'payment_method_description' => 'Débito'
+                'payment_method_description' => 'Cartão de débito'
             ],
             [
-                'payment_method_description' => 'Crédito'
+                'payment_method_description' => 'Cartão de crédito'
             ]
         ];
 

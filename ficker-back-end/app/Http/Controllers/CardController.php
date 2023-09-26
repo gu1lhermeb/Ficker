@@ -116,4 +116,38 @@ class CardController extends Controller
             return response()->json($response, 404);
         }
     }
+
+    public function showCardTransactionsByMonth($id) { // Verifcar a questão do dia de fechamento da fatura (closure)
+
+        try {
+
+            $card = Card::findOrFail($id);
+
+            $transactions = Transaction::whereMonth('date', now()->month)
+                                    ->whereYear('date', now()->year)
+                                    ->where('user_id', Auth::user()->id)
+                                    ->where('card_id', $id)
+                                    ->get();
+
+            $response = [];
+            foreach($transactions as $transaction) {
+                $description = CategoryController::showCategory($transaction->category_id);
+                $transaction->category_description = $description;
+                array_push($response, $transaction);
+            }
+
+            return response()->json($response, 200);
+
+        } catch(\Exception $e) {
+
+            $errorMessage = "Erro: Este cartão não possui transações.";
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+    }
 }

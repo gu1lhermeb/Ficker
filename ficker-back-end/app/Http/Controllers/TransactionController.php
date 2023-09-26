@@ -24,29 +24,36 @@ class TransactionController extends Controller
             'value' => ['required', 'decimal:0,2']
         ]);
 
-        // Validando parcelas e card id
+        // Validando método de pagamento, parcelas e card id
 
-        if($request->type_id == 3) {
+        if($request->type_id == 2) {
 
             $request->validate([
-                'installments' => ['required', 'min:1', 'max:12'],
-                'card_id' => ['required']
+                'payment_method_id' => ['required']
             ]);
 
-            try {
+            if($request->payment_method_id == 4) {
 
-                Card::findOrFail($request->card_id);
-
-            } catch (\Exception $e) {
-                $errorMessage = "Error: Cartão não encontrado.";
-                $response = [
-                    "data" => [
-                        "message" => $errorMessage,
-                        "error" => $e
-                    ]
-                ];
-
-                return response()->json($response, 404);
+                $request->validate([
+                    'installments' => ['required', 'min:1', 'max:12'],
+                    'card_id' => ['required']
+                ]);
+    
+                try {
+    
+                    Card::findOrFail($request->card_id);
+    
+                } catch (\Exception $e) {
+                    $errorMessage = "Error: Cartão não encontrado.";
+                    $response = [
+                        "data" => [
+                            "message" => $errorMessage,
+                            "error" => $e
+                        ]
+                    ];
+    
+                    return response()->json($response, 404);
+                }
             }
         }
 

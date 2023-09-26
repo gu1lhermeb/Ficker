@@ -27,13 +27,13 @@ class BalanceController extends Controller
                                 ->latest()
                                 ->first('planned_spending');
 
-        $month_spendings = Transaction::whereMonth('date', now()->month)
+        $real_spending = Transaction::whereMonth('date', now()->month)
                                 ->whereYear('date', now()->year)
                                 ->where('user_id', Auth::user()->id)
                                 ->where('type_id', 2)
                                 ->sum('value');
 
-        $spending->real_spending_value = $month_spendings;
+        $spending->real_spending = $real_spending;
 
         $spending->balance = $balance;
 
