@@ -157,7 +157,10 @@ class TransactionController extends Controller
     public function showTransactions() :JsonResponse
     {
         try {
-            $transactions = Transaction::orderBy('date', 'desc')->get();
+            $transactions = Transaction::orderBy('date', 'desc')
+                                        ->where('user_id', Auth::user()->id)
+                                        ->get();
+
             $reponse = [
                 'transactions' => $transactions
             ];
