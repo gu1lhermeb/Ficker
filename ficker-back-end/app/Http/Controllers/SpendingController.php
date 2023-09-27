@@ -12,12 +12,12 @@ class SpendingController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'value' => ['required', 'min:1']
+            'planned_spending' => ['required', 'min:1']
         ]);
 
         $spending = Spending::create([
             'user_id' => Auth::user()->id,
-            'value' => $request->value
+            'planned_spending' => $request->planned_spending
         ]);
 
         $response = [

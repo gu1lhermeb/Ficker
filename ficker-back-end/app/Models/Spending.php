@@ -12,7 +12,7 @@ class Spending extends Model
 
     protected $fillable = [
         'user_id',
-        'value'
+        'planned_spending'
     ];
 
     public function user(): BelongsTo

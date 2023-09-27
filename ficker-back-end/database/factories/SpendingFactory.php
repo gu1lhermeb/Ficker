@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Type>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Spending>
  */
-class TypeFactory extends Factory
+class SpendingFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class TypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'type_description' => 'Entrada'
+            'user_id' => 1,
+            'planned_spending' => random_int(1000, 5000)
         ];
     }
 }

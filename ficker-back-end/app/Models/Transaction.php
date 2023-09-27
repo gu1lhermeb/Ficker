@@ -15,10 +15,11 @@ class Transaction extends Model
         'user_id',
         'card_id',
         'category_id',
-        'description',
+        'payment_method_id',
+        'transaction_description',
         'date',
         'type_id',
-        'value',
+        'transaction_value',
         'installments'
     ];
 

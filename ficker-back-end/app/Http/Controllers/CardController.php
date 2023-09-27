@@ -17,7 +17,7 @@ class CardController extends Controller
     public function store(Request $request) : JsonResponse
     {
         $request->validate([
-            'description' => ['required', 'string', 'min:2', 'max:50'],
+            'card_description' => ['required', 'string', 'min:2', 'max:50'],
             'flag_id' => ['required'],
             'expiration' => ['required', 'integer', 'min:1', 'max:31'],
             'closure' => ['required', 'integer', 'min:1', 'max:31']
@@ -27,7 +27,7 @@ class CardController extends Controller
         $card = Card::create([
             'user_id' => Auth::user()->id,
             'flag_id' => $request->flag_id,
-            'description' => $request->description,
+            'card_description' => $request->card_description,
             'expiration' => $request->expiration,
             'closure' => $request->closure
         ]);
@@ -45,7 +45,7 @@ class CardController extends Controller
             $cards = Auth::user()->cards;
             $response = [];
             foreach($cards as $card){
-                $invoice = Self::showInvoiceCard($card->id);
+                $invoice = Self::showCardInvoice($card->id);
                 $card->invoice = $invoice;
                 array_push($response, $card);
             }
@@ -86,7 +86,7 @@ class CardController extends Controller
         }
     }
 
-    public function showInvoiceCard($id)
+    public function showCardInvoice($id)
     {
 
         try {
@@ -116,4 +116,42 @@ class CardController extends Controller
             return response()->json($response, 404);
         }
     }
+
+    public function showInvoiceInstallments($id): JsonResponse
+    {
+
+        try {
+            $card = Card::findOrFail($id);
+            $installments = Installment::where([
+                'card_id' => $card->id
+            ])->get();
+            $date_now = date('Y-m');
+            $day_now = date('d');
+            $response = [];
+            foreach($installments as $installment){
+                $new_installment = date('Y-m', strtotime($installment->pay_day));
+                if($new_installment == $date_now and $day_now < $card->closure){
+                    array_push($response, $installment);
+                }
+            }
+
+            $response = [
+                'data' => [
+                    'installment' => $installment
+                ]
+            ];
+
+            return response()->json($response, 200);
+
+        } catch (\Exception $e) {
+            $errorMessage = "Erro: " + $e;
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+    }
+
 }

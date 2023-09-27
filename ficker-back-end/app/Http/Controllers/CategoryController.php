@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Category;
-use App\Models\Type;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
 
-    public static function storeTransaction($description, $type) :JsonResponse
+    public function store(Request $request) :JsonResponse
     {
         try {
             $category = Category::create([
                 'user_id' => Auth::user()->id,
-                'category_description' => $description,
-                'type_id' => $type
+                'category_description' => $request->category_description,
+                'type_id' => $request->type_id
             ]);
 
             $response = [
@@ -40,7 +39,64 @@ class CategoryController extends Controller
         }
     }
 
-    public function showTypeCategories($id): JsonResponse
+    public static function storeInTransaction($description, $type)
+    {
+        try {
+            $category = Category::create([
+                'user_id' => Auth::user()->id,
+                'category_description' => $description,
+                'type_id' => $type
+            ]);
+
+            return $category;
+
+        } catch (\Exception $e) {
+            $errorMessage = "A categoria não foi criada";
+            $response = [
+                'Error' => [
+                    'message' => $errorMessage,
+                    'error' => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public function showCategories(): JsonResponse
+    {
+        try {
+            $categories = Auth::user()->categories;
+
+            $response = [];
+            foreach($categories as $category){
+                $ammount = 0;
+                foreach(Transaction::where('category_id', $category->id)->get() as $transaction){
+                    $transactionMonth = date('m',strtotime($transaction->date));
+                    $currentMonth = date('m');
+                    if($transactionMonth === $currentMonth){
+                        $ammount += $transaction->value;
+                    };
+                };
+                $category->ammount = $ammount;
+                array_push($response, $category);
+            }
+            return response()->json($response, 200);
+
+        } catch (\Exception $e) {
+            $errorMessage = "Nenhuma categoria foi encontrada";
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public function showCategoriesByType($id): JsonResponse
     {
         try {
             $categories = Category::where([
@@ -92,64 +148,4 @@ class CategoryController extends Controller
         }
     }
 
-    public function showCategories(): JsonResponse
-    {
-        try {
-            $categories = Auth::user()->categories;
-
-            $response = [];
-            foreach($categories as $category){
-                $ammount = 0;
-                foreach(Transaction::where('category_id', $category->id)->get() as $transaction){
-                    $transactionMonth = date('m',strtotime($transaction->date));
-                    $currentMonth = date('m');
-                    if($transactionMonth === $currentMonth){
-                        $ammount += $transaction->value;
-                    };
-                };
-                $category->ammount = $ammount;
-                array_push($response, $category);
-            }
-            return response()->json($response, 200);
-
-        } catch (\Exception $e) {
-            $errorMessage = "Nenhuma categoria foi encontrada";
-            $response = [
-                "data" => [
-                    "message" => $errorMessage,
-                    "error" => $e
-                ]
-            ];
-
-            return response()->json($response, 404);
-        }
-    }
-
-    public static function store(Request $request) :JsonResponse
-    {
-        try {
-            $category = Category::create([
-                'user_id' => Auth::user()->id,
-                'category_description' => $request->category_description,
-                'type_id' => $request->type_id
-            ]);
-
-            $response = [
-                'data' => [
-                    'category' => $category
-                ]
-            ];
-            return response()->json($response, 201);
-        } catch (\Exception $e) {
-            $errorMessage = "A categoria não foi criada";
-            $response = [
-                'Error' => [
-                    'message' => $errorMessage,
-                    'error' => $e
-                ]
-            ];
-
-            return response()->json($response, 404);
-        }
-    }
 }
