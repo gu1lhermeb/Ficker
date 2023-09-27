@@ -100,7 +100,7 @@ class CardController extends Controller
             foreach($installments as $installment){
                 $new_installment = date('Y-m', strtotime($installment->pay_day));
                 if($new_installment == $date_now and $day_now < $card->closure){
-                    $invoice += $installment->value;
+                    $invoice += $installment->installment_value;
                 }
             }
 
