@@ -14,12 +14,12 @@ class BalanceController extends Controller
         $incomes = Transaction::where([
             'user_id' => Auth::user()->id,
             'type_id' => 1,
-        ])->sum('value');
+        ])->sum('transaction_value');
         
         $outgoings = Transaction::where([
             'user_id' => Auth::user()->id,
             'type_id' => 2,
-        ])->sum('value');
+        ])->sum('transaction_value');
 
         $balance = $incomes - $outgoings;
 
@@ -31,7 +31,7 @@ class BalanceController extends Controller
                                 ->whereYear('date', now()->year)
                                 ->where('user_id', Auth::user()->id)
                                 ->where('type_id', 2)
-                                ->sum('value');
+                                ->sum('transaction_value');
 
         $spending->real_spending = $real_spending;
 

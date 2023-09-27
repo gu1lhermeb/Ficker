@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/categories/type/{id}', [CategoryController::class, 'showCategoriesByType']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
-    Route::get('/cards/{id/invoice', [CardController::class, 'showCardInvoice']);
+    Route::get('/cards/{id}/invoice', [CardController::class, 'showCardInvoice']);
     Route::get('/cards/{id}/installments', [CardController::class, 'showInvoiceInstallments']); // Transações de um cartão no mês atual
     Route::get('/flags', [CardController::class, 'showFlags']);
     Route::get('/spending', [SpendingController::class, 'showSpending']);
