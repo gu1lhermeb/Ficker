@@ -12,8 +12,8 @@ class Installment extends Model
 
     protected $fillable = [
         'transaction_id',
-        'description',
-        'value',
+        'installment_description',
+        'installment_value',
         'pay_day',
         'card_id'
     ];

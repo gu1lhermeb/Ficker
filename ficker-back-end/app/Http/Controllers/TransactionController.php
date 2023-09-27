@@ -79,10 +79,11 @@ class TransactionController extends Controller
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
                 'category_id' => $category->id,
+                'type_id' => $request->type_id,
+                'payment_method_id' => $request->payment_method_id,
                 'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
                 'value' => $request->value,
-                'type_id' => $request->type_id
             ]);
 
             $response = [
@@ -98,12 +99,13 @@ class TransactionController extends Controller
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
                 'category_id' => $category->id,
+                'type_id' => $request->type_id,
+                'payment_method_id' => $request->payment_method_id,
                 'card_id' => $request->card_id,
                 'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
                 'value' => $request->value,
                 'installments' => $request->installments,  
-                'type_id' => $request->type_id
             ]);
 
             $response = [];
@@ -121,8 +123,8 @@ class TransactionController extends Controller
             if($i == 1){
                 $installment = Installment::create([
                     'transaction_id' => $transaction->id,
-                    'installment_description' => $request->installment_description,
-                    'value' => $firstInstallment,
+                    'installment_description' => $request->transaction_description.' '.$i.'/'.$request->installments,
+                    'installment_value' => $firstInstallment,
                     'card_id' => $request->card_id,
                     'pay_day' => $pay_day
                 ]);
@@ -134,8 +136,8 @@ class TransactionController extends Controller
                 $new_pay_day_formated = date('Y-m-d', $new_pay_day);
                 $installment = Installment::create([
                     'transaction_id' => $transaction->id,
-                    'installment_description' => $request->installment_description,
-                    'value' => $value,
+                    'installment_description' => $request->transaction_description.' '.$i.'/'.$request->installments,
+                    'installment_value' => $value,
                     'card_id' => $request->card_id,
                     'pay_day' => $new_pay_day_formated
                 ]);

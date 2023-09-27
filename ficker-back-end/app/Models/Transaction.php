@@ -16,10 +16,10 @@ class Transaction extends Model
         'card_id',
         'category_id',
         'payment_method_id',
-        'description',
+        'transaction_description',
         'date',
         'type_id',
-        'value',
+        'transaction_value',
         'installments'
     ];
 
