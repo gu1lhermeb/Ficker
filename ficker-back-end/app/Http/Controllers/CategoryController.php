@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CategoryController extends Controller
 {
 
-    public function store(Request $request) :JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             $category = Category::create([
@@ -49,7 +49,6 @@ class CategoryController extends Controller
             ]);
 
             return $category;
-
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [
@@ -69,12 +68,12 @@ class CategoryController extends Controller
             $categories = Auth::user()->categories;
 
             $response = [];
-            foreach($categories as $category){
-                $ammount = 0;
-                foreach(Transaction::where('category_id', $category->id)->get() as $transaction){
-                    $transactionMonth = date('m',strtotime($transaction->date));
+            $ammount = 0;
+            foreach ($categories as $category) {
+                foreach (Transaction::where('category_id', $category->id)->get() as $transaction) {
+                    $transactionMonth = date('m', strtotime($transaction->date));
                     $currentMonth = date('m');
-                    if($transactionMonth === $currentMonth){
+                    if ($transactionMonth === $currentMonth) {
                         $ammount += $transaction->value;
                     };
                 };
@@ -82,7 +81,6 @@ class CategoryController extends Controller
                 array_push($response, $category);
             }
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $errorMessage = "Nenhuma categoria foi encontrada";
             $response = [
@@ -105,13 +103,12 @@ class CategoryController extends Controller
             ])->get();
 
             $response = [];
-            foreach($categories as $category){
+            foreach ($categories as $category) {
                 array_push($response, $category);
             }
 
             return response()->json($response, 200);
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
 
             $errorMessage = "Nenhuma categoria encontrada.";
             $response = [
@@ -134,7 +131,6 @@ class CategoryController extends Controller
             $description = $category->category_description;
 
             return $description;
-
         } catch (\Exception $e) {
             $errorMessage = "Error: " . $e;
             $response = [
@@ -147,5 +143,4 @@ class CategoryController extends Controller
             return response()->json($response, 404);
         }
     }
-
 }
