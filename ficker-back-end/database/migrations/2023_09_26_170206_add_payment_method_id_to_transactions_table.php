@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->foreignIdFor(PaymentMethod::class)->onDelete('cascade');
+            $table->foreignIdFor(PaymentMethod::class)->nullable()->onDelete('cascade');
         });
     }
 
