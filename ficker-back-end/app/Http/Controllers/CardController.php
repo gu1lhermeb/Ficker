@@ -45,7 +45,7 @@ class CardController extends Controller
             $cards = Auth::user()->cards;
             $response = [];
             foreach($cards as $card){
-                $invoice = Self::showInvoiceCard($card->id);
+                $invoice = Self::showCardInvoice($card->id);
                 $card->invoice = $invoice;
                 array_push($response, $card);
             }
@@ -86,7 +86,7 @@ class CardController extends Controller
         }
     }
 
-    public function showInvoiceCard($id)
+    public function showCardInvoice($id)
     {
 
         try {
@@ -117,37 +117,41 @@ class CardController extends Controller
         }
     }
 
-    public function showCardTransactionsByMonth($id) { // Verifcar a questão do dia de fechamento da fatura (closure)
+    public function showInvoiceInstallments($id): JsonResponse
+    {
 
         try {
-
             $card = Card::findOrFail($id);
-
-            $transactions = Transaction::whereMonth('date', now()->month)
-                                    ->whereYear('date', now()->year)
-                                    ->where('user_id', Auth::user()->id)
-                                    ->where('card_id', $id)
-                                    ->get();
-
+            $installments = Installment::where([
+                'card_id' => $card->id
+            ])->get();
+            $date_now = date('Y-m');
+            $day_now = date('d');
             $response = [];
-            foreach($transactions as $transaction) {
-                $description = CategoryController::showCategory($transaction->category_id);
-                $transaction->category_description = $description;
-                array_push($response, $transaction);
+            foreach($installments as $installment){
+                $new_installment = date('Y-m', strtotime($installment->pay_day));
+                if($new_installment == $date_now and $day_now < $card->closure){
+                    array_push($response, $installment);
+                }
             }
+
+            $response = [
+                'data' => [
+                    'installment' => $installment
+                ]
+            ];
 
             return response()->json($response, 200);
 
-        } catch(\Exception $e) {
-
-            $errorMessage = "Erro: Este cartão não possui transações.";
+        } catch (\Exception $e) {
+            $errorMessage = "Erro: " + $e;
             $response = [
                 "data" => [
-                    "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $errorMessage
                 ]
             ];
             return response()->json($response, 404);
         }
     }
+
 }

@@ -21,7 +21,7 @@ class TransactionController extends Controller
             'category_id' => ['required'],
             'date' => ['required', 'date'],
             'type_id' => ['required'],
-            'value' => ['required', 'decimal:0,2']
+            'transaction_value' => ['required', 'decimal:0,2']
         ]);
 
         // Validando método de pagamento, parcelas e card id
@@ -83,7 +83,7 @@ class TransactionController extends Controller
                 'payment_method_id' => $request->payment_method_id,
                 'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
-                'value' => $request->value,
+                'transaction_value' => $request->transaction_value,
             ]);
 
             $response = [
@@ -104,18 +104,18 @@ class TransactionController extends Controller
                 'card_id' => $request->card_id,
                 'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
-                'value' => $request->value,
+                'transaction_value' => $request->transaction_value,
                 'installments' => $request->installments,  
             ]);
 
             $response = [];
-        $pay_day = date('Y-m-d');
-        $new_pay_day_formated = $pay_day;
-        $i = $request->installments;
-        $value = (float)$request->value / (float)$request->installments;
-        $value = (float) number_format($value,2,'.','');
-        $firstInstallment = $request->value - ($value * ($i-1));
-        $firstInstallment =  (float) number_format($firstInstallment,2,'.','');
+            $pay_day = date('Y-m-d');
+            $new_pay_day_formated = $pay_day;
+            $i = $request->installments;
+            $value = (float)$request->transaction_value / (float)$request->installments;
+            $value = (float) number_format($value,2,'.','');
+            $firstInstallment = $request->transaction_value - ($value * ($i-1));
+            $firstInstallment =  (float) number_format($firstInstallment,2,'.','');
 
 
         for($i = 1; $i <= $request->installments; $i++){
