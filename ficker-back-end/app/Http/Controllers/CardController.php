@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Card;
 use App\Models\Flag;
-use App\Models\Transaction;
 use App\Models\Installment;
 use Illuminate\Support\Facades\Auth;
-
-use function PHPUnit\Framework\isNull;
 
 class CardController extends Controller
 {

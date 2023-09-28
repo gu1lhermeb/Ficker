@@ -49,6 +49,7 @@ class CategoryController extends Controller
             ]);
 
             return $category;
+
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [
@@ -65,22 +66,28 @@ class CategoryController extends Controller
     public function showCategories(): JsonResponse
     {
         try {
-            $categories = Auth::user()->categories;
 
-            $response = [];
-            $ammount = 0;
-            foreach ($categories as $category) {
-                foreach (Transaction::where('category_id', $category->id)->get() as $transaction) {
-                    $transactionMonth = date('m', strtotime($transaction->date));
-                    $currentMonth = date('m');
-                    if ($transactionMonth === $currentMonth) {
-                        $ammount += $transaction->value;
-                    };
-                };
-                $category->ammount = $ammount;
-                array_push($response, $category);
+            $categories = [];
+
+            foreach(Auth::user()->categories as $category) {
+
+                $category_spending = Transaction::whereMonth('date', now()->month)
+                                                ->where('category_id', $category->id)
+                                                ->where('type_id', 2)
+                                                ->sum('transaction_value');
+                
+                $category->category_spending = $category_spending;
+                array_push($categories, $category);
             }
+
+            $response = [
+                'data' => [
+                    'categories' => $categories
+                ]
+            ];
+
             return response()->json($response, 200);
+
         } catch (\Exception $e) {
             $errorMessage = "Nenhuma categoria foi encontrada";
             $response = [
