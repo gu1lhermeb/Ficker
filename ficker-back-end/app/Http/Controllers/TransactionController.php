@@ -38,11 +38,11 @@ class TransactionController extends Controller
                     'installments' => ['required', 'min:1', 'max:12'],
                     'card_id' => ['required']
                 ]);
-    
+
                 try {
-    
+
                     Card::findOrFail($request->card_id);
-    
+
                 } catch (\Exception $e) {
                     $errorMessage = "Error: Cartão não encontrado.";
                     $response = [
@@ -51,7 +51,7 @@ class TransactionController extends Controller
                             "error" => $e
                         ]
                     ];
-    
+
                     return response()->json($response, 404);
                 }
             }
@@ -105,7 +105,7 @@ class TransactionController extends Controller
                 'transaction_description' => $request->transaction_description,
                 'date' => $request->date,
                 'transaction_value' => $request->transaction_value,
-                'installments' => $request->installments,  
+                'installments' => $request->installments,
             ]);
 
             $response = [];
@@ -329,5 +329,9 @@ class TransactionController extends Controller
             return response()->json($response, 404);
 
         }
+    }
+
+    public function incomeByYear(){
+
     }
 }
