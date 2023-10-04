@@ -53,4 +53,74 @@ class SpendingController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function spendingByDay(): JsonResponse
+    {  
+        try {
+            $spending = Spending::where('user_id', Auth::user()->id)->
+            whereDate('created_at', date('Y-m-d'))->get();
+            $response = [
+                'spending' => $spending
+            ];
+    
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }  
+    }
+    
+    public function spendingByMonth(): JsonResponse
+    {   
+        try {
+            $spending = Spending::where('user_id', Auth::user()->id)->
+            whereMonth('created_at', date('m'))->get();
+    
+            $response = [
+                'spending' => $spending
+            ];
+    
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }  
+    }
+
+
+    public function spendingByYear(): JsonResponse
+    {   
+        try {
+            $spending = Spending::where('user_id', Auth::user()->id)->
+            whereYear('created_at', date('Y'))->get();
+            $response = [
+                'spending' => $spending
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
 }

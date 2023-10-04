@@ -46,6 +46,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/spending/store', [SpendingController::class, 'store']);
     Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
     Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
+    Route::get('/spending/day', [SpendingController::class, 'spendingByDay']); //Mostra o gasto do dia atual;
+    Route::get('/spending/month', [SpendingController::class, 'spendingByMonth']); //Mostra o gasto do mês atual;
+    Route::get('/spending/year', [SpendingController::class, 'spendingByYear']); //Mostra o gasto do ano atual;
 });
 
 require __DIR__.'/auth.php';
