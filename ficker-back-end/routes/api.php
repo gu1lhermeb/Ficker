@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SpendingController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -45,6 +46,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //Rotas dos saldos
     Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
+
+    //Rotas dos métodos de pagamento (id e descrição)
+    Route::get('/payment/methods', [PaymentController::class, 'showPaymentMethods']);
 });
 
 require __DIR__ . '/auth.php';
