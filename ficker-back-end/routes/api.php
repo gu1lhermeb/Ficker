@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/transactions/{id}/installments', [InstallmentController::class, 'showInstallments']); // Parcelas de uma transação
     Route::delete('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
     Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
-    Route::get('/transactions/incomeByYear', [TransactionController::class, 'showIncomeByYear']); // Entradas por ano
+    Route::get('/transactions/income/by/year', [TransactionController::class, 'incomeByYearInput']); // Entradas por ano
 
     //Rotas das categorias
     Route::post('/category/store', [CategoryController::class, 'store']);

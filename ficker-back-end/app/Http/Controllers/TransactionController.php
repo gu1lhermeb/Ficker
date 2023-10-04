@@ -322,15 +322,14 @@ class TransactionController extends Controller
         }
     }
 
-    public function incomeByYear()
+    public function incomeByYearInput()
     {
         try {
             $incomeByYear = Transaction::where('user_id', Auth::user()->id)
+                ->where('type_id', 1)
                 ->selectRaw('YEAR(date) as year, SUM(transaction_value) as total')
                 ->groupBy('year')
                 ->get();
-
-            dd($incomeByYear);
 
             $response = [
                 'data' => [
