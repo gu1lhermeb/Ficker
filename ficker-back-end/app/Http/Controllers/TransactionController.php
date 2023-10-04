@@ -9,8 +9,6 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
-use App\Models\Spending;
-use illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -167,7 +165,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
 
@@ -194,7 +192,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
@@ -224,7 +222,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
@@ -252,7 +250,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
@@ -271,7 +269,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
@@ -294,7 +292,7 @@ class TransactionController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
@@ -308,45 +306,89 @@ class TransactionController extends Controller
 
             Transaction::findOrFail($id)->delete();
 
-            return response(204);
+            $message = 'Transação excluída com sucesso.';
+
+            $response = [
+                'data' => [
+                    'message' => $message
+                ]
+            ];
+            return response()->json($response, 200);
         } catch (\Exception $e) {
 
             $errorMessage = "Erro: Esta transação não existe.";
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
             return response()->json($response, 404);
         }
     }
 
-    public function incomeByYearInput()
+    public function income(Request $request)
     {
         try {
-            $incomeByYear = Transaction::where('user_id', Auth::user()->id)
-                ->where('type_id', 1)
-                ->selectRaw('YEAR(date) as year, SUM(transaction_value) as total')
-                ->groupBy('year')
-                ->get();
+            if ($request->query('sort') == 'day') {
 
-            $response = [
-                'data' => [
-                    'incomesByYear' => $incomeByYear
-                ]
-            ];
+                $incomeByDay = Transaction::whereMonth('date', now()->month)
+                    ->whereYear('date', now()->year)
+                    ->whereDay('date', '<=', now()->day)
+                    ->where('user_id', Auth::user()->id)
+                    ->where('type_id', 1)
+                    ->get();
+
+                $response = [];
+
+                foreach ($incomeByDay as $income) {
+                    $day = date('d', strtotime($income->date));
+                    $month = date('m', strtotime($income->date));
+
+                    $income->day = $day;
+                    $income->month = $month;
+                    $incomeFormatted = [
+                        'data' => [
+                            'day' => $day,
+                            'month' => $month,
+                            'ammount' => $income->transaction_value
+                        ]
+                    ];
+                    array_push($response, $incomeFormatted);
+                }
+            } elseif ($request->query('sort') == 'month') {
+                $incomeByMonth = Transaction::where('user_id', Auth::user()->id)
+                    ->where('type_id', 1)
+                    ->selectRaw('MONTH(date) as month, SUM(transaction_value) as total')
+                    ->groupBy('month')
+                    ->get();
+
+                $response = [
+                    'data' => $incomeByMonth
+                ];
+            } else {
+
+                $incomeByYear = Transaction::where('user_id', Auth::user()->id)
+                    ->where('type_id', 1)
+                    ->selectRaw('YEAR(date) as year, SUM(transaction_value) as total')
+                    ->groupBy('year')
+                    ->get();
+
+                $response = [
+                    'data' => $incomeByYear
+                ];
+            }
 
             return response()->json($response, 200);
         } catch (\Exception $e) {
-            $errorMessage = "Erro: Nenhum gasto foi encontrado.";
+            $errorMessage = "Erro: Nenhuma entrada foi encontrada.";
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
-            return response()->json($response, 404);
+            return response()->json($response, 500);
         }
     }
 }

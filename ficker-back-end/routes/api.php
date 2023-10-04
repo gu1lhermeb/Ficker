@@ -15,16 +15,17 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Rotas de transação
-    Route::post('/transaction/store', [TransactionController::class, 'store']);
-    Route::get('/transactions', [TransactionController::class, 'showTransactions']);
-    Route::get('/transactions/{id}', [TransactionController::class, 'showTransaction']);
-    Route::get('/transactions/type/{id}', [TransactionController::class, 'showTransactionsByType']); // Entradas ou saídas
-    Route::get('/transactions/card/{id}', [TransactionController::class, 'showTransactionsByCard']); // Transações de um cartão de crédito
-    Route::get('/transactions/{id}/installments', [InstallmentController::class, 'showInstallments']); // Parcelas de uma transação
-    Route::delete('/transactions/delete/{id}', [TransactionController::class, 'destroy']);
-    Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
-    Route::get('/transactions/income/by/year', [TransactionController::class, 'incomeByYearInput']); // Entradas por ano
+    Route::prefix('transaction')->group(function () {
+        Route::get('/income', [TransactionController::class, 'income']); // Entradas por ano ou dia
+        Route::get('/all', [TransactionController::class, 'showTransactions']);
+        Route::post('/store', [TransactionController::class, 'store']);
+        Route::get('/type/{id}', [TransactionController::class, 'showTransactionsByType']); // Entradas ou saídas
+        Route::get('/card/{id}', [TransactionController::class, 'showTransactionsByCard']); // Transações de um cartão de crédito
+        Route::get('/{id}/installments', [InstallmentController::class, 'showInstallments']); // Parcelas de uma transação
+        Route::get('/{id}', [TransactionController::class, 'showTransaction']);
+        Route::put('/{id}', [TransactionController::class, 'update']);
+        Route::delete('/{id}', [TransactionController::class, 'destroy']);
+    });
 
     //Rotas das categorias
     Route::post('/category/store', [CategoryController::class, 'store']);

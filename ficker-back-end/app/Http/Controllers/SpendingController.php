@@ -11,46 +11,85 @@ class SpendingController extends Controller
 {
     public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'planned_spending' => ['required', 'min:1']
-        ]);
+        try {
+            $request->validate([
+                'planned_spending' => ['required', 'min:1']
+            ]);
 
-        $spending = Spending::create([
-            'user_id' => Auth::user()->id,
-            'planned_spending' => $request->planned_spending
-        ]);
+            $spending = Spending::create([
+                'user_id' => Auth::user()->id,
+                'planned_spending' => $request->planned_spending
+            ]);
 
-        $response = [
-            'spending' => $spending
-        ];
+            $response = [
+                'spending' => $spending
+            ];
 
-        return response()->json($response, 201);
+            return response()->json($response, 201);
+        } catch (\Exception $e) {
+            $errorMessage = 'Erro na busca de gastos planejados.';
+            $response = [
+                'data' => [
+                    'message' => $errorMessage,
+                    'error' => $e->getMessage()
+                ]
+            ];
+
+            return response()->json($response, 500);
+        }
     }
 
     public function showSpending(): JsonResponse
     {
-        $spending = Spending::where('user_id', Auth::user()->id)
-            ->latest()
-            ->first('value');
+        try {
+            $spending = Spending::where('user_id', Auth::user()->id)
+                ->latest()
+                ->first('value');
 
-        $response = [
-            'spending' => $spending
-        ];
+            $response = [
+                'data' => [
+                    'spending' => $spending
+                ]
+            ];
 
-        return response()->json($response, 200);
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Erro ao exibit os gastos planejados.';
+            $response = [
+                'data' => [
+                    'message' => $errorMessage,
+                    'error' => $e->getMessage()
+                ]
+            ];
+
+            return response()->json($response, 500);
+        }
     }
 
     public function update(Request $request): JsonResponse
     {
+        try {
+            Spending::find($request->id)->update($request->all());
 
-        Spending::find($request->id)->update($request->all());
+            $spending = Spending::find($request->id);
 
-        $spending = Spending::find($request->id);
+            $response = [
+                'data' => [
+                    'spending' => $spending
+                ]
+            ];
 
-        $response = [
-            'spending' => $spending
-        ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Erro ao atualizar os gastos planejados.';
+            $response = [
+                'data' => [
+                    'message' => $errorMessage,
+                    'error' => $e->getMessage()
+                ]
+            ];
 
-        return response()->json($response, 200);
+            return response()->json($response, 500);
+        }
     }
 }
