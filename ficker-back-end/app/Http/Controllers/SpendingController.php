@@ -30,8 +30,8 @@ class SpendingController extends Controller
     public function showSpending(): JsonResponse
     {
         $spending = Spending::where('user_id', Auth::user()->id)
-                                    ->latest()
-                                    ->first('value');
+            ->latest()
+            ->first('value');
 
         $response = [
             'spending' => $spending
