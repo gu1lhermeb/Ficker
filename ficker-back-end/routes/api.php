@@ -13,6 +13,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Rotas de transação
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/transaction/store', [TransactionController::class, 'store']);
     Route::get('/transactions', [TransactionController::class, 'showTransactions']);
@@ -24,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
 });
 
+//Rotas das categorias
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/category/store', [CategoryController::class, 'store']);
     Route::get('/categories', [CategoryController::class, 'showCategories']);
@@ -31,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/categories/type/{id}', [CategoryController::class, 'showCategoriesByType']); // Categorias de entrada (1), saída (2) ou cartão de crédito (3)
 });
 
+//Rotas dos cartões
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/card', [CardController::class, 'store']);
     Route::get('/cards', [CardController::class, 'showCards']);
@@ -39,12 +42,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/flags', [CardController::class, 'showFlags']);
 });
 
+//Rotas dos gastos
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/spending', [SpendingController::class, 'showSpending']);
     Route::post('/spending/store', [SpendingController::class, 'store']);
     Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
 });
 
+//Rotas dos saldos
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
 });
