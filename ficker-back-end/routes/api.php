@@ -16,7 +16,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('transaction')->group(function () {
-        Route::get('/income', [TransactionController::class, 'income']); // Entradas por ano ou dia
+        Route::get('/income', [TransactionController::class, 'incomes']); // Entradas por ano, mês ou dia
         Route::get('/all', [TransactionController::class, 'showTransactions']);
         Route::post('/store', [TransactionController::class, 'store']);
         Route::get('/type/{id}', [TransactionController::class, 'showTransactionsByType']); // Entradas ou saídas
@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/flags', [CardController::class, 'showFlags']);
 
     //Rotas dos gastos
+    Route::get('/spendings', [SpendingController::class, 'spendings']); // Saídas por ano, mês ou dia
     Route::get('/spending', [SpendingController::class, 'showSpending']);
     Route::post('/spending/store', [SpendingController::class, 'store']);
     Route::put('/spending/update/{id}', [SpendingController::class, 'update']);

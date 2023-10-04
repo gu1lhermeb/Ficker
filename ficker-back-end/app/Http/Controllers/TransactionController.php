@@ -327,7 +327,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function income(Request $request)
+    public function incomes(Request $request)
     {
         try {
             if ($request->query('sort') == 'day') {
