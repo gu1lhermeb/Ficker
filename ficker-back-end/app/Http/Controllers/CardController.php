@@ -100,9 +100,9 @@ class CardController extends Controller
 
             $response = [
                 "data" => [
-                   "invoice" => $invoice
+                    "invoice" => $invoice
                 ]
-            ]
+            ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
             $errorMessage = "Erro: " + $e;
