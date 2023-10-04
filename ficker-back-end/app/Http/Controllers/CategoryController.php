@@ -31,7 +31,7 @@ class CategoryController extends Controller
             $response = [
                 'Error' => [
                     'message' => $errorMessage,
-                    'error' => $e
+                    'error' => $e->getMessage()
                 ]
             ];
 
@@ -39,7 +39,7 @@ class CategoryController extends Controller
         }
     }
 
-    public static function storeInTransaction($description, $type)
+    public static function storeInTransaction($description, $type): JsonResponse
     {
         try {
             $category = Category::create([
@@ -49,13 +49,12 @@ class CategoryController extends Controller
             ]);
 
             return $category;
-
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [
                 'Error' => [
                     'message' => $errorMessage,
-                    'error' => $e
+                    'error' => $e->getMessage()
                 ]
             ];
 
@@ -69,13 +68,13 @@ class CategoryController extends Controller
 
             $categories = [];
 
-            foreach(Auth::user()->categories as $category) {
+            foreach (Auth::user()->categories as $category) {
 
                 $category_spending = Transaction::whereMonth('date', now()->month)
-                                                ->where('category_id', $category->id)
-                                                ->where('type_id', 2)
-                                                ->sum('transaction_value');
-                
+                    ->where('category_id', $category->id)
+                    ->where('type_id', 2)
+                    ->sum('transaction_value');
+
                 $category->category_spending = $category_spending;
                 array_push($categories, $category);
             }
@@ -87,13 +86,12 @@ class CategoryController extends Controller
             ];
 
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $errorMessage = "Nenhuma categoria foi encontrada";
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
 
@@ -121,7 +119,7 @@ class CategoryController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
 
@@ -129,7 +127,7 @@ class CategoryController extends Controller
         }
     }
 
-    public static function showCategory($id)
+    public static function showCategory($id): JsonResponse
     {
         try {
 
@@ -143,7 +141,7 @@ class CategoryController extends Controller
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e
+                    "error" => $e->getMessage()
                 ]
             ];
 

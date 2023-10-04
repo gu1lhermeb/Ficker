@@ -94,7 +94,7 @@ class SpendingController extends Controller
         }
     }
 
-    public function spendings(Request $request)
+    public function spendings(Request $request): JsonResponse
     {
         try {
             if ($request->query('sort') == 'day') {

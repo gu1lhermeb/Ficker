@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CardController extends Controller
 {
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'card_description' => ['required', 'string', 'min:2', 'max:50'],
@@ -36,18 +36,17 @@ class CardController extends Controller
         return response()->json($response, 201);
     }
 
-    public function showCards() :JsonResponse
+    public function showCards(): JsonResponse
     {
         try {
             $cards = Auth::user()->cards;
             $response = [];
-            foreach($cards as $card){
+            foreach ($cards as $card) {
                 $invoice = Self::showCardInvoice($card->id);
                 $card->invoice = $invoice;
                 array_push($response, $card);
             }
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $errorMessage = "Nenhum cartão cadastrado";
             $response = [
@@ -57,20 +56,18 @@ class CardController extends Controller
             ];
             return response()->json($response, 404);
         }
-
     }
 
-    public function showFlags() :JsonResponse
+    public function showFlags(): JsonResponse
     {
         try {
 
             $flags = Flag::all();
             $response = [];
-            foreach($flags as $flag){
+            foreach ($flags as $flag) {
                 array_push($response, $flag);
             }
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $errorMessage = "Nenhuma bandeira foi encontrada";
             $response = [
@@ -83,7 +80,7 @@ class CardController extends Controller
         }
     }
 
-    public function showCardInvoice($id)
+    public function showCardInvoice($id): JsonResponse
     {
 
         try {
@@ -94,15 +91,19 @@ class CardController extends Controller
             $date_now = date('Y-m');
             $day_now = date('d');
             $invoice = 0;
-            foreach($installments as $installment){
+            foreach ($installments as $installment) {
                 $new_installment = date('Y-m', strtotime($installment->pay_day));
-                if($new_installment == $date_now and $day_now < $card->closure){
+                if ($new_installment == $date_now and $day_now < $card->closure) {
                     $invoice += $installment->installment_value;
                 }
             }
 
-            return $invoice;
-
+            $response = [
+                "data" => [
+                   "invoice" => $invoice
+                ]
+            ]
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $errorMessage = "Erro: " + $e;
             $response = [
@@ -125,9 +126,9 @@ class CardController extends Controller
             $date_now = date('Y-m');
             $day_now = date('d');
             $response = [];
-            foreach($installments as $installment){
+            foreach ($installments as $installment) {
                 $new_installment = date('Y-m', strtotime($installment->pay_day));
-                if($new_installment == $date_now and $day_now < $card->closure){
+                if ($new_installment == $date_now and $day_now < $card->closure) {
                     array_push($response, $installment);
                 }
             }
@@ -139,7 +140,6 @@ class CardController extends Controller
             ];
 
             return response()->json($response, 200);
-
         } catch (\Exception $e) {
             $errorMessage = "Erro: " + $e;
             $response = [
@@ -150,5 +150,4 @@ class CardController extends Controller
             return response()->json($response, 404);
         }
     }
-
 }

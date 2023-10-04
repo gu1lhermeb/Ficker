@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
+use Illuminate\Http\JsonResponse;
 
 class PaymentController extends Controller
 {
-    public function showPaymentMethods()
+    public function showPaymentMethods(): JsonResponse
     {
         try {
             $paymentMethods = PaymentMethod::all();

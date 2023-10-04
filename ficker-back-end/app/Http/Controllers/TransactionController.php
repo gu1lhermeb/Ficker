@@ -257,7 +257,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
 
         try {
@@ -299,7 +299,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
 
         try {
@@ -327,7 +327,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function incomes(Request $request)
+    public function incomes(Request $request): JsonResponse
     {
         try {
             if ($request->query('sort') == 'day') {
