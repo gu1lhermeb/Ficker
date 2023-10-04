@@ -9,6 +9,8 @@ use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\Card;
 use App\Models\Installment;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -329,6 +331,125 @@ class TransactionController extends Controller
             ];
             return response()->json($response, 404);
 
+        }
+    }
+
+    public function transactionSpendingByYear(): JsonResponse
+    {   
+        try {
+            $anosDistintos = Transaction::select(DB::raw('YEAR(created_at) as ano'))
+            ->where('user_id', Auth::user()->id)
+            ->groupBy('ano')
+            ->get();
+
+            if ($anosDistintos->isEmpty()) {
+                throw new \Exception('Nenhum ano distinto encontrado.', 404);
+            }
+
+            $expensesByYear = [];
+
+            foreach ($anosDistintos as $ano) {
+                $totalGasto = Transaction::where('user_id', Auth::user()->id)
+                    ->whereYear('created_at', $ano->ano)
+                    ->sum('transaction_value');
+
+                $expensesByYear[$ano->ano] = $totalGasto;
+            }
+
+            // $response = [
+            //     'expensesByYear' => $expensesByYear,
+            // ];
+
+            return response()->json($expensesByYear, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+
+    public function transactionSpendingByMonth(): JsonResponse
+    {
+        try {
+
+            $mes = now()->subMonths(12);
+
+            $mesesDistintos = Transaction::select(DB::raw('MONTH(created_at) as mes'))
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>=', $mes)
+                ->groupBy('mes')
+                ->get();
+
+            if ($mesesDistintos->isEmpty()) {
+                throw new \Exception('Nenhum ano distinto encontrado.', 404);
+            }
+            $expensesByMonth = [];
+
+            foreach ($mesesDistintos as $mes) {
+                $totalGasto = Transaction::where('user_id', Auth::user()->id)
+                    ->whereMonth('created_at', $mes->mes)
+                    ->sum('transaction_value');
+
+                $expensesByMonth[$mes->mes] = $totalGasto;
+            }
+
+            return response()->json($expensesByMonth, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
+        }
+    }
+
+    public function transactionSpendingByDay(): JsonResponse
+    {
+        try{
+            
+            $dias = Carbon::now()->subDays(31);
+
+            $diasDistintos = Transaction::select(DB::raw('DAY(created_at) as dia'))
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>=', $dias) 
+                ->groupBy('dia')
+                ->get();
+
+            if ($diasDistintos->isEmpty()) {
+                throw new \Exception('Nenhum ano distinto encontrado.', 404);
+            }
+            $expensesByDay = [];
+
+            foreach ($diasDistintos as $dia) {
+                $totalGasto = Transaction::where('user_id', Auth::user()->id)
+                    ->whereDay('created_at', $dia->dia)
+                    ->sum('transaction_value');
+
+                $expensesByDay[$dia->dia] = $totalGasto;
+            }
+
+            return response()->json($expensesByDay, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Nenhuma transação foi encontrada';
+            $response = [
+                "data" => [
+                    "message" => $errorMessage,
+                    "error" => $e
+                ]
+            ];
+
+            return response()->json($response, 404);
         }
     }
 }
