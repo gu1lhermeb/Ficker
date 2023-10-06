@@ -10,9 +10,8 @@ use App\Models\Category;
 use App\Models\Transaction;
 
 
-class IncomingTest extends TestCase
+class IncomingTransactionTest extends TestCase
 {
-    
     use RefreshDatabase;
 
     public function test_users_can_create_an_incoming_transaction_with_existing_category(): void

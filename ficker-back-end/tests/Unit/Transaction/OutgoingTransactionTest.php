@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\PaymentMethod;
 
-class OutgoingTest extends TestCase
+class OutgoingTransactionTest extends TestCase
 {
     use RefreshDatabase;
     
