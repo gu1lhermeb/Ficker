@@ -25,6 +25,7 @@ services:
     #Necessário mapear diretório do host que contém a aplicação a ser desenvolvida
     volumes:
       - /home/guilherme/Documentos/projetos/Ficker/ficker-back-end:/app
+      #- /home/phpdro/Documents/projetos/ficker/ficker-back-end:/app
     environment:
       - APP_ENV=local
     labels:
