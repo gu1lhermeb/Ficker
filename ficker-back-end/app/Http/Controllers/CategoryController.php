@@ -39,7 +39,7 @@ class CategoryController extends Controller
         }
     }
 
-    public static function storeInTransaction($description, $type): JsonResponse
+    public static function storeInTransaction($description, $type)
     {
         try {
             $category = Category::create([
@@ -47,8 +47,9 @@ class CategoryController extends Controller
                 'category_description' => $description,
                 'type_id' => $type
             ]);
-
+            
             return $category;
+
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [

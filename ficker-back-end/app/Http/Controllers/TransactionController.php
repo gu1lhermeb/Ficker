@@ -19,40 +19,32 @@ class TransactionController extends Controller
         $request->validate([
             'transaction_description' => ['required', 'string', 'max:50'],
             'category_id' => ['required'],
+            'category_description' => ['required_if:category_id,0', 'string', 'max:50'],
             'date' => ['required', 'date'],
-            'type_id' => ['required'],
-            'transaction_value' => ['required', 'decimal:0,2']
+            'type_id' => ['required', 'min:1', 'max:4'],
+            'transaction_value' => ['required', 'decimal:0,2'],
+            'payment_method_id' => ['required_if:type_id,2', 'prohibited_if:type_id,1'],
+            'installments' => ['required_if:payment_method_id,4', 'prohibited_if:type_id,1'],
+            'card_id' => ['required_if:payment_method_id,4', 'prohibited_if:type_id,1']
         ]);
 
-        // Validando método de pagamento, parcelas e card id
+        // Validando card id
 
-        if ($request->type_id == 2) {
+        if ($request->payment_method_id == 4) {
 
-            $request->validate([
-                'payment_method_id' => ['required']
-            ]);
+            try {
 
-            if ($request->payment_method_id == 4) {
+                Card::findOrFail($request->card_id);
+            } catch (\Exception $e) {
+                $errorMessage = "Error: Cartão não encontrado.";
+                $response = [
+                    "data" => [
+                        "message" => $errorMessage,
+                        "error" => $e
+                    ]
+                ];
 
-                $request->validate([
-                    'installments' => ['required', 'min:1', 'max:12'],
-                    'card_id' => ['required']
-                ]);
-
-                try {
-
-                    Card::findOrFail($request->card_id);
-                } catch (\Exception $e) {
-                    $errorMessage = "Error: Cartão não encontrado.";
-                    $response = [
-                        "data" => [
-                            "message" => $errorMessage,
-                            "error" => $e
-                        ]
-                    ];
-
-                    return response()->json($response, 404);
-                }
+                return response()->json($response, 404);
             }
         }
 
@@ -60,11 +52,8 @@ class TransactionController extends Controller
 
         if ($request->category_id == 0) {
 
-            $request->validate([
-                'category_description' => ['required', 'string', 'max:50', 'unique:categories'],
-            ]);
-
             $category = CategoryController::storeInTransaction($request->category_description, $request->type_id);
+
         } else {
 
             $category = Category::find($request->category_id);
@@ -91,6 +80,7 @@ class TransactionController extends Controller
             ];
 
             return response()->json($response, 201);
+
         } else { // Com parcelas
 
             $transaction = Transaction::create([

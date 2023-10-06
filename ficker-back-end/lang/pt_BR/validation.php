@@ -152,8 +152,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'transaction_description' => [
+            'required' => 'Informe uma descrição para a transação.',
         ],
     ],
 
