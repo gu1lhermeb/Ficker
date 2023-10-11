@@ -155,6 +155,16 @@ return [
         'transaction_description' => [
             'required' => 'Informe uma descrição para a transação.',
         ],
+
+        'payment_method_id' => [
+            'required_if' => 'É necessário informar um método de pagamento para transações de saída.',
+            'prohibited_id' => 'Transações de entrada não possuem método de pagamento.'
+        ],
+
+        'card_id' => [
+            'required_if' => 'É necessário informar um cartão para transações no crédito.',
+            'prohibited_id' => 'Apenas transações no crédito necessitam de um cartão.'
+        ]
     ],
 
     /*
