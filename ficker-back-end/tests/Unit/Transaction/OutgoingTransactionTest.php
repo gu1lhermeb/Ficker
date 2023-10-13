@@ -257,6 +257,6 @@ class OutgoingTransactionTest extends TestCase
 
         $errors = session('errors');
     
-        $this->assertEquals($errors->get('payment_method_id')[0],"O campo payment method id é obrigatório quando type id for 2.");
+        $this->assertEquals($errors->get('payment_method_id')[0],"É necessário informar um método de pagamento para transações de saída.");
     }
 }

@@ -133,7 +133,11 @@ class DatabaseSeeder extends Seeder
 
         // Transações
 
-        Transaction::factory()->count(4)->create();
+        Transaction::factory()->create();
+        Transaction::factory()->create([
+            'type_id' => 1,
+            'payment_method_id' => null,
+        ]);
 
         // Gasto planejado
 

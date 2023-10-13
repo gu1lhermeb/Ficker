@@ -21,7 +21,7 @@ class TransactionFactory extends Factory
             'payment_method_id' => random_int(1,3),
             'transaction_description' => fake()->name(),
             'date' => date("Y-m-d"),
-            'type_id' => random_int(1,2),
+            'type_id' => 2,
             'transaction_value' => random_int(100, 1000),
             'category_id' => random_int(1,4),
         ];
