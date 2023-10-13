@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'category_description' => 'Test',
+            'category_description' => 'Test Category',
             'type_id' => random_int(1,2)
         ];
     }

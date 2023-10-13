@@ -9,25 +9,33 @@ use App\Models\Type;
 use App\Models\PaymentMethod;
 use App\Models\Category;
 use App\Models\Card;
-use App\Models\Flag;    
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public static function testLogin(): void
+    public static function login(): void
     {
         $user = User::factory()->create();
         Auth::login($user);
     }
 
-    public function testSetup(): void
+    public static function creditCardTestSetup(): void
     {
-        Type::factory()->create();
-        PaymentMethod::factory()->create();
-        Category::factory()->create();
-        Card::factory()->create();
-        Flag::factory()->create();
+        Self::login();
+        
+        Type::factory()->create([
+            'id' => 2,
+        ]);
+        PaymentMethod::factory()->create([
+            'id' => 4,
+        ]);
+        Category::factory()->create([
+            'id' => 1
+        ]);
+        Card::factory()->create([
+            'id' => 1
+        ]);
     }
 
 }
