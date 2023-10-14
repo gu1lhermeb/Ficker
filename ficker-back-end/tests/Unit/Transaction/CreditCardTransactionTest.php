@@ -56,7 +56,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(2, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_category(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_category(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -70,13 +70,36 @@ class CreditCardTransactionTest extends TestCase
             'installments' => 2
         ]);
 
-        $errors = session('errors');
-        $this->assertEquals($errors->get('category_id')[0],"O campo category id é obrigatório.");
+        $errors = session('errors')->get('category_id')[0];
+        $this->assertEquals($errors,"O campo category id é obrigatório.");
         $this->assertEquals(0, count(Transaction::all()));
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_type(): void
+    public function test_users_can_create_a_credit_card_transaction_with_a_new_category_without_the_category_description(): void
+    {
+        TestCase::creditCardTestSetup();
+
+        $this->post('/api/transaction/store',[
+            'category_id' => 0,
+            'type_id' => 2,
+            'card_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'payment_method_id' => 4,
+            'installments' => 2
+        ]);
+
+        $errors = session('errors')->get('category_description')[0];
+
+        $this->assertEquals($errors,'Informe o nome da nova categoria.');
+        $this->assertEquals(1, count(Category::all())); // 1 from setup
+        $this->assertEquals(0, count(Transaction::all()));
+        $this->assertEquals(0, count(Installment::all()));
+    }
+
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_type(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -96,7 +119,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_description(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_description(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -116,7 +139,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_value(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_value(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -136,7 +159,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_date(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_date(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -156,7 +179,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_payment_method(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_payment_method(): void
     {
         
         TestCase::creditCardTestSetup();
@@ -177,7 +200,7 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_not_create_a_credit_card_transaction_without_a_card(): void
+    public function test_users_cannot_create_a_credit_card_transaction_without_a_card(): void
     {
         TestCase::creditCardTestSetup();
         
@@ -192,8 +215,46 @@ class CreditCardTransactionTest extends TestCase
         ]);
 
         $errors = session('errors');
-
         $this->assertEquals($errors->get('card_id')[0],"É necessário informar um cartão de crédito para esse tipo de transação.");
+        $this->assertEquals(0, count(Transaction::all()));
+        $this->assertEquals(0, count(Installment::all()));
+    }
+
+    public function test_users_cannot_create_a_credit_card_transaction_without_installments(): void
+    {
+        TestCase::creditCardTestSetup();
+        
+        $this->post('/api/transaction/store',[
+            'category_id' => 1,
+            'type_id' => 2,
+            'payment_method_id' => 4,
+            'card_id' => 1,
+            'transaction_description' => 'CURSO DE LARAVEL',
+            'transaction_value' => 500.00,
+            'date' => date('Y-m-d'),
+        ]);
+
+        $errors = session('errors');
+        $this->assertEquals($errors->get('installments')[0],"É necessário informar a quantidade de parcelas para esse tipo de transação.");
+        $this->assertEquals(0, count(Transaction::all()));
+        $this->assertEquals(0, count(Installment::all()));
+    }
+
+    public function test_users_cannot_create_a_credit_card_transaction_with_an_invalid_card(): void
+    {
+        TestCase::creditCardTestSetup();
+        
+        $this->post('/api/transaction/store',[
+            'category_id' => 1,
+            'type_id' => 2,
+            'payment_method_id' => 4,
+            'card_id' => 54,
+            'transaction_description' => 'CURSO DE LARAVEL',
+            'transaction_value' => 500.00,
+            'date' => date('Y-m-d'),
+            'installments' => 2
+        ]);
+
         $this->assertEquals(0, count(Transaction::all()));
         $this->assertEquals(0, count(Installment::all()));
     }

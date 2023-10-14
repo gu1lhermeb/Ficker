@@ -4,8 +4,6 @@ namespace Tests\Unit\Transaction;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\User;
-use App\Models\Type;
 use App\Models\Category;
 use App\Models\Transaction;
 
@@ -16,205 +14,120 @@ class IncomingTransactionTest extends TestCase
 
     public function test_users_can_create_an_incoming_transaction_with_existing_category(): void
     {
-        $size = count(Transaction::all());
-
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
-
-        $category = Category::factory()->create();
+        TestCase::IncomingTestSetup();
 
         $this->post('/api/transaction/store',[
-            'category_id' => $category->id,
-            'type_id' => $type->id,
+            'category_id' => 1,
+            'type_id' => 1,
             'transaction_description' => 'Mc Donalds',
             'transaction_value' => 50.99,
             'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size + 1, count(Transaction::all()));
-
-        $errors = session('errors');
-        $this->assertEquals(0, $errors);
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals(1, count(Transaction::all()));
     }
 
     public function test_users_can_create_an_incoming_transaction_with_a_new_category(): void
     {
-        $size = count(Transaction::all());
-
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
+        TestCase::IncomingTestSetup();
 
         $this->post('/api/transaction/store',[
             'category_id' => 0,
-            'category_description' => 'Comida',
-            'type_id' => $type->id,
+            'category_description' => 'Alimentação',
+            'type_id' => 1,
             'transaction_description' => 'Mc Donalds',
             'transaction_value' => 50.99,
-            'date' => date('Y-m-d')
+            'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size + 1, count(Category::all()));
-        $this->assertEquals($size + 1, count(Transaction::all()));
-
-        $errors = session('errors');
-        $this->assertEquals(0, $errors);
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals(1, count(Transaction::all()));
+        $this->assertEquals(2, count(Category::all())); // 1 from the setup and 1 from the test
     }
 
-    public function test_users_can_not_create_an_incoming_transaction_without_a_category(): void
+    public function test_users_cannot_create_an_incoming_transaction_without_a_category(): void
     {
+        TestCase::IncomingTestSetup();
 
-        $size = count(Transaction::all());
-
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
-        
         $this->post('/api/transaction/store',[
-            'type_id' => $type->id,
-            'transaction_description' => 'CURSO DE LARAVEL',
-            'transaction_value' => 500.00,
-            'date' => date('Y-m-d')
+            'type_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size, count(Transaction::all()));
-
-        $errors = session('errors');
+        $errors = session('errors')->get('category_id')[0];
     
-        $this->assertEquals($errors->get('category_id')[0],"O campo category id é obrigatório.");
+        $this->assertEquals($errors,"O campo categoria é obrigatório.");
+        $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_can_not_create_an_incoming_transaction_without_a_type(): void
+    public function test_users_cannot_create_an_incoming_transaction_without_a_type(): void
     {
+        TestCase::IncomingTestSetup();
 
-        $size = count(Transaction::all());
-
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $category = Category::factory()->create();
-        
         $this->post('/api/transaction/store',[
-            'category_id' => $category->id,
-            'transaction_description' => 'CURSO DE LARAVEL',
-            'transaction_value' => 500.00,
-            'date' => date('Y-m-d')
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size, count(Transaction::all()));
-
-        $errors = session('errors');
+        $errors = session('errors')->get('type_id')[0];
     
-        $this->assertEquals($errors->get('type_id')[0],"O campo type id é obrigatório.");
+        $this->assertEquals($errors,"O campo tipo é obrigatório.");
+        $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_can_not_create_an_incoming_transaction_without_a_description(): void
+    public function test_users_cannot_create_an_incoming_transaction_without_a_description(): void
     {
+        TestCase::IncomingTestSetup();
 
-        $size = count(Transaction::all());
-
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
-        $category = Category::factory()->create();
-        
         $this->post('/api/transaction/store',[
-            'category_id' => $category->id,
-            'type_id' => $type->id,
-            'transaction_value' => 500.00,
-            'date' => date('Y-m-d')
+            'type_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size, count(Transaction::all()));
-
-        $errors = session('errors');
+        $errors = session('errors')->get('category_id')[0];
     
-        $this->assertEquals($errors->get('transaction_description')[0],"Informe uma descrição para a transação.");
+        $this->assertEquals($errors,"O campo categoria é obrigatório.");
+        $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_can_not_create_an_incoming_transaction_without_a_value(): void
+    public function test_users_cannot_create_an_incoming_transaction_without_a_value(): void
     {
-        $size = count(Transaction::all());
+        TestCase::IncomingTestSetup();
 
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
-        $category = Category::factory()->create();
-        
         $this->post('/api/transaction/store',[
-            'category_id' => $category->id,
-            'type_id' => $type->id,
-            'transaction_description' => 'CURSO DE PHPUNIT',
-            'date' => date('Y-m-d')
+            'type_id' => 1,
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'date' => date('Y-m-d'),
         ]);
 
-        $this->assertEquals($size, count(Transaction::all()));
-
-        $errors = session('errors');
+        $errors = session('errors')->get('transaction_value')[0];
     
-        $this->assertEquals($errors->get('transaction_value')[0],"O campo transaction value é obrigatório.");
+        $this->assertEquals($errors,'Informe o valor da transação.');
+        $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_can_not_create_an_incoming_transaction_without_a_date(): void
+    public function test_users_cannot_create_an_incoming_transaction_without_a_date(): void
     {
-        $size = count(Transaction::all());
+        TestCase::IncomingTestSetup();
 
-        $user = User::factory()->create();
-        $this->post('/api/login', [
-            'email' => $user->email,
-            'password' => 'password'
-        ]);
-
-        $type = Type::factory()->create([
-            'id' => 1
-        ]);
-        $category = Category::factory()->create();
-        
         $this->post('/api/transaction/store',[
-            'category_id' => $category->id,
-            'type_id' => $type->id,
-            'transaction_description' => 'CURSO DE PHPUNIT',
-            'transaction_value' => 60.5
+            'type_id' => 1,
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
         ]);
 
-        $this->assertEquals($size, count(Transaction::all()));
-
-        $errors = session('errors');
+        $errors = session('errors')->get('date')[0];
     
-        $this->assertEquals($errors->get('date')[0],"O campo data é obrigatório.");
+        $this->assertEquals($errors,"O campo data é obrigatório.");
+        $this->assertEquals(0, count(Transaction::all()));
     }
 }

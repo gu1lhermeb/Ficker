@@ -27,15 +27,41 @@ abstract class TestCase extends BaseTestCase
         Type::factory()->create([
             'id' => 2,
         ]);
-        PaymentMethod::factory()->create([
-            'id' => 4,
-        ]);
         Category::factory()->create([
             'id' => 1
+        ]);
+        PaymentMethod::factory()->create([
+            'id' => 4,
         ]);
         Card::factory()->create([
             'id' => 1
         ]);
     }
 
+    public static function OutgoingTestSetup(): void
+    {
+        Self::login();
+
+        Type::factory()->create([
+            'id' => 2
+        ]);
+        Category::factory()->create([
+            'id' => 1
+        ]);
+        PaymentMethod::factory()->create([
+            'id' => 1
+        ]);
+    }
+
+    public static function IncomingTestSetup(): void
+    {
+        Self::login();
+
+        Type::factory()->create([
+            'id' => 1
+        ]);
+        Category::factory()->create([
+            'id' => 1
+        ]);
+    }
 }

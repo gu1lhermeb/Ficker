@@ -167,6 +167,12 @@ return [
             'required_if' => 'É necessário informar um cartão de crédito para esse tipo de transação.',
             'prohibited_id' => 'Apenas transações no crédito necessitam de um cartão.'
         ],
+        'installments' => [
+            'required_if' => "É necessário informar a quantidade de parcelas para esse tipo de transação."
+        ],
+        'category_description' => [
+            'required_if' => 'Informe o nome da nova categoria.',
+        ],
     ],
 
     /*
@@ -227,6 +233,11 @@ return [
         'blood_type' => 'tipo sanguíneo',
         'birth_date' => 'data de nascimento',
         'card_id' => 'cartão',
+        'installments' => 'parcelas',
+        'category_id' => 'categoria',
+        'type_id' => 'tipo',
+        'transaction_description' => 'descrição',
+        'transaction_value' => 'valor',
     ],
 
 ];

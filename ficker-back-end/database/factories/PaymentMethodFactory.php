@@ -17,6 +17,7 @@ class PaymentMethodFactory extends Factory
     public function definition(): array
     {
         return [
+            'id' => random_int(1,3),
             'payment_method_description' => 'Test Method'
         ];
     }
