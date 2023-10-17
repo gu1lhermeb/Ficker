@@ -136,7 +136,14 @@ class CategoryController extends Controller
 
             $description = $category->category_description;
 
-            return $description;
+            $response = [
+                'data' => [
+                    'category' => $description
+                ]
+            ];
+
+            return response()->json($response, 200);
+
         } catch (\Exception $e) {
             $errorMessage = "Error: " . $e;
             $response = [
