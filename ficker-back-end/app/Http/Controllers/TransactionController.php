@@ -200,7 +200,7 @@ class TransactionController extends Controller
 
             $response = [];
             foreach ($transactions  as $transaction) {
-                $description = CategoryController::showCategory($transaction->category_id);
+                $description = Category::find($transaction->category_id)->category_description;
                 $transaction->category_description = $description;
                 array_push($response, $transaction);
             }
