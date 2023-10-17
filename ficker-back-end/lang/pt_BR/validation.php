@@ -152,8 +152,26 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'transaction_description' => [
+            'required' => 'O campo descrição é obrigatório.',
+        ],
+        'transaction_value' => [
+            'required' => 'Informe o valor da transação.',
+        ],
+        'payment_method_id' => [
+            'required_if' => 'É necessário informar um método de pagamento para esse tipo de transação.',
+            'prohibited_id' => 'Transações de entrada não possuem método de pagamento.'
+        ],
+
+        'card_id' => [
+            'required_if' => 'É necessário informar um cartão de crédito para esse tipo de transação.',
+            'prohibited_id' => 'Apenas transações no crédito necessitam de um cartão.'
+        ],
+        'installments' => [
+            'required_if' => "É necessário informar a quantidade de parcelas para esse tipo de transação."
+        ],
+        'category_description' => [
+            'required_if' => 'Informe o nome da nova categoria.',
         ],
     ],
 
@@ -213,7 +231,13 @@ return [
         'modality' => 'modalidade',
         'category' => 'categoria',
         'blood_type' => 'tipo sanguíneo',
-        'birth_date' => 'data de nascimento'
+        'birth_date' => 'data de nascimento',
+        'card_id' => 'cartão',
+        'installments' => 'parcelas',
+        'category_id' => 'categoria',
+        'type_id' => 'tipo',
+        'transaction_description' => 'descrição',
+        'transaction_value' => 'valor',
     ],
 
 ];

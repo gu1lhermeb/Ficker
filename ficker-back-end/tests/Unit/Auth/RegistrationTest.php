@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Auth;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -9,7 +9,6 @@ use App\Models\User;
 class RegistrationTest extends TestCase
 
 {
-
     use RefreshDatabase;
 
     public function test_users_can_not_register_without_a_name(): void
