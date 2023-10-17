@@ -136,9 +136,12 @@ class CategoryController extends Controller
 
             $description = $category->category_description;
 
+            $categories = [];
+            array_push($categories, $description);
+            
             $response = [
                 'data' => [
-                    'category' => $description
+                    'category' => $categories
                 ]
             ];
 
