@@ -146,7 +146,9 @@ class TransactionController extends Controller
                 ->get();
 
             $reponse = [
-                'transactions' => $transactions
+                'data' => [
+                    'transactions' => $transactions
+                ]
             ];
 
             return response()->json($reponse, 200);
@@ -169,11 +171,13 @@ class TransactionController extends Controller
 
             $transaction = Transaction::find($id);
 
-            $description = CategoryController::showCategory($transaction->category_id);
+            $description = Category::find($transaction->category_id)->category_description;
             $transaction->category_description = $description;
 
             $response = [
-                "transaction" => $transaction
+                'data' => [
+                    'transaction' => $transaction
+                ]
             ];
 
             return response()->json($response, 200);
@@ -198,11 +202,11 @@ class TransactionController extends Controller
                 'type_id' => $id
             ])->orderBy('date', 'desc')->get();
 
-            $response = [];
+            $response = ['data' => ['transactions' => []]];
             foreach ($transactions  as $transaction) {
                 $description = Category::find($transaction->category_id)->category_description;
                 $transaction->category_description = $description;
-                array_push($response, $transaction);
+                array_push($response['data']['transactions'], $transaction);
             }
 
             return response()->json($response, 200);
@@ -227,11 +231,11 @@ class TransactionController extends Controller
                 'card_id' => $id
             ])->get();
 
-            $response = [];
+            $response = ['data' => ['transactions' => []]];
             foreach ($transactions  as $transaction) {
-                $description = CategoryController::showCategory($transaction->category_id);
+                $description = Category::find($transaction->category_id)->category_description;
                 $transaction->category_description = $description;
-                array_push($response, $transaction);
+                array_push($response['data']['transactions'], $transaction);
             }
 
             return response()->json($response, 200);
