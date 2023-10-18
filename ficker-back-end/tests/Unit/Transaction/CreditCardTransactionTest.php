@@ -71,7 +71,7 @@ class CreditCardTransactionTest extends TestCase
         ]);
 
         $errors = session('errors')->get('category_id')[0];
-        $this->assertEquals($errors,"O campo category id é obrigatório.");
+        $this->assertEquals($errors,"O campo categoria é obrigatório.");
         $this->assertEquals(0, count(Transaction::all()));
         $this->assertEquals(0, count(Installment::all()));
     }
@@ -114,7 +114,7 @@ class CreditCardTransactionTest extends TestCase
         ]);
 
         $errors = session('errors');
-        $this->assertEquals($errors->get('type_id')[0],"O campo type id é obrigatório.");
+        $this->assertEquals($errors->get('type_id')[0],"O campo tipo é obrigatório.");
         $this->assertEquals(0, count(Transaction::all()));
         $this->assertEquals(0, count(Installment::all()));
     }

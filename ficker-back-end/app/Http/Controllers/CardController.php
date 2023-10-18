@@ -40,13 +40,14 @@ class CardController extends Controller
     {
         try {
             $cards = Auth::user()->cards;
-            $response = [];
+            $response = ['data' => ['cards' => []]];
             foreach ($cards as $card) {
-                $invoice = Self::showCardInvoice($card->id);
+                $invoice = Self::invoice($card->id);
                 $card->invoice = $invoice;
-                array_push($response, $card);
+                array_push($response['data']['cards'], $card);
             }
             return response()->json($response, 200);
+            
         } catch (\Exception $e) {
             $errorMessage = "Nenhum cartão cadastrado";
             $response = [
@@ -61,11 +62,10 @@ class CardController extends Controller
     public function showFlags(): JsonResponse
     {
         try {
-
             $flags = Flag::all();
-            $response = [];
+            $response = ['data' => ['flags' => []]];
             foreach ($flags as $flag) {
-                array_push($response, $flag);
+                array_push($response['data']['flags'], $flag);
             }
             return response()->json($response, 200);
         } catch (\Exception $e) {
@@ -80,9 +80,38 @@ class CardController extends Controller
         }
     }
 
+    public function invoice($id)
+    {
+        try {
+            $card = Card::findOrFail($id);
+            $installments = Installment::where([
+                'card_id' => $card->id
+            ])->get();
+            $date_now = date('Y-m');
+            $day_now = date('d');
+            $invoice = 0;
+            foreach ($installments as $installment) {
+                $new_installment = date('Y-m', strtotime($installment->pay_day));
+                if ($new_installment == $date_now and $day_now < $card->closure) {
+                    $invoice += $installment->installment_value;
+                }
+            }
+
+            return $invoice;
+
+        } catch (\Exception $e) {
+            $errorMessage = "Erro: " + $e;
+            $response = [
+                "data" => [
+                    "error" => $errorMessage
+                ]
+            ];
+            return response()->json($response, 404);
+        }
+    }
+
     public function showCardInvoice($id): JsonResponse
     {
-
         try {
             $card = Card::findOrFail($id);
             $installments = Installment::where([

@@ -21,7 +21,7 @@ class PaymentController extends Controller
 
             $response = [
                 'data' => [
-                    'paymentMethods' => $formattedPaymentMethods
+                    'payment_methods' => $formattedPaymentMethods
                 ]
             ];
 
