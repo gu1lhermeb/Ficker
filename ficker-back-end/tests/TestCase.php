@@ -45,6 +45,7 @@ abstract class TestCase extends BaseTestCase
 
         Transaction::factory()->create([
             'id' => 1,
+            'category_id' => 1,
             'type_id' => $type,
             'payment_method_id' => $payment_method,
         ]);

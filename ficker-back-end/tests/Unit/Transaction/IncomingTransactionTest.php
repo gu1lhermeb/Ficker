@@ -12,7 +12,7 @@ class IncomingTransactionTest extends TestCase
 {
     use RefreshDatabase;
 
-    // Begin of store tests
+    // Store tests ----------------------------------------------------------------------------------------
 
     public function test_users_can_store_an_incoming_transaction_with_existing_category(): void
     {
@@ -192,9 +192,7 @@ class IncomingTransactionTest extends TestCase
 
     }
 
-    // End of store tests
-
-    // Begin of update tests
+    // Update tests ============================================================================================
 
     public function test_users_can_update_the_description_of_an_incoming_transaction(): void
     {
@@ -221,4 +219,31 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(0, session('errors'));
         $this->assertEquals(50.99, Transaction::find(1)->transaction_value);
     }
+
+    public function test_users_can_update_the_date_of_an_incoming_transaction(): void
+    {
+        TestCase::transactionUpdateTestSetup(1, 1);
+
+        $this->put('/api/transaction/update',[
+            'id' => 1,
+            'date' => "2023-10-10",
+        ]);
+
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals("2023-10-10", Transaction::find(1)->date);
+    }
+
+    public function test_users_can_update_the_category_of_an_incoming_transaction(): void
+    {
+        TestCase::transactionUpdateTestSetup(1, 1);
+
+        $this->put('/api/transaction/update',[
+            'id' => 1,
+            'category_id' => 2,
+        ]);
+
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals(2, Transaction::find(1)->category_id);
+    }
+
 }
