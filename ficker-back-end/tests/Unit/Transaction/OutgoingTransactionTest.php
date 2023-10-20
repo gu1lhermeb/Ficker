@@ -6,14 +6,15 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Category;
 use App\Models\Transaction;
+use App\Models\Installment;
 
 class OutgoingTransactionTest extends TestCase
 {
     use RefreshDatabase;
     
-    public function test_users_can_create_an_outgoing_transaction_with_existing_category(): void
+    public function test_users_can_store_an_outgoing_transaction_with_existing_category(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -30,9 +31,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(1, count(Transaction::all()));
     }
 
-    public function test_users_can_create_an_outgoing_transaction_with_a_new_category(): void
+    public function test_users_can_store_an_outgoing_transaction_with_a_new_category(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 0,
@@ -51,9 +52,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(1, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_category(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_category(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -69,9 +70,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_type(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_type(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -87,9 +88,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_description(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_description(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -105,9 +106,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_value(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_value(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -123,9 +124,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_date(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_date(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -141,9 +142,9 @@ class OutgoingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_outgoing_transaction_without_a_payment_method(): void
+    public function test_users_cannot_store_an_outgoing_transaction_without_a_payment_method(): void
     {
-        TestCase::OutgoingTestSetup();
+        TestCase::transactionStoreTestSetup(2, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -157,5 +158,47 @@ class OutgoingTransactionTest extends TestCase
 
         $this->assertEquals($errors,'É necessário informar um método de pagamento para esse tipo de transação.');
         $this->assertEquals(0, count(Transaction::all()));
+    }
+
+    public function test_users_cannot_store_an_outgoing_transaction_with_a_card(): void
+    {
+        TestCase::transactionStoreTestSetup(2, 1);
+
+        $this->post('/api/transaction/store',[
+            'type_id' => 2,
+            'category_id' => 1,
+            'payment_method_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'card_id' => 1,
+        ]);
+
+        $errors = session('errors')->get('card_id')[0];
+    
+        $this->assertEquals($errors,"O campo cartão é proibido exceto quando método de pagamento for 4.");
+        $this->assertEquals(0, count(Transaction::all()));
+    }
+
+    public function test_users_cannot_store_an_outgoing_transaction_with_installments(): void
+    {
+        TestCase::transactionStoreTestSetup(2, 1);
+
+        $this->post('/api/transaction/store',[
+            'type_id' => 2,
+            'category_id' => 1,
+            'payment_method_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'installments' => 2,
+        ]);
+
+        $errors = session('errors')->get('installments')[0];
+    
+        $this->assertEquals($errors,"O campo parcelas é proibido exceto quando método de pagamento for 4.");
+        $this->assertEquals(0, count(Transaction::all()));
+        $this->assertEquals(0, count(Installment::all()));
+
     }
 }

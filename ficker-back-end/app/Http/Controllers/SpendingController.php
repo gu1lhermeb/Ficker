@@ -45,7 +45,7 @@ class SpendingController extends Controller
         try {
             $spending = Spending::where('user_id', Auth::user()->id)
                 ->latest()
-                ->first('value');
+                ->first('planned_spending');
 
             $response = [
                 'data' => [

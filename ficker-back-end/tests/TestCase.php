@@ -9,6 +9,7 @@ use App\Models\Type;
 use App\Models\PaymentMethod;
 use App\Models\Category;
 use App\Models\Card;
+use App\Models\Transaction;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -20,48 +21,32 @@ abstract class TestCase extends BaseTestCase
         Auth::login($user);
     }
 
-    public static function creditCardTestSetup(): void
+    public static function transactionStoreTestSetup($type, $payment_method): void
     {
         Self::login();
         
         Type::factory()->create([
-            'id' => 2,
+            'id' => $type,
         ]);
         Category::factory()->create([
             'id' => 1
         ]);
         PaymentMethod::factory()->create([
-            'id' => 4,
+            'id' => $payment_method,
         ]);
         Card::factory()->create([
             'id' => 1
         ]);
     }
 
-    public static function OutgoingTestSetup(): void
+    public static function transactionUpdateTestSetup($type, $payment_method): void
     {
         Self::login();
 
-        Type::factory()->create([
-            'id' => 2
-        ]);
-        Category::factory()->create([
-            'id' => 1
-        ]);
-        PaymentMethod::factory()->create([
-            'id' => 1
-        ]);
-    }
-
-    public static function IncomingTestSetup(): void
-    {
-        Self::login();
-
-        Type::factory()->create([
-            'id' => 1
-        ]);
-        Category::factory()->create([
-            'id' => 1
+        Transaction::factory()->create([
+            'id' => 1,
+            'type_id' => $type,
+            'payment_method_id' => $payment_method,
         ]);
     }
 }

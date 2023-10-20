@@ -6,15 +6,17 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Category;
 use App\Models\Transaction;
-
+use App\Models\Installment;
 
 class IncomingTransactionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_create_an_incoming_transaction_with_existing_category(): void
+    // Begin of store tests
+
+    public function test_users_can_store_an_incoming_transaction_with_existing_category(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -28,9 +30,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(1, count(Transaction::all()));
     }
 
-    public function test_users_can_create_an_incoming_transaction_with_a_new_category(): void
+    public function test_users_can_store_an_incoming_transaction_with_a_new_category(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 0,
@@ -46,9 +48,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(2, count(Category::all())); // 1 from the setup and 1 from the test
     }
 
-    public function test_users_cannot_create_an_incoming_transaction_without_a_category(): void
+    public function test_users_cannot_store_an_incoming_transaction_without_a_category(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 1,
@@ -63,9 +65,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_incoming_transaction_without_a_type(): void
+    public function test_users_cannot_store_an_incoming_transaction_without_a_type(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -80,9 +82,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_incoming_transaction_without_a_description(): void
+    public function test_users_cannot_store_an_incoming_transaction_without_a_description(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 1,
@@ -97,9 +99,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_incoming_transaction_without_a_value(): void
+    public function test_users_cannot_store_an_incoming_transaction_without_a_value(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 1,
@@ -114,9 +116,9 @@ class IncomingTransactionTest extends TestCase
         $this->assertEquals(0, count(Transaction::all()));
     }
 
-    public function test_users_cannot_create_an_incoming_transaction_without_a_date(): void
+    public function test_users_cannot_store_an_incoming_transaction_without_a_date(): void
     {
-        TestCase::IncomingTestSetup();
+        TestCase::transactionStoreTestSetup(1, 1);
 
         $this->post('/api/transaction/store',[
             'type_id' => 1,
@@ -129,5 +131,94 @@ class IncomingTransactionTest extends TestCase
     
         $this->assertEquals($errors,"O campo data é obrigatório.");
         $this->assertEquals(0, count(Transaction::all()));
+    }
+
+    public function test_users_cannot_store_an_incoming_transaction_with_a_payment_method(): void
+    {
+        TestCase::transactionStoreTestSetup(1, 1);
+
+        $this->post('/api/transaction/store',[
+            'type_id' => 1,
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'payment_method_id' => 1,
+        ]);
+
+        $errors = session('errors')->get('payment_method_id')[0];
+    
+        $this->assertEquals($errors,"O campo método de pagamento é proibido quando tipo for 1.");
+        $this->assertEquals(0, count(Transaction::all()));
+    }
+
+    public function test_users_cannot_store_an_incoming_transaction_with_a_card(): void
+    {
+        TestCase::transactionStoreTestSetup(1, 1);
+
+        $this->post('/api/transaction/store',[
+            'type_id' => 1,
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'card_id' => 1,
+        ]);
+
+        $errors = session('errors')->get('card_id')[0];
+    
+        $this->assertEquals($errors,'O campo cartão é proibido exceto quando método de pagamento for 4.');
+        $this->assertEquals(0, count(Transaction::all()));
+    }
+
+    public function test_users_cannot_store_an_incoming_transaction_with_installments(): void
+    {
+        TestCase::transactionStoreTestSetup(1, 1);
+
+        $this->post('/api/transaction/store',[
+            'type_id' => 1,
+            'category_id' => 1,
+            'transaction_description' => 'Mc Donalds',
+            'transaction_value' => 50.99,
+            'date' => date('Y-m-d'),
+            'installments' => 2,
+        ]);
+
+        $errors = session('errors')->get('installments')[0];
+    
+        $this->assertEquals($errors,'O campo parcelas é proibido exceto quando método de pagamento for 4.');
+        $this->assertEquals(0, count(Transaction::all()));
+        $this->assertEquals(0, count(Installment::all()));
+
+    }
+
+    // End of store tests
+
+    // Begin of update tests
+
+    public function test_users_can_update_the_description_of_an_incoming_transaction(): void
+    {
+        TestCase::transactionUpdateTestSetup(1, 1);
+
+        $this->put('/api/transaction/update',[
+            'id' => 1,
+            'transaction_description' => 'Burger King',
+        ]);
+
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals('Burger King', Transaction::find(1)->transaction_description);
+    }
+
+    public function test_users_can_update_the_value_of_an_incoming_transaction(): void
+    {
+        TestCase::transactionUpdateTestSetup(1, 1);
+
+        $this->put('/api/transaction/update',[
+            'id' => 1,
+            'transaction_value' => 50.99,
+        ]);
+
+        $this->assertEquals(0, session('errors'));
+        $this->assertEquals(50.99, Transaction::find(1)->transaction_value);
     }
 }
