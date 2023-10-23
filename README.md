@@ -3,6 +3,8 @@ _Ficker - Finance Tracker_
 Sistema de Controle de Finanças - PROINT ( Projeto Integrador )
 
 _Repositório do front_ - https://github.com/alandysson/ficker-front
+_Documentação_ - https://docs.google.com/document/d/1R7DMciOjXJnXy3Nv-IglHX2D1q0lxLKiGg20vD_lbiQ/edit?usp=sharing
+_Protótipo_ - https://www.figma.com/file/g0sBQWHksscwCSgTuthoiF/Prot%C3%B3tipo-Ficker?type=design&node-id=0-1&mode=design
 
 _Stacks:_
 
