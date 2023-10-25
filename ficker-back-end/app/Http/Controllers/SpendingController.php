@@ -149,7 +149,7 @@ class SpendingController extends Controller
                     ->get();
 
                 $planned_spendings = Spending::where('user_id', Auth::user()->id)
-                    ->selectRaw('MONTH(date) as month, YEAR(date) as year, planned_spending')
+                    ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, planned_spending')
                     ->groupBy('year')
                     ->groupBy('month')
                     ->get();
