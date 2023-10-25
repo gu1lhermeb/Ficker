@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->double('planned_spending');
-            $table->date('date');
             $table->timestamps();
         });
     }
