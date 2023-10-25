@@ -3,8 +3,8 @@
     Olá, {{$nome}}
     <br>
     Cadastro realizado com sucesso!!
-    Atenciosamente,
     <br>
+    Atenciosamente,
     Ficker
     </div>
 @endcomponent
