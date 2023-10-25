@@ -4,8 +4,7 @@
     <br>
     Cadastro realizado com sucesso!!
     <br>
-    Atenciosamente,
-    Ficker
+    Atenciosamente, Ficker
     </div>
 @endcomponent
 
