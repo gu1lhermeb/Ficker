@@ -21,11 +21,11 @@ class TransactionController extends Controller
             'category_id' => ['required'],
             'category_description' => ['required_if:category_id,0', 'string', 'max:50'],
             'date' => ['required', 'date'],
-            'type_id' => ['required', 'min:1', 'max:4'],
-            'transaction_value' => ['required', 'decimal:0,2'],
-            'payment_method_id' => ['required_if:type_id,2', 'prohibited_if:type_id,1'],
-            'installments' => ['required_if:payment_method_id,4', 'prohibited_if:type_id,1', 'min:1'],
-            'card_id' => ['required_if:payment_method_id,4', 'prohibited_if:type_id,1']
+            'type_id' => ['required', 'min:1', 'max:2'],
+            'transaction_value' => ['required', 'decimal:0,2', 'min:1'],
+            'payment_method_id' => ['required_if:type_id,2', 'prohibited_if:type_id,1', 'min:1', 'max:4'],
+            'installments' => ['required_if:payment_method_id,4', 'prohibited_unless:payment_method_id,4', 'min:1'],
+            'card_id' => ['required_if:payment_method_id,4', 'prohibited_unless:payment_method_id,4']
         ]);
 
         // Validando card id
@@ -253,13 +253,11 @@ class TransactionController extends Controller
 
     public function update(Request $request): JsonResponse
     {
-
         try {
-
             Transaction::findOrFail($request->id);
         } catch (\Exception $e) {
 
-            $errorMessage = "Erro: Esta transação não existe.";
+            $errorMessage = "Essa transação não existe ou já foi excluída.";
             $response = [
                 "data" => [
                     "message" => $errorMessage,
@@ -271,33 +269,115 @@ class TransactionController extends Controller
 
         try {
 
-            Transaction::find($request->id)->update($request->all());
+            $request->validate([
+                'transaction_description' => ['string', 'max:50'],
+                'date' => ['date'],
+                'transaction_value' => ['decimal:0,2', 'min:1'],
+                'payment_method_id' => ['min:1', 'max:4'],
+                'installments' => ['min:1'],
+            ]);
+
+            Transaction::find($request->id)->update($request->only([
+                'transaction_description',
+                'category_id',
+                'date',
+                'transaction_value',
+                'payment_method_id',
+                'installments'
+            ]));
 
             $transaction = Transaction::find($request->id);
 
+            if($transaction->payment_method_id == 4) {
+
+                if(!(is_null($request->installments))) {
+
+                    $installments = Installment::where('transaction_id', $request->id)->get();
+                    $transaction = Transaction::find($request->id);
+
+                    Installment::where('transaction_id', $request->id)->delete();
+                    $date = $transaction->date;
+                    for ($i = 1; $i <= $request->installments; $i++) {
+
+                        Installment::create([
+                            'transaction_id' => $request->id,
+                            'installment_description' => $transaction->transaction_description.' '.$i.'/'.$request->installments,
+                            'installment_value' => $transaction->transaction_value / $request->installments,
+                            'card_id' => $transaction->card_id,
+                            'pay_day' => $date
+                        ]);
+
+                        $date = strtotime('+1 months', strtotime($date));
+                        $date = date('Y-m-d', $date);
+                    }
+                }
+
+                if(!(is_null($request->transaction_value))) {
+
+                    Installment::where('transaction_id', $request->id)->get()->each(function($installment) use ($request) {
+                        
+                        $transaction = Transaction::find($request->id);
+    
+                        $installment->update([
+                            'installment_value' => $request->transaction_value / $transaction->installments
+                        ]);
+                    });
+                }
+
+                if(!(is_null($request->transaction_description))) {
+
+                    $count = 1;
+                    Installment::where('transaction_id', $request->id)->get()->each(function($installment) use ($request, &$count){
+
+                        $transaction = Transaction::find($request->id);
+    
+                        $installment->update([
+                            'installment_description' => $request->transaction_description.' '.$count.'/'.$transaction->installments,
+                        ]);
+
+                        $count++;
+                    });
+                }
+
+                if(!(is_null($request->date))) {
+
+                    $date = $request->date;
+                    Installment::where('transaction_id', $request->id)->get()->each(function($installment) use (&$date){
+    
+                        $installment->update([
+                            'pay_day' => $date,
+                        ]);
+
+                        $date = strtotime('+1 months', strtotime($date));
+                        $date = date('Y-m-d', $date);
+                    });
+                }
+            }
+
+            $installments = Installment::where('transaction_id', $request->id)->get();
+
             $response = [
-                "transaction" => $transaction
+                "transaction" => $transaction,
+                "installments" => $installments
             ];
 
             return response()->json($response, 200);
+
         } catch (\Exception $e) {
 
-            $errorMessage = "Erro: Teste.";
+            $errorMessage = $e->getMessage();
             $response = [
                 "data" => [
                     "message" => $errorMessage,
-                    "error" => $e->getMessage()
                 ]
             ];
-            return response()->json($response, 404);
+            return response()->json($response, 400);
         }
     }
 
     public function destroy($id): JsonResponse
     {
-
         try {
-
             Transaction::findOrFail($id)->delete();
 
             $message = 'Transação excluída com sucesso.';
@@ -321,68 +401,4 @@ class TransactionController extends Controller
         }
     }
 
-    public function incomes(Request $request): JsonResponse
-    {
-        try {
-            if ($request->query('sort') == 'day') {
-
-                $incomeByDay = Transaction::whereMonth('date', now()->month)
-                    ->whereYear('date', now()->year)
-                    ->whereDay('date', '<=', now()->day)
-                    ->where('user_id', Auth::user()->id)
-                    ->where('type_id', 1)
-                    ->get();
-
-                $response = [];
-
-                foreach ($incomeByDay as $income) {
-                    $day = date('d', strtotime($income->date));
-                    $month = date('m', strtotime($income->date));
-
-                    $income->day = $day;
-                    $income->month = $month;
-                    $incomeFormatted = [
-                        'data' => [
-                            'day' => $day,
-                            'month' => $month,
-                            'ammount' => $income->transaction_value
-                        ]
-                    ];
-                    array_push($response, $incomeFormatted);
-                }
-            } elseif ($request->query('sort') == 'month') {
-                $incomeByMonth = Transaction::where('user_id', Auth::user()->id)
-                    ->where('type_id', 1)
-                    ->selectRaw('MONTH(date) as month, SUM(transaction_value) as total')
-                    ->groupBy('month')
-                    ->get();
-
-                $response = [
-                    'data' => $incomeByMonth
-                ];
-            } else {
-
-                $incomeByYear = Transaction::where('user_id', Auth::user()->id)
-                    ->where('type_id', 1)
-                    ->selectRaw('YEAR(date) as year, SUM(transaction_value) as total')
-                    ->groupBy('year')
-                    ->get();
-
-                $response = [
-                    'data' => $incomeByYear
-                ];
-            }
-
-            return response()->json($response, 200);
-        } catch (\Exception $e) {
-            $errorMessage = "Erro: Nenhuma entrada foi encontrada.";
-            $response = [
-                "data" => [
-                    "message" => $errorMessage,
-                    "error" => $e->getMessage()
-                ]
-            ];
-            return response()->json($response, 500);
-        }
-    }
 }

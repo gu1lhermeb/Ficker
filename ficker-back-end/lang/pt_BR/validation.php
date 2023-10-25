@@ -238,6 +238,7 @@ return [
         'type_id' => 'tipo',
         'transaction_description' => 'descrição',
         'transaction_value' => 'valor',
+        'payment_method_id' => 'método de pagamento',
     ],
 
 ];

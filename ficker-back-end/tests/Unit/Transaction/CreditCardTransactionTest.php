@@ -12,9 +12,9 @@ class CreditCardTransactionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_users_can_create_a_credit_card_transaction_with_existing_category(): void
+    public function test_users_can_store_a_credit_card_transaction_with_existing_category(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
 
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -33,9 +33,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(2, count(Installment::all()));
     }
 
-    public function test_users_can_create_a_credit_card_transaction_with_a_new_category(): void
+    public function test_users_can_store_a_credit_card_transaction_with_a_new_category(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
 
         $this->post('/api/transaction/store',[
             'category_id' => 0,
@@ -56,9 +56,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(2, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_category(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_category(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'type_id' => 2,
@@ -76,9 +76,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_can_create_a_credit_card_transaction_with_a_new_category_without_the_category_description(): void
+    public function test_users_can_store_a_credit_card_transaction_with_a_new_category_without_the_category_description(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
 
         $this->post('/api/transaction/store',[
             'category_id' => 0,
@@ -99,9 +99,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_type(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_type(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -119,9 +119,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_description(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_description(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -139,9 +139,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_value(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_value(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -159,9 +159,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_date(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_date(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -179,10 +179,10 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_payment_method(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_payment_method(): void
     {
         
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -200,9 +200,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_a_card(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_a_card(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -220,9 +220,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_without_installments(): void
+    public function test_users_cannot_store_a_credit_card_transaction_without_installments(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
@@ -240,9 +240,9 @@ class CreditCardTransactionTest extends TestCase
         $this->assertEquals(0, count(Installment::all()));
     }
 
-    public function test_users_cannot_create_a_credit_card_transaction_with_an_invalid_card(): void
+    public function test_users_cannot_store_a_credit_card_transaction_with_an_invalid_card(): void
     {
-        TestCase::creditCardTestSetup();
+        TestCase::transactionStoreTestSetup(2, 4);
         
         $this->post('/api/transaction/store',[
             'category_id' => 1,
