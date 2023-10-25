@@ -19,7 +19,8 @@ class SpendingController extends Controller
 
             $spending = Spending::create([
                 'user_id' => Auth::user()->id,
-                'planned_spending' => $request->planned_spending
+                'planned_spending' => $request->planned_spending,
+                'date' => $request->date
             ]);
 
             $response = [
@@ -93,57 +94,91 @@ class SpendingController extends Controller
             return response()->json($response, 500);
         }
     }
+    public function destroy(Request $request): JsonResponse
+    {
+        try {
+            Spending::find($request->id)->delete();
+
+            $response = [
+                'data' => [
+                    'message' => 'Gasto planejado deletado com sucesso.'
+                ]
+            ];
+
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $errorMessage = 'Erro ao deletar os gastos planejados.';
+            $response = [
+                'data' => [
+                    'message' => $errorMessage,
+                    'error' => $e->getMessage()
+                ]
+            ];
+
+            return response()->json($response, 500);
+        }
+    }
 
     public function spendings(Request $request): JsonResponse
     {
         try {
             if ($request->query('sort') == 'day') {
 
-                $spendingByDay = Transaction::whereMonth('date', now()->month)
-                    ->whereYear('date', now()->year)
-                    ->whereDay('date', '<=', now()->day)
-                    ->where('user_id', Auth::user()->id)
-                    ->where('type_id', 2)
-                    ->get();
+                $spendingByDay = Transaction::where('user_id', Auth::user()->id)
+                ->selectRaw('MONTH(date) as month, DAY(date) as day, 
+                            SUM(CASE WHEN type_id = 1 THEN transaction_value ELSE 0 END) as incomes,
+                            SUM(CASE WHEN type_id != 1 THEN transaction_value ELSE 0 END) as spendings')
+                ->groupBy('day')
+                ->groupBy('month')
+                ->get();
 
-                $response = [];
+                $response = [
+                    'data' => [
+                        $spendingByDay,
+                    ]
+                ];
 
-                foreach ($spendingByDay as $spending) {
-                    $day = date('d', strtotime($spending->date));
-                    $month = date('m', strtotime($spending->date));
-
-                    $spending->day = $day;
-                    $spending->month = $month;
-                    $spendingFormatted = [
-                        'data' => [
-                            'day' => $day,
-                            'month' => $month,
-                            'ammount' => $spending->transaction_value
-                        ]
-                    ];
-                    array_push($response, $spendingFormatted);
-                }
             } elseif ($request->query('sort') == 'month') {
-                $spendingByMonth = Transaction::where('user_id', Auth::user()->id)
-                    ->where('type_id', 2)
-                    ->selectRaw('MONTH(date) as month, SUM(transaction_value) as total')
+
+                $spendingsByMonth = Transaction::where('user_id', Auth::user()->id)
+                    ->selectRaw('MONTH(date) as month, YEAR(date) as year,
+                                SUM(CASE WHEN type_id = 1 THEN transaction_value ELSE 0 END) as incomes,
+                                SUM(CASE WHEN type_id != 1 THEN transaction_value ELSE 0 END) as real_spending')
+                    ->groupBy('year')
                     ->groupBy('month')
                     ->get();
 
+                $planned_spendings = Spending::where('user_id', Auth::user()->id)
+                    ->selectRaw('MONTH(date) as month, YEAR(date) as year, planned_spending')
+                    ->groupBy('year')
+                    ->groupBy('month')
+                    ->get();
+                
+
+                for($i = 0; $i < count($spendingsByMonth); $i++) {
+                    $spendingsByMonth[$i]->planned_spending = $planned_spendings[$i]->planned_spending;
+                }
+
                 $response = [
-                    'data' => $spendingByMonth
+                    'data' => [
+                        $spendingsByMonth,
+                    ]
                 ];
-            } else {
+            } elseif ($request->query('sort') == 'year') {
 
                 $spendingByYear = Transaction::where('user_id', Auth::user()->id)
-                    ->where('type_id', 2)
-                    ->selectRaw('YEAR(date) as year, SUM(transaction_value) as total')
-                    ->groupBy('year')
-                    ->get();
+                ->selectRaw('YEAR(date) as year, 
+                            SUM(CASE WHEN type_id = 1 THEN transaction_value ELSE 0 END) as incomes,
+                            SUM(CASE WHEN type_id != 1 THEN transaction_value ELSE 0 END) as spendings')
+                ->groupBy('year')
+                ->get();
 
                 $response = [
                     'data' => $spendingByYear
                 ];
+
+            } else {
+
             }
 
             return response()->json($response, 200);

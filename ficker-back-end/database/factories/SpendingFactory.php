@@ -18,7 +18,8 @@ class SpendingFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'planned_spending' => random_int(1000, 5000)
+            'planned_spending' => random_int(1000, 5000),
+            'date' => date('Y-m-d')
         ];
     }
 }

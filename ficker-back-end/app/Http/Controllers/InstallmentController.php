@@ -9,12 +9,6 @@ use App\Models\Installment;
 
 class InstallmentController extends Controller
 {
-
-    public function store()
-    {
-        
-    }
-
     public function showInstallments($id): JsonResponse
     {
         try {
