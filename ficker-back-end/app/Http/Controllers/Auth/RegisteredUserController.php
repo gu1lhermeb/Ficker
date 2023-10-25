@@ -11,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Mail;
+use Register 
 
 class RegisteredUserController extends Controller
 {
@@ -38,7 +40,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         $token = $user->createToken('create_token')->plainTextToken;
-
+        Mail::to($request->email)->send(new Register($request->name));
         $response = [
             "user" => $user,
             "data" => [
