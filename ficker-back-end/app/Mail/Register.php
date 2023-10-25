@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class cadastroRealizado extends Mailable
+class Register extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -40,7 +40,7 @@ class cadastroRealizado extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.Register',
+            markdown: 'mails.Register',
         );
     }
 

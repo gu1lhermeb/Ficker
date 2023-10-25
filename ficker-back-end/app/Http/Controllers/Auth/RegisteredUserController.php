@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Mail;
-use Register 
+use App\Mail\Register;
 
 class RegisteredUserController extends Controller
 {
