@@ -20,7 +20,6 @@ class SpendingController extends Controller
             $spending = Spending::create([
                 'user_id' => Auth::user()->id,
                 'planned_spending' => $request->planned_spending,
-                'date' => $request->date
             ]);
 
             $response = [
