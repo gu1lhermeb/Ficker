@@ -73,6 +73,29 @@ class DatabaseSeeder extends Seeder
 
         });
 
+        // Níveis de usuário
+
+        $levels = [
+            [
+                'level_description' => 'Padawan'
+            ],
+            [
+                'level_description' => 'Ficker Knight'
+            ],
+            [
+                'level_description' => 'Ficker Master'
+            ],
+            [
+                'level_description' => 'Ficker Grand Master'
+            ],
+        ];
+
+        collect($levels)->each( function($level) {
+
+            \App\Models\Level::factory()->create($level);
+
+        });
+
         //Usuário
 
         $user = User::create([

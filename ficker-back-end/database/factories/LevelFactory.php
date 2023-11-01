@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Spending>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Level>
  */
-class SpendingFactory extends Factory
+class LevelFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class SpendingFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => 1,
-            'planned_spending' => random_int(1000, 5000),
+            'level_description' => 'test level'
         ];
     }
 }
