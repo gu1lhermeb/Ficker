@@ -17,7 +17,7 @@ class TransactionController extends Controller
     {
 
         $request->validate([
-            'transaction_description' => 'required' | 'string'| 'max:50',
+            'transaction_description' => 'required | string | max:50',
             'category_id' => ['required'],
             'category_description' => ['required_if:category_id,0', 'string', 'max:50'],
             'date' => ['required', 'date'],
