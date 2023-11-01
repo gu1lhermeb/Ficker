@@ -17,7 +17,7 @@ class LevelFactory extends Factory
     public function definition(): array
     {
         return [
-            'level_description' => 'test level'
-        ];
+            'level_description' => 'test level',
+       ];
     }
 }
