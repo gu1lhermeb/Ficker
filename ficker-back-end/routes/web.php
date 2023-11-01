@@ -18,5 +18,5 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
-Route::get('/exportar-dados', [ExcelController::class, 'exportarDados']); 
+
 
