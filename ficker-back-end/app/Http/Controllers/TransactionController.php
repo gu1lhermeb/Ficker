@@ -73,6 +73,9 @@ class TransactionController extends Controller
                 'transaction_value' => $request->transaction_value,
             ]);
 
+            LevelController::completeMission(1);
+            LevelController::completeMission(2);
+            
             $response = [
                 'data' => [
                     'trasanction' => $transaction
@@ -133,6 +136,8 @@ class TransactionController extends Controller
 
                 $pay_day = $new_pay_day_formated;
             }
+
+            LevelController::completeMission(4);
 
             return response()->json($response, 200);
         }
