@@ -15,6 +15,74 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        // Níveis de usuário
+
+        $levels = [
+            [
+                'level_description' => 'Padawan',
+                'level_xp' => 0
+            ],
+            [
+                'level_description' => 'Ficker Knight',
+                'level_xp' => 125
+            ],
+            [
+                'level_description' => 'Ficker Master',
+                'level_xp' => 250
+            ],
+            [
+                'level_description' => 'Ficker Grand Master',
+                'level_xp' => 500
+            ],
+        ];
+
+        collect($levels)->each( function($level) {
+
+            \App\Models\Level::factory()->create($level);
+
+        });
+
+        $missions = [
+            [
+                'mission_description' => 'Adicionar transação de entrada',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar transação de saída',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar cartão de crédito',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar transação de cartão de crédito',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Criar nova categoria',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Finalizar um mês com orçamento dentro do gasto planejado',
+                'mission_xp' => 100
+            ],
+        ];
+
+        collect($missions)->each( function($mission) {
+
+            \App\Models\Mission::factory()->create($mission);
+
+        });
+
+        //Usuário
+
+        User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('admin123'),
+
+        ]);
 
         // Bandeiras de cartão de crédito
 
@@ -72,38 +140,6 @@ class DatabaseSeeder extends Seeder
             \App\Models\Type::create($type);
 
         });
-
-        // Níveis de usuário
-
-        $levels = [
-            [
-                'level_description' => 'Padawan'
-            ],
-            [
-                'level_description' => 'Ficker Knight'
-            ],
-            [
-                'level_description' => 'Ficker Master'
-            ],
-            [
-                'level_description' => 'Ficker Grand Master'
-            ],
-        ];
-
-        collect($levels)->each( function($level) {
-
-            \App\Models\Level::factory()->create($level);
-
-        });
-
-        //Usuário
-
-        $user = User::create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('admin123'),
-            'level_id' => 1
-        ]);
 
         // Cartão de crédito
 

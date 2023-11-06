@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'level_id'
+        'level_id',
+        'user_xp'
     ];
 
     /**
@@ -69,5 +71,10 @@ class User extends Authenticatable
     public function level(): BelongsTo
     {
         return $this->belongsTo(Level::class);
+    }
+
+    public function missions(): BelongsToMany
+    {
+        return $this->belongsToMany(Mission::class);
     }
 }
