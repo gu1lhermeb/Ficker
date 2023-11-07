@@ -4,8 +4,12 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class DadosExport implements FromCollection, WithHeadings
+
+class DadosExport implements FromCollection, WithHeadings, WithColumnFormatting
 {
     protected $dados;
 
@@ -22,10 +26,20 @@ class DadosExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'ID',
+            'NOME',
             'DESCRIÇÃO',
             'DATA',
             'VALOR',
+            'PARCELAS',
+            'CARTÃO',
+            'CATEGORIA',
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => NumberFormat::FORMAT_CURRENCY_USD_SIMPLE,
         ];
     }
 }
