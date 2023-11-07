@@ -193,15 +193,15 @@ class DatabaseSeeder extends Seeder
 
         // Transações
 
-        Transaction::factory()->create();
-        Transaction::factory()->create([
-            'type_id' => 1,
-            'payment_method_id' => null,
-        ]);
+        // Transaction::factory()->create();
+        // Transaction::factory()->create([
+        //     'type_id' => 1,
+        //     'payment_method_id' => null,
+        // ]);
 
         // Gasto planejado
 
-        Spending::factory()->create();
+        // Spending::factory()->create();
 
     }
 }

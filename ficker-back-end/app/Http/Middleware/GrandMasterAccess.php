@@ -23,6 +23,6 @@ class GrandMasterAccess
                 return redirect('/login');
             }
             abort(401);
-        }     
+        }
     }
 }

@@ -14,10 +14,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mission_user', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->foreignIdFor(Mission::class)->onDelete('cascade');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

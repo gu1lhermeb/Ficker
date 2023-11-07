@@ -26,7 +26,7 @@ class CategoryController extends Controller
                 ]
             ];
 
-            LevelController::completeMission(3);
+            LevelController::completeMission(5);
 
             return response()->json($response, 201);
 
@@ -52,7 +52,7 @@ class CategoryController extends Controller
                 'type_id' => $type
             ]);
 
-            LevelController::completeMission(3);
+            LevelController::completeMission(5);
             
             return $category;
 

@@ -61,7 +61,7 @@ class TransactionController extends Controller
 
         // Cadastrando transação
 
-        if (is_null($request->installments)) { // Sem parcelas
+        if (is_null($request->installments)) { // Entrada e saída sem parcelas
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
@@ -73,8 +73,7 @@ class TransactionController extends Controller
                 'transaction_value' => $request->transaction_value,
             ]);
 
-            LevelController::completeMission(1);
-            LevelController::completeMission(2);
+            LevelController::completeMission($request->type_id);
             
             $response = [
                 'data' => [
@@ -84,7 +83,7 @@ class TransactionController extends Controller
 
             return response()->json($response, 201);
 
-        } else { // Com parcelas
+        } else { // Saídas de cartão de crédito
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,

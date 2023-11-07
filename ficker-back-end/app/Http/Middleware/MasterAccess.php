@@ -16,7 +16,7 @@ class MasterAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && Auth::user()->level_id == 3){
+        if(Auth::check() && Auth::user()->level_id >= 3){
             return $next($request);
         }else{
             if(!Auth::check()){

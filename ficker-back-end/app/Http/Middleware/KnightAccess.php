@@ -16,13 +16,13 @@ class KnightAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && Auth::user()->level_id == 2){
+        if(Auth::check() && Auth::user()->level_id >= 2){
             return $next($request);
         }else{
             if(!Auth::check()){
                 return redirect('/login');
             }
-            abort(401);
+            abort(401, 'Unauthorized');
         }    
     }
 }
