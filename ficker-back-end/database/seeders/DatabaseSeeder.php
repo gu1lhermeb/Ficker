@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
 
         // Cartão de crédito
 
-        $card = Card::factory()->create();
+        // $card = Card::factory()->create();
 
         // Categorias
 
