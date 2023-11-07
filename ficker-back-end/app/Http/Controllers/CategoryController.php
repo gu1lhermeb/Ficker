@@ -25,7 +25,11 @@ class CategoryController extends Controller
                     'category' => $category
                 ]
             ];
+
+            LevelController::completeMission(5);
+
             return response()->json($response, 201);
+
         } catch (\Exception $e) {
             $errorMessage = "A categoria não foi criada";
             $response = [
@@ -47,6 +51,8 @@ class CategoryController extends Controller
                 'category_description' => $description,
                 'type_id' => $type
             ]);
+
+            LevelController::completeMission(5);
             
             return $category;
 

@@ -70,8 +70,28 @@ class SpendingController extends Controller
     public function update(Request $request): JsonResponse
     {
         try {
-            Spending::find($request->id)->update($request->all());
 
+            $request->validate([
+                'planned_spending' => ['required', 'min:1']
+            ]);
+
+            $created_at = Spending::find($request->id)->created_at->toString();
+            $updated_at = Spending::find($request->id)->updated_at->toString();
+
+            if(Auth::user()->level_id < 4 && $created_at != $updated_at) {
+
+                $errorMessage = 'Erro: Este usuário só pode alterar o gasto planejado uma vez por mês.';
+                $response = [
+                    'data' => [
+                        'message' => $errorMessage,
+                    ]
+                ];
+
+                return response()->json($response, 401);
+            }
+
+            Spending::find($request->id)->update($request->all());
+            
             $spending = Spending::find($request->id);
 
             $response = [
@@ -81,6 +101,7 @@ class SpendingController extends Controller
             ];
 
             return response()->json($response, 200);
+
         } catch (\Exception $e) {
             $errorMessage = 'Erro ao atualizar os gastos planejados.';
             $response = [

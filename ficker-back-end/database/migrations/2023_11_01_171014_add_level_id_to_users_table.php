@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignIdFor(Level::class)->onDelete('cascade');
+            $table->string('user_xp');
         });
     }
 

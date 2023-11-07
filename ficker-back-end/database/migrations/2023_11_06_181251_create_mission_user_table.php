@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_mission', function (Blueprint $table) {
-            $table->id();
+        Schema::create('mission_user', function (Blueprint $table) {
+            // $table->id();
             $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->foreignIdFor(Mission::class)->onDelete('cascade');
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_mission');
+        Schema::dropIfExists('mission_user');
     }
 };

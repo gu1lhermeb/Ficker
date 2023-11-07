@@ -61,7 +61,7 @@ class TransactionController extends Controller
 
         // Cadastrando transação
 
-        if (is_null($request->installments)) { // Sem parcelas
+        if (is_null($request->installments)) { // Entrada e saída sem parcelas
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
@@ -73,6 +73,8 @@ class TransactionController extends Controller
                 'transaction_value' => $request->transaction_value,
             ]);
 
+            LevelController::completeMission($request->type_id);
+            
             $response = [
                 'data' => [
                     'trasanction' => $transaction
@@ -81,7 +83,7 @@ class TransactionController extends Controller
 
             return response()->json($response, 201);
 
-        } else { // Com parcelas
+        } else { // Saídas de cartão de crédito
 
             $transaction = Transaction::create([
                 'user_id' => Auth::user()->id,
@@ -134,6 +136,8 @@ class TransactionController extends Controller
                 $pay_day = $new_pay_day_formated;
             }
 
+            LevelController::completeMission(4);
+
             return response()->json($response, 200);
         }
     }
@@ -142,16 +146,27 @@ class TransactionController extends Controller
     {
         try {
             $transactions = Transaction::orderBy('date', 'desc')
-                ->where('user_id', Auth::user()->id)
+                ->where('user_id', Auth::id())
                 ->get();
 
-            $reponse = [
-                'data' => [
-                    'transactions' => $transactions
-                ]
-            ];
+            $most_expensive_transaction = Transaction::orderBy('transaction_value', 'desc')
+                ->where(['user_id'=> Auth::id(),
+                    'type_id' => 2])
+                ->first()->transaction_value;
 
-            return response()->json($reponse, 200);
+            $response = ['data' => ['transactions' => []]];
+
+            array_push($response['data']['transactions'], ['total' => count($transactions)]);
+            array_push($response['data']['transactions'], ['most_expensive' => $most_expensive_transaction]);
+
+            foreach($transactions as $transaction) {
+                $description = Category::find($transaction->category_id)->category_description;
+                $transaction->category_description = $description;
+                array_push($response['data']['transactions'], $transaction);
+            }
+
+            return response()->json($response, 200);
+
         } catch (\Exception $e) {
             $errorMessage = 'Nenhuma transação foi encontrada';
             $response = [
@@ -196,13 +211,16 @@ class TransactionController extends Controller
     public function showTransactionsByType($id): JsonResponse
     {
         try {
-
+            
             $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
             ])->orderBy('date', 'desc')->get();
 
             $response = ['data' => ['transactions' => []]];
+
+            array_push($response['data']['transactions'], ['total' => count($transactions)]);
+
             foreach ($transactions  as $transaction) {
                 $description = Category::find($transaction->category_id)->category_description;
                 $transaction->category_description = $description;

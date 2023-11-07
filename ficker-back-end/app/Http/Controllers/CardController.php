@@ -29,6 +29,8 @@ class CardController extends Controller
             'closure' => $request->closure
         ]);
 
+        LevelController::completeMission(3);
+
         $response = [
             'card' => $card
         ];

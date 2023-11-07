@@ -42,9 +42,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //Rotas dos gastos
     Route::get('/spendings', [SpendingController::class, 'spendings']); // Saídas por ano, mês ou dia
-    Route::get('/spending', [SpendingController::class, 'showSpending']);
-    Route::post('/spending/store', [SpendingController::class, 'store']);
-    Route::put('/spending/update/{id}', [SpendingController::class, 'update']);
+    Route::get('/spending', [SpendingController::class, 'showSpending'])->middleware('knight');
+    Route::post('/spending/store', [SpendingController::class, 'store'])->middleware('knight');
+    Route::put('/spending/update/{id}', [SpendingController::class, 'update'])->middleware('knight');
 
     //Rotas dos saldos
     Route::get('/balance', [BalanceController::class, 'balance']); //Mostra o saldo atual;
