@@ -146,27 +146,16 @@ class TransactionController extends Controller
     {
         try {
             $transactions = Transaction::orderBy('date', 'desc')
-                ->where('user_id', Auth::id())
+                ->where('user_id', Auth::user()->id)
                 ->get();
 
-            $most_expensive_transaction = Transaction::orderBy('transaction_value', 'desc')
-                ->where(['user_id'=> Auth::id(),
-                    'type_id' => 2])
-                ->first()->transaction_value;
+            $reponse = [
+                'data' => [
+                    'transactions' => $transactions
+                ]
+            ];
 
-            $response = ['data' => ['transactions' => []]];
-
-            array_push($response['data']['transactions'], ['total' => count($transactions)]);
-            array_push($response['data']['transactions'], ['most_expensive' => $most_expensive_transaction]);
-
-            foreach($transactions as $transaction) {
-                $description = Category::find($transaction->category_id)->category_description;
-                $transaction->category_description = $description;
-                array_push($response['data']['transactions'], $transaction);
-            }
-
-            return response()->json($response, 200);
-
+            return response()->json($reponse, 200);
         } catch (\Exception $e) {
             $errorMessage = 'Nenhuma transação foi encontrada';
             $response = [
@@ -211,16 +200,13 @@ class TransactionController extends Controller
     public function showTransactionsByType($id): JsonResponse
     {
         try {
-            
+
             $transactions = Transaction::where([
                 'user_id' => Auth::user()->id,
                 'type_id' => $id
             ])->orderBy('date', 'desc')->get();
 
             $response = ['data' => ['transactions' => []]];
-
-            array_push($response['data']['transactions'], ['total' => count($transactions)]);
-
             foreach ($transactions  as $transaction) {
                 $description = Category::find($transaction->category_id)->category_description;
                 $transaction->category_description = $description;
