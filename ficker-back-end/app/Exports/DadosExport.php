@@ -7,9 +7,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 
-class DadosExport implements FromCollection, WithHeadings, WithColumnFormatting
+class DadosExport implements FromCollection, WithHeadings, WithColumnFormatting, WithStyles
 {
     protected $dados;
 
@@ -23,6 +25,19 @@ class DadosExport implements FromCollection, WithHeadings, WithColumnFormatting
         return $this->dados;
     }
 
+    public function styles(Worksheet $sheet)
+    {
+        $sheet->getStyle('A1:G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFD3D3D3');
+        $sheet->getColumnDimension('A')->setWidth(22);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(18);
+        $sheet->getColumnDimension('D')->setWidth(18);
+        $sheet->getColumnDimension('E')->setWidth(18);
+        $sheet->getColumnDimension('F')->setWidth(18);
+    }
+
+    
+
     public function headings(): array
     {
         return [
@@ -31,15 +46,15 @@ class DadosExport implements FromCollection, WithHeadings, WithColumnFormatting
             'DATA',
             'VALOR',
             'PARCELAS',
-            'CARTÃO',
             'CATEGORIA',
         ];
     }
 
+    
     public function columnFormats(): array
     {
         return [
-            'C' => NumberFormat::FORMAT_CURRENCY_USD_SIMPLE,
+            'C' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 }
