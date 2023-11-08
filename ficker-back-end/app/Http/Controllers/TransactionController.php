@@ -154,7 +154,13 @@ class TransactionController extends Controller
                     'type_id' => 2])
                 ->first()->transaction_value;
 
-            $response = ['data' => ['transactions' => []], 'most_expensive' => $most_expensive_transaction, 'total' => count($transactions)];
+            $response = [
+                'data' => [
+                    'transactions' => [], 
+                    'most_expensive' => $most_expensive_transaction, 
+                    'total' => count($transactions)
+                ]
+            ];
 
             foreach($transactions as $transaction) {
                 $description = Category::find($transaction->category_id)->category_description;
@@ -214,7 +220,12 @@ class TransactionController extends Controller
                 'type_id' => $id
             ])->orderBy('date', 'desc')->get();
 
-            $response = ['data' => ['transactions' => []], 'total' => count($transactions)];
+            $response = [
+                'data' => [
+                    'transactions' => [], 
+                    'total' => count($transactions)
+                ]
+            ];
 
             foreach ($transactions  as $transaction) {
                 $description = Category::find($transaction->category_id)->category_description;
