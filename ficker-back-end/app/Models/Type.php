@@ -11,7 +11,7 @@ class Type extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description'
+        'type_description'
     ];
 
     public function categories(): HasMany

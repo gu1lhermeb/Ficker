@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Card;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,7 +30,8 @@ class CardTest extends TestCase
         $this->post('/api/card', [
             'flag_id' => $flag->id,
             'description' => 'Nubank',
-            'expiration' => '15',
+            'expiration' => 15,
+            'closure' => 24
         ]);
 
         $this->assertEquals($size + 1, count(Card::all()));

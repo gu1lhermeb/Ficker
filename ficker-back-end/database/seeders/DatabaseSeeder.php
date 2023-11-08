@@ -8,42 +8,112 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Card;
 use App\Models\Transaction;
-use App\Models\Category;
+use App\Models\Spending;
 
 class DatabaseSeeder extends Seeder
 {
 
     public function run(): void
     {
+        // Níveis de usuário
+
+        $levels = [
+            [
+                'level_description' => 'Padawan',
+                'level_xp' => 0
+            ],
+            [
+                'level_description' => 'Ficker Knight',
+                'level_xp' => 125
+            ],
+            [
+                'level_description' => 'Ficker Master',
+                'level_xp' => 250
+            ],
+            [
+                'level_description' => 'Ficker Grand Master',
+                'level_xp' => 500
+            ],
+        ];
+
+        collect($levels)->each( function($level) {
+
+            \App\Models\Level::factory()->create($level);
+
+        });
+
+        $missions = [
+            [
+                'mission_description' => 'Adicionar transação de entrada',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar transação de saída',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar cartão de crédito',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Adicionar transação de cartão de crédito',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Criar nova categoria',
+                'mission_xp' => 25
+            ],
+            [
+                'mission_description' => 'Finalizar um mês com orçamento dentro do gasto planejado',
+                'mission_xp' => 100
+            ],
+        ];
+
+        collect($missions)->each( function($mission) {
+
+            \App\Models\Mission::factory()->create($mission);
+
+        });
+
+        //Usuário
+
+        User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('admin123'),
+
+        ]);
+
+        // Bandeiras de cartão de crédito
 
         $flags = [
 
             [
-                'description' => 'Mastercard',
+                'flag_description' => 'Mastercard',
             ],
 
             [
-                'description' => 'Visa'
+                'flag_description' => 'Visa'
             ],
 
             [
-                'description' => 'Hipercard'
+                'flag_description' => 'Hipercard'
             ],
 
             [
-                'description' => 'Elo'
+                'flag_description' => 'Elo'
             ],
 
             [
-                'description' => 'Alelo'
+                'flag_description' => 'Alelo'
             ],
 
             [
-                'description' => 'American Express'
+                'flag_description' => 'American Express'
             ],
 
             [
-                'description' => 'Diners Club'
+                'flag_description' => 'Diners Club'
             ],
 
         ];
@@ -54,15 +124,14 @@ class DatabaseSeeder extends Seeder
 
         });
 
+        // Tipos de transação
+
         $types = [
             [
-                'description' => 'Entrada'
+                'type_description' => 'Entrada'
             ],
             [
-                'description' => 'Saída'
-            ],
-            [
-                'description' => 'Cartão de crédito'
+                'type_description' => 'Saída'
             ]
         ];
 
@@ -72,41 +141,67 @@ class DatabaseSeeder extends Seeder
 
         });
 
-        $admin = User::create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('admin123'),
-        ]);
+        // Cartão de crédito
 
         $card = Card::factory()->create();
 
-        Category::create([
-            'category_description' => 'Lazer',
-            'type_id' => 1
-        ]);
+        // Categorias
 
-        Category::create([
-            'category_description' => 'Alimentação',
-            'type_id' => 2
-        ]);
+        $categories = [
+            [
+                'category_description' => 'Lazer'
+            ],
+            [
+                'category_description' => 'Alimentação'
+            ],
+            [
+                'category_description' => 'Filhos'
+            ],
+            [
+                'category_description' => 'Valorant'
+            ],
+        ];
 
-        Transaction::create([
-            'user_id' => $admin->id,
-            'description' => 'Salário',
-            'date' => '2023-01-03',
-            'type_id' => 1,
-            'value' => 1500,
-            'category_id' => 1,
-        ]);
+        collect($categories)->each( function($category) {
 
-        Transaction::create([
-            'user_id' => $admin->id,
-            'description' => 'Compra na Adidas',
-            'date' => '2023-01-03',
-            'type_id' => 3,
-            'value' => 300,
-            'category_id' => 2,
-            'card_id' => $card->id,
-        ]);
+            \App\Models\Category::factory()->create($category);
+
+        });
+
+        // Métodos de pagamento
+
+        $payment_methods = [
+            [
+                'payment_method_description' => 'Dinheiro'
+            ],
+            [
+                'payment_method_description' => 'Pix'
+            ],
+            [
+                'payment_method_description' => 'Cartão de débito'
+            ],
+            [
+                'payment_method_description' => 'Cartão de crédito'
+            ]
+        ];
+
+        collect($payment_methods)->each( function($payment_method) {
+
+            \App\Models\PaymentMethod::factory()->create($payment_method);
+
+        });
+
+        // Transações
+
+        // Transaction::factory()->create();
+        // Transaction::factory()->create([
+        //     'type_id' => 1,
+        //     'payment_method_id' => null,
+        // ]);
+
+        // Gasto planejado
+
+        // Spending::factory()->create();
+
     }
 }

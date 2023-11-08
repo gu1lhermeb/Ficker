@@ -11,7 +11,7 @@ class Flag extends Model
     use HasFactory;
 
     protected $fillable = [
-        'description'
+        'flag_description'
     ];
 
     public function cards(): HasMany

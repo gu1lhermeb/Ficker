@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User;
+use App\Models\Flag;
 
 return new class extends Migration
 {
@@ -13,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('flag_id')->constrained('flags')->onDelete('cascade');
-            $table->string('description');
+            $table->foreignIdFor(User::class)->onDelete('cascade');
+            $table->foreignIdFor(Flag::class)->onDelete('cascade');
+            $table->string('card_description');
             $table->integer('expiration');
             $table->integer('closure');
             $table->timestamps();

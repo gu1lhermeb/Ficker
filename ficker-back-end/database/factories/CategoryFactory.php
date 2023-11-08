@@ -17,8 +17,9 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'category_description' => 'Test',
-            'type_id' => 1
+            'user_id' => 1,
+            'category_description' => 'Test Category',
+            'type_id' => random_int(1,2)
         ];
     }
 }

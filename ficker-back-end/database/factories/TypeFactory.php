@@ -17,7 +17,7 @@ class TypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'description' => 'Entrada'
+            'type_description' => 'Test Type'
         ];
     }
 }
